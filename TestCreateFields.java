@@ -17,7 +17,7 @@ public class TestCreateFields {
 	//}
 
    @Test
-	public void testSetPrimaryKey(){
+	public void testSetPrimaryKey() {
 
 		CreateFields.setPrimaryKey("ABC", 0);
     	Assert.assertTrue("failure - wrong set method", CreateFields.getPrimaryKey().get("ABC").equals(0));
@@ -25,7 +25,7 @@ public class TestCreateFields {
 
 
 	@Test
-	public void testGetPrimaryKey(){
+	public void testGetPrimaryKey() {
 
 		HashMap<String, Integer> testMap = new HashMap<String, Integer>();
     	Assert.assertTrue("failure - wrong get method", CreateFields.getPrimaryKey().equals(testMap));
