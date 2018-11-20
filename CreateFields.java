@@ -1,6 +1,19 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 public class CreateFields  {
 
+	//For Primary Key
+	private static HashMap<String, Integer> primaryKey = new HashMap<String, Integer>();
+
+	public static void setPrimaryKey(String s, Integer x){
+
+		 primaryKey.put(s,x);
+	}
+
+	public static HashMap getPrimaryKey(){
+
+		 return primaryKey;
+	}
 
 	//For other attributes
 	public static ArrayList createStringField () {
