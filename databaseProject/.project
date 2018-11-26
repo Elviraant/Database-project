@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/main/java/com/Databaseproject/databaseProject/DataPresenter.java</name>
+			<type>1</type>
+			<location>C:/Users/User/Database-project/databaseProject/src/main/java/com/Databaseproject/databaseProject/DataPresenter.java</location>
+		</link>
+		<link>
+			<name>src/main/java/com/Databaseproject/databaseProject/Example.java</name>
+			<type>1</type>
+			<location>C:/Users/User/Database-project/databaseProject/src/main/java/com/Databaseproject/databaseProject/Example.java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
