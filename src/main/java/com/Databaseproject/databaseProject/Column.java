@@ -1,3 +1,5 @@
+
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -43,6 +45,15 @@ public class Column {
 		thisTable.setColumnCounter(counter);
 		field = new ArrayList<Object>();
 		}
+
+	public void printElement(int row) {
+		String data = String.format("|%-15s|", this.field.get(row).toString());
+		System.out.print(data);
+		System.out.print("     ");
+
+	}
+
+
 
 }//End of class Column.
 
