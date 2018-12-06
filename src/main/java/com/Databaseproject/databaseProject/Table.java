@@ -1,3 +1,4 @@
+
 //Class which represents a table of our database.
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -8,47 +9,49 @@ public class Table {
 	private String name;
 	private int numberOfRows;
 
-//setters and getters
-public ArrayList<Column> getColumns() {
-	return columns;
-}
+    Scanner cs = new Scanner(System.in);
 
-public void setColumns(ArrayList<Column> columns) {
-	this.columns = columns;
-}
+    //setters and getters
+    public ArrayList<Column> getColumns() {
+	    return columns;
+    }
 
-public int getColumnCounter() {
-	return columnCounter;
-}
+    public void setColumns(ArrayList<Column> columns) {
+	    this.columns = columns;
+    }
 
-public void setColumnCounter(int columnCounter) {
-	this.columnCounter = columnCounter;
-}
+    public int getColumnCounter() {
+	    return columnCounter;
+    }
 
-public String getName() {
-	return name;
-}
+    public void setColumnCounter(int columnCounter) {
+	    this.columnCounter = columnCounter;
+    }
 
-public void setName(String name) {
-	this.name = name;
-}
+    public String getName() {
+	    return name;
+    }
 
-public int getNumberOfRows() {
-	return numberOfRows;
-}
+    public void setName(String name) {
+	    this.name = name;
+    }
 
-public void setNumberOfRows(int numberOfRows) {
-	this.numberOfRows = numberOfRows;
-}
+    public int getNumberOfRows() {
+	    return numberOfRows;
+    }
 
-//constructor
-public Table(String name) {
-	this.name = name;
-	Database.getTables().add(this);
-	int counter = Database.getTableCounter();
-	counter++;
-	Database.setTableCounter(counter);
-}
+    public void setNumberOfRows(int numberOfRows) {
+	    this.numberOfRows = numberOfRows;
+    }
+
+    //constructor
+    public Table(String name) {
+	    this.name = name;
+	    Database.getTables().add(this);
+	    int counter = Database.getTableCounter();
+	    counter++;
+	    Database.setTableCounter(counter);
+    }
 
 	//Prints the header with the title of the fields
 	public void printHeader() {
@@ -56,29 +59,46 @@ public Table(String name) {
 		String title;
 		for (int i = 0; i < this.getColumnCounter(); i++) {
 			Column column = this.getColumns().get(i);
-			title = String.format("|%-15s|", column.getName());
+			title = String.format("|%-15s|", this.name);
 			System.out.print(title);
 			spaces =spaces + title.length() + 5;
 			System.out.print("     ");
 		}
 		System.out.println();
-		for (int i = 0; i < spaces-5; i++) {
+		for (int i = 0; i < spaces - 5; i++) {
 			System.out.print("-");
-	}
-	System.out.println();
+	    }
+
+		System.out.println();
 	}
 
-	//Prints one row of the table.
-	public void presentRow(int row) {
-		String data;
-		for (int i = 0; i < this.getColumnCounter(); i++) {
-			Column column = this.getColumns().get(i);
-			data = String.format("|%-15s|", column.getField().get(row).toString());
-			System.out.print(data);
+
+    public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
+	    int spaces = 0;
+	    for (String attribute: attributes ) {
+	    	String title = String.format("|%-15s|", attribute);
+			System.out.print(title);
+			spaces =spaces + title.length() + 5;
 			System.out.print("     ");
+	    }
+	    System.out.println();
+	    for (int i = 0; i < spaces - 5; i++) {
+			System.out.print("-");
+		}
+		System.out.println();
+
+	}
+
+
+	//Prints one row of the table.
+    public void presentRow(int row) {
+        for (int i = 0; i < this.getColumnCounter(); i++) {
+		    Column column = this.getColumns().get(i);
+			column.printElement(row);
 		}
 		System.out.println();
 	}
+
 
 	//Prints all table insertions.
 	public void printAll() {
@@ -86,13 +106,14 @@ public Table(String name) {
 		this.printHeader();
 		Column firstColumn = this.getColumns().get(0);
 		for (int k = 0; k < firstColumn.getField().size(); k++) {
+
 			this.presentRow(k);
 		}
 		System.out.println();
 	}
 
 
-	Scanner cs = new Scanner(System.in);
+
 
 	//User gives the number of the starting row.
 	public int startingRow() {
@@ -117,4 +138,55 @@ public Table(String name) {
 		}
 		System.out.println();
 	}
+
+	/*Presents columns given by the user*/
+	public void presentSpecificColumns() {
+		ArrayList <String>  attributes = new ArrayList<String>();
+
+		System.out.println("Type the first attribute that you want print."
+		    + "If you're done, type Done.");
+		String attribute = cs.next();
+		while (!attribute.equals("Done"))	                     {
+			if (this.containsName(attribute) != -1) {
+				attributes.add(attribute);
+				System.out.println("Type another attribute that you want print."
+				    + "If you're done, type Done.");
+				attribute = cs.next();
+			} else {
+				System.out.println("There's no such attribute. Try again."
+						+ "If you're done, type Done.");
+				attribute = cs.next();
+			}
+		}
+
+		if (attributes.isEmpty()) {
+			System.out.println("There's nothing to be presented");
+		} else {
+		    this.printHeaderOfSpecificColumns(attributes);
+		    this.presentColumns(attributes);
+		}
+
+	}
+
+    //Checks if a Column exists in a Table
+	public int containsName(String name) {
+    	for (Column c: this.columns) {
+    	   if (c.getName() == name) { //if it exits, it returns its position
+    		   return this.columns.indexOf(c);
+    	   }
+    	}
+    	return -1; //if it doesn't exist, it returns -1
+    }
+
+
+    public void presentColumns( ArrayList <String> attributes) {
+		for (int i = 0; i < this.columns.get(0).getField().size(); i++)  {
+			for (String a: attributes) {
+				Column column = this.columns.get(this.containsName(a));
+		        column.printElement(i);
+            }
+        System.out.println();
+        }
+	}
 }
+
