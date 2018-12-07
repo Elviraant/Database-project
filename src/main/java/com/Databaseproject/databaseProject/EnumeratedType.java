@@ -1,0 +1,53 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class EnumeratedType extends FieldType{
+
+	private ArrayList<String> allowedStrings;
+	static Scanner cs = new Scanner(System.in);
+
+	public EnumeratedType() {
+		allowedStrings = new ArrayList<String>();
+	}
+
+	public ArrayList getAllowedStrings() {
+		return allowedStrings;
+	}
+
+	public String getData() {
+
+		String data = null;
+		boolean flag = true;
+		while(flag == true) {
+			data = cs.nextLine();
+
+			if (correctValue(data)) {
+				flag = false;
+			} else {
+				System.out.print("You have to insert one of these: " + getAllowedStrings());
+			}
+
+		}
+		return data;
+	}
+
+	public void defineEnumeration() {
+		System.out.println("Please insert the types you want to fill your fields with. Enter EXIT to stop");
+		String type = cs.nextLine();
+		while (!type.equals("EXIT")) {
+			allowedStrings.add(type);
+			type = cs.nextLine();
+		}
+	}
+
+	public boolean correctValue(String filler) {
+		boolean isCorrect = false;
+		for (String allowedString: allowedStrings) {
+			if (filler.equals(allowedString)) {
+				isCorrect = true;
+			}
+		}
+		return isCorrect;
+	}
+
+}
