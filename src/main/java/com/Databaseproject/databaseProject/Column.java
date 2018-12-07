@@ -1,5 +1,3 @@
-
-
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -35,16 +33,15 @@ public class Column {
 	}
 
 	//Constructor.
-	public Column(String name, FieldType type, boolean isPrimaryKey, Table thisTable) {
+	public Column(String name, FieldType type, Table thisTable) {
 		this.name = name;
 		this.type = type;
-		this.isPrimaryKey = isPrimaryKey;
 		thisTable.getColumns().add(this);
 		int counter = thisTable.getColumnCounter();
 		counter++;
 		thisTable.setColumnCounter(counter);
 		field = new ArrayList<Object>();
-		}
+	}
 
 	public void printElement(int row) {
 		String data = String.format("|%-15s|", this.field.get(row).toString());
@@ -52,7 +49,6 @@ public class Column {
 		System.out.print("     ");
 
 	}
-
 
 
 }//End of class Column.
