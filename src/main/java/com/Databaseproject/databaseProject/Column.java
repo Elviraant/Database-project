@@ -1,13 +1,30 @@
-import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Column {
 	private String name;
 	private FieldType type;
+	private static int counter = 0;
 	private boolean isPrimaryKey;
 	private ArrayList<Object> field;
 
-	//Setters and getters.
+	/**
+	 * Constructor for Column class
+	 * @param name 	name of this field
+	 * @param type 	type of this field
+	 * @param table database's entity of this field
+	 */
+	public Column(String name, FieldType type, Table table) {
+		this.name = name;
+		this.type = type;
+		field = new ArrayList<Object>();
+		table.getColumns().add(this);
+		counter++;
+	}
+
+	public static int getCounter() {
+		return counter;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -16,32 +33,28 @@ public class Column {
 		this.name = name;
 	}
 
-	public ArrayList<Object> getField() {
-		return field;
+	public void setPrimaryKey() {
+		isPrimaryKey = true;
 	}
 
-	public void setField(ArrayList<Object> field) {
-		this.field = field;
+	public ArrayList<Object> getField() {
+		return field;
 	}
 
 	public FieldType getType() {
 		return type;
 	}
 
-	public void setType(FieldType type) {
-		this.type = type;
-	}
+	/**public Column findName(String name) {
 
-	//Constructor.
-	public Column(String name, FieldType type, Table thisTable) {
-		this.name = name;
-		this.type = type;
-		thisTable.getColumns().add(this);
-		int counter = thisTable.getColumnCounter();
-		counter++;
-		thisTable.setColumnCounter(counter);
-		field = new ArrayList<Object>();
-	}
+		Column column = null;
+		for(Column c : columns){
+			if (c.getName().equals(name)) {
+				column = c;
+			}
+		}
+		return column;
+	} ***/
 
 	public void printElement(int row) {
 		String data = String.format("|%-15s|", this.field.get(row).toString());
@@ -50,7 +63,26 @@ public class Column {
 
 	}
 
+	/**
+	 * Returns void
+	 * Checks uniqueness and adds data in a field
+	 * Use for Primary Key Field
+	 */
+	public void checkUniqueness() {
 
-}//End of class Column.
+		boolean exists = false;
+		Object data = getType().getData();
 
+		for (Object f : field) {
+			if (f.equals(data)) {
+				exists = true;
+			}
+		}
+		if (exists) {
+			System.out.println("That data is already exist. Try again");
+		} else {
+			field.add(data);
+		}
+	}
 
+}
