@@ -1,4 +1,5 @@
-//class which represents our database.
+
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,6 +32,7 @@ public class Database {
 		Database.name = name;
 	}
 
+
 	//this is where main is created.
 	public static Scanner cs = new Scanner(System.in);
 
@@ -39,5 +41,15 @@ public class Database {
 			String name = cs.nextLine();
 			Database.setName(name);
 			System.out.println("Database: "+ name);
+
+			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			Table table = new Table("student");
+
+			table.setFieldNames();
+			table.callFiller();
+			table.printAll();
+			table.printSpecificRows();
+			table.printSpecificColumns();
+
 		}
 	}

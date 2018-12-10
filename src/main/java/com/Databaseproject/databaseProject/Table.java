@@ -59,7 +59,7 @@ public class Table {
 		String title;
 		for (int i = 0; i < this.getColumnCounter(); i++) {
 			Column column = this.getColumns().get(i);
-			title = String.format("|%-15s|", this.name);
+			title = String.format("|%-15s|", column.getName());
 			System.out.print(title);
 			spaces =spaces + title.length() + 5;
 			System.out.print("     ");
@@ -140,7 +140,7 @@ public class Table {
 	}
 
 	/*Presents columns given by the user*/
-	public void presentSpecificColumns() {
+	public void printSpecificColumns() {
 		ArrayList <String>  attributes = new ArrayList<String>();
 
 		System.out.println("Type the first attribute that you want print."
@@ -170,9 +170,12 @@ public class Table {
 
     //Checks if a Column exists in a Table
 	public int containsName(String name) {
+
     	for (Column c: this.columns) {
-    	   if (c.getName() == name) { //if it exits, it returns its position
+    	   if (c.getName().equals(name)) { //if it exists, it returns its position
+    		   //System.out.println(this.columns.indexOf(c));
     		   return this.columns.indexOf(c);
+
     	   }
     	}
     	return -1; //if it doesn't exist, it returns -1
@@ -188,5 +191,6 @@ public class Table {
         System.out.println();
         }
 	}
+
 }
 

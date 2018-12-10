@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Column {
 	private String name;
 	private FieldType type;
-	private static int counter = 0;
+	//private static int counter = 0;
 	private boolean isPrimaryKey;
 	private ArrayList<Object> field;
 
@@ -18,12 +18,12 @@ public class Column {
 		this.type = type;
 		field = new ArrayList<Object>();
 		table.getColumns().add(this);
-		counter++;
+		table.setColumnCounter(table.getColumnCounter() + 1);
 	}
 
-	public static int getCounter() {
+	/**public static int getCounter() {
 		return counter;
-	}
+	} **/
 
 	public String getName() {
 		return name;
