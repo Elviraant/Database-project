@@ -1,5 +1,6 @@
-
-//Class which represents a table of our database.
+/**
+Represents a table of our database.
+*/
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,9 +10,23 @@ public class Table {
 	private String name;
 	private int numberOfRows;
 
+	/**
+	*Constructor for Table class
+	* @param columns arraylist with objects of Column
+	* @param columnCounter number of columns in this table
+	* @param name name of this table
+	* @param numberOfRows number of row insertions from user
+	*/
+	 public Table(String name) {
+	    this.name = name;
+	    Database.getTables().add(this);
+	    int counter = Database.getTableCounter();
+	    counter++;
+	    Database.setTableCounter(counter);
+    }
+
     Scanner cs = new Scanner(System.in);
 
-    //setters and getters
     public ArrayList<Column> getColumns() {
 	    return columns;
     }
@@ -44,16 +59,10 @@ public class Table {
 	    this.numberOfRows = numberOfRows;
     }
 
-    //constructor
-    public Table(String name) {
-	    this.name = name;
-	    Database.getTables().add(this);
-	    int counter = Database.getTableCounter();
-	    counter++;
-	    Database.setTableCounter(counter);
-    }
+	/**
+	*create field names and call method findType to create the arrays
+	*/
 
-	//create field names and call method findType to create the arrays
 	public void setFieldNames() {
 		System.out.println("Set the names of the fields that you want to create?\nEnter EXIT to stop");
 		int counter = 1;
@@ -85,8 +94,9 @@ public class Table {
 		System.out.println();
 	}
 
-
-	//ask how to fill the fields and call method columnFillerByRow or columnFillerByCollumn
+	/**
+	*ask how to fill the fields and call method columnFillerByRow or columnFillerByCollumn
+	*/
 	public void callFiller() {
 		System.out.println("How would you like to fill the table?");
 		System.out.println("1. By row\n2. By column");
@@ -103,8 +113,9 @@ public class Table {
 		System.out.println("");
 	}
 
-
-	//Fill in with Data, Fills by row//
+	/**
+	*Fill in with Data, Fills by row//
+	*/
 	public void columnFillerByRow() {
 		//System.out.println("mpike sthn filler by row");
 		boolean continueProcess = true;
@@ -131,7 +142,9 @@ public class Table {
 	}
 
 
-	//Fill in with Data, Fills by column//
+	/**
+	*Fill in with Data, Fills by column
+	*/
 	public void columnFillerByColumn() {
 		for (int i = 0; i < this.getColumnCounter(); i++){
 			Column column = this.getColumns().get(i);
@@ -158,8 +171,9 @@ public class Table {
 		}
 	}
 
-
-	//Prints the header with the title of the fields
+	/**
+	*Prints the header with the title of the fields
+	*/
 	public void printHeader() {
 		int spaces = 0;
 		String title;
@@ -178,8 +192,7 @@ public class Table {
 		System.out.println();
 	}
 
-
-    public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
+	public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
 	    int spaces = 0;
 	    for (String attribute: attributes ) {
 	    	String title = String.format("|%-15s|", attribute);
@@ -192,25 +205,27 @@ public class Table {
 			System.out.print("-");
 		}
 		System.out.println();
-
 	}
 
 
 	//Prints one row of the table.
     public void presentRow(int row) {
-        for (int i = 0; i < this.getColumnCounter(); i++) {
-		    Column column = this.getColumns().get(i);
+        for (int i = 0; i < columnCounter; i++) {
+		    Column column = columns.get(i);
 			column.printElement(row);
 		}
 		System.out.println();
 	}
 
+	/**
+	*prints all table insertions and the titles of the attributes
+	*/
 
-	//Prints all table insertions.
 	public void printAll() {
 		System.out.println();
+		System.out.println("Table: "+this.name);
 		this.printHeader();
-		Column firstColumn = this.getColumns().get(0);
+		Column firstColumn = this.columns.get(0);
 		for (int k = 0; k < firstColumn.getField().size(); k++) {
 
 			this.presentRow(k);
@@ -218,34 +233,47 @@ public class Table {
 		System.out.println();
 	}
 
-
-
-
-	//User gives the number of the starting row.
-	public int startingRow() {
-		System.out.println("Starting row: ");
-		return cs.nextInt();
-	}
-
-	//User gives the ending row.
-	public int endingRow() {
-		System.out.println("Ending row: ");
-		return cs.nextInt();
-	}
-
-	//Present specific rows within a range given by the user.
+	/**
+	*Present specific rows within a range given by the user
+	*/
 	public void printSpecificRows() {
 		System.out.println();
+		System.out.println("Please insert the range of rows you want to print.");
 		int start = startingRow() - 1;
 		int end = endingRow();
 		this.printHeader();
 		for (int i = start; i < end; i++) {
-			this.presentRow(i);
+			presentRow(i);
 		}
 		System.out.println();
 	}
 
-	/*Presents columns given by the user*/
+	/**
+	@return starting row given by the user
+	*/
+	public int startingRow() {
+		int row = cs.nextInt();
+		System.out.println("Starting row: ");
+		while ((row > numberOfRows) || (row < 1)) {
+			System.out.println("Your choice is out of boundaries. Please chose another starting row.");
+			row = cs.nextInt();
+		}
+		return row;
+	}
+
+	public int endingRow() {
+		int row = cs.nextInt();
+		System.out.println("Ending row: ");
+		while ((row > numberOfRows) || (row < 1)) {
+			System.out.println("Your choice is out of boundaries. Please chose another ending row.");
+			row = cs.nextInt();
+		}
+		return row;
+	}
+
+	/**
+	*Presents columns given by the user
+	*/
 	public void printSpecificColumns() {
 		ArrayList <String>  attributes = new ArrayList<String>();
 
@@ -286,23 +314,24 @@ public class Table {
     	for (Column c: this.columns) {
     	   if (c.getName().equals(name)) {
     		   //System.out.println(this.columns.indexOf(c));
-    		   return this.columns.indexOf(c);
+    		   return columns.indexOf(c);
 
     	   }
     	}
     	return -1;
     }
 
-
+	/**
+	*present columns according to a list of attributes given by the user
+	*@param attributes the list of the attributes
+	*/
     public void presentColumns( ArrayList <String> attributes) {
 		for (int i = 0; i < this.columns.get(0).getField().size(); i++)  {
 			for (String a: attributes) {
-				Column column = this.columns.get(this.containsName(a));
+				Column column = columns.get(this.containsName(a));
 		        column.printElement(i);
             }
         System.out.println();
         }
 	}
-
 }
-

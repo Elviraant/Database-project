@@ -1,5 +1,6 @@
-
-
+/**
+Represents our Database
+*/
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,8 +33,6 @@ public class Database {
 		Database.name = name;
 	}
 
-
-	//this is where main is created.
 	public static Scanner cs = new Scanner(System.in);
 
 	public static void main(String[] args) {
