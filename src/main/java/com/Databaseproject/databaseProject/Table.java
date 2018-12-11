@@ -9,9 +9,22 @@ public class Table {
 	private String name;
 	private int numberOfRows;
 
+	/**
+	*Constructor for Table class
+	* @param columns arraylist with objects of Column
+	* @param columnCounter number of columns in this table
+	* @param name name of this table
+	* @param numberOfRows number of row insertions from user
+	*/
+    public Table(String name) {
+	    this.name = name;
+	    Database.getTables().add(this);
+	    int counter = Database.getTableCounter();
+	    counter++;
+	    Database.setTableCounter(counter);
+    }
     Scanner cs = new Scanner(System.in);
 
-    //setters and getters
     public ArrayList<Column> getColumns() {
 	    return columns;
     }
@@ -44,14 +57,6 @@ public class Table {
 	    this.numberOfRows = numberOfRows;
     }
 
-    //constructor
-    public Table(String name) {
-	    this.name = name;
-	    Database.getTables().add(this);
-	    int counter = Database.getTableCounter();
-	    counter++;
-	    Database.setTableCounter(counter);
-    }
 
 	//create field names and call method findType to create the arrays
 	public void setFieldNames() {
@@ -195,8 +200,10 @@ public class Table {
 
 	}
 
-
-	//Prints one row of the table.
+	/**
+	*print specific row of a table
+	*@param the row that is printed
+	*/
     public void presentRow(int row) {
         for (int i = 0; i < this.getColumnCounter(); i++) {
 		    Column column = this.getColumns().get(i);
@@ -206,7 +213,9 @@ public class Table {
 	}
 
 
-	//Prints all table insertions.
+	/**
+	*prints all table insertions and the titles of the attributes
+	*/
 	public void printAll() {
 		System.out.println();
 		this.printHeader();
@@ -218,16 +227,17 @@ public class Table {
 		System.out.println();
 	}
 
-
-
-
-	//User gives the number of the starting row.
+	/**
+	@return starting row given by the user
+	*/
 	public int startingRow() {
 		System.out.println("Starting row: ");
 		return cs.nextInt();
 	}
 
-	//User gives the ending row.
+	/**
+	@return ending row given by the user
+	*/
 	public int endingRow() {
 		System.out.println("Ending row: ");
 		return cs.nextInt();
