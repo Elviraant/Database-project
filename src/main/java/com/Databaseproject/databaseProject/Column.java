@@ -85,4 +85,20 @@ public class Column {
 		}
 	}
 
+	public static FieldType findType(int choice) {
+		FieldType type;
+		switch (choice) {
+			case 1: {type = new IntegerType();}
+			break;
+			case 2: {type = new DoubleType();}
+			break;
+			case 3: {type = new StringType();}
+			break;
+			//case 4: {type = new EnumeratedType();}
+			//break;
+			default: {type = new StringType();}
+		}
+		return type;
+	}
+
 }

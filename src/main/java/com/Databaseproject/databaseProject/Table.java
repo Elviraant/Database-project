@@ -53,6 +53,112 @@ public class Table {
 	    Database.setTableCounter(counter);
     }
 
+	//create field names and call method findType to create the arrays
+	public void setFieldNames() {
+		System.out.println("Set the names of the fields that you want to create?\nEnter EXIT to stop");
+		int counter = 1;
+		System.out.print("#" +  counter + " Field Name: ");
+		String nameOfField = cs.next();
+		System.out.println();
+
+		while (!nameOfField.equals("EXIT")) {
+
+			System.out.println("Please choose one of the following data types:");
+			System.out.println();
+			System.out.println("1. Integer\n2. Double\n3. Text\n4. Own Type" );
+
+			int choice = cs.nextInt();
+			if (choice == 1 || choice == 2 || choice == 3) {
+				FieldType type = Column.findType(choice);
+				new Column(nameOfField, type, this);
+			} else if (choice == 4) {
+				EnumeratedType type = new EnumeratedType();
+				type.defineEnumeration();
+				new Column(nameOfField, type, this);
+			}
+			counter++;
+			System.out.println();
+			System.out.println("Please insert name of the next field");
+			System.out.print("#" +  counter + " Field Name: ");
+			nameOfField = cs.next();
+		}
+		System.out.println();
+	}
+
+
+	//ask how to fill the fields and call method columnFillerByRow or columnFillerByCollumn
+	public void callFiller() {
+		System.out.println("How would you like to fill the table?");
+		System.out.println("1. By row\n2. By column");
+		int filltype = cs.nextInt();
+		while (!((filltype == 1) || (filltype == 2))) {
+				System.out.print("select 1 or 2: ");
+				filltype = cs.nextInt();
+		}
+		if (filltype == 1) {
+			this.columnFillerByRow();
+		}else if (filltype == 2) {
+			this.columnFillerByColumn();
+		}
+		System.out.println("");
+	}
+
+
+	//Fill in with Data, Fills by row//
+	public void columnFillerByRow() {
+		//System.out.println("mpike sthn filler by row");
+		boolean continueProcess = true;
+		int insertions = 0;
+		while (continueProcess) {
+			System.out.println("#" + (insertions + 1) + " Row: ");
+			/****for (int i = 0; i < this.getColumnCounter(); i++) {
+				Column column = this.getColumns().get(i);
+				System.out.println("Give "+ column.getName());
+				Object data = column.getType().getData();
+				column.getField().add(data);
+			} ****/
+			for(Column column : this.getColumns()) {
+				System.out.println("Give "+ column.getName());
+				Object data = column.getType().getData();
+				column.getField().add(data);
+			}
+			insertions++;
+			System.out.println("Do you want to continue? Y/N");
+			continueProcess = Database.findDecision();
+			//if (decision) continueProcess = true; else continueProcess = false;
+		}
+		 this.setNumberOfRows((insertions + 1));
+	}
+
+
+	//Fill in with Data, Fills by column//
+	public void columnFillerByColumn() {
+		for (int i = 0; i < this.getColumnCounter(); i++){
+			Column column = this.getColumns().get(i);
+			System.out.println("How many cells would you like to fill for " + column.getName());
+			int decision = cs.nextInt();
+			//System.out.println("Please insert the values for array " + column.getName() + ". Enter EXIT to stop");
+			System.out.println("	" + column.getName());
+			System.out.println("-----------------");
+			//int j = 1;
+			for (int j = 0 ; j < decision; j++) {
+				System.out.print("#"+ (j+1)+" Row: ");
+				Object data = column.getType().getData();
+				column.getField().add(data);
+			}
+			System.out.println();
+			//String decision = cs.next();
+		/*	while (!decision.equals("EXIT")) {
+				j++;
+				System.out.print("#"+ j+" Row: ");
+				Object data = column.getType().getData();
+				column.getField().add(data);
+			//	decision = column.getData();
+			} */
+		}
+	}
+
+
 	//Prints the header with the title of the fields
 	public void printHeader() {
 		int spaces = 0;
