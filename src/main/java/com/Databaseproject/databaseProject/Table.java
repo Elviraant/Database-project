@@ -9,22 +9,9 @@ public class Table {
 	private String name;
 	private int numberOfRows;
 
-	/**
-	*Constructor for Table class
-	* @param columns arraylist with objects of Column
-	* @param columnCounter number of columns in this table
-	* @param name name of this table
-	* @param numberOfRows number of row insertions from user
-	*/
-    public Table(String name) {
-	    this.name = name;
-	    Database.getTables().add(this);
-	    int counter = Database.getTableCounter();
-	    counter++;
-	    Database.setTableCounter(counter);
-    }
     Scanner cs = new Scanner(System.in);
 
+    //setters and getters
     public ArrayList<Column> getColumns() {
 	    return columns;
     }
@@ -57,6 +44,14 @@ public class Table {
 	    this.numberOfRows = numberOfRows;
     }
 
+    //constructor
+    public Table(String name) {
+	    this.name = name;
+	    Database.getTables().add(this);
+	    int counter = Database.getTableCounter();
+	    counter++;
+	    Database.setTableCounter(counter);
+    }
 
 	//create field names and call method findType to create the arrays
 	public void setFieldNames() {
@@ -200,10 +195,8 @@ public class Table {
 
 	}
 
-	/**
-	*print specific row of a table
-	*@param the row that is printed
-	*/
+
+	//Prints one row of the table.
     public void presentRow(int row) {
         for (int i = 0; i < this.getColumnCounter(); i++) {
 		    Column column = this.getColumns().get(i);
@@ -213,9 +206,7 @@ public class Table {
 	}
 
 
-	/**
-	*prints all table insertions and the titles of the attributes
-	*/
+	//Prints all table insertions.
 	public void printAll() {
 		System.out.println();
 		this.printHeader();
@@ -227,17 +218,16 @@ public class Table {
 		System.out.println();
 	}
 
-	/**
-	@return starting row given by the user
-	*/
+
+
+
+	//User gives the number of the starting row.
 	public int startingRow() {
 		System.out.println("Starting row: ");
 		return cs.nextInt();
 	}
 
-	/**
-	@return ending row given by the user
-	*/
+	//User gives the ending row.
 	public int endingRow() {
 		System.out.println("Ending row: ");
 		return cs.nextInt();
@@ -284,17 +274,23 @@ public class Table {
 
 	}
 
-    //Checks if a Column exists in a Table
+    /**
+     *	Checks by name, if a Column exists in a Table
+     *	If the column exists, returns its position at ArrayList columns.
+     *  If it doesn't exist, returns -1
+     *  @param name of this field
+     *	@returns int position
+     */
 	public int containsName(String name) {
 
     	for (Column c: this.columns) {
-    	   if (c.getName().equals(name)) { //if it exists, it returns its position
+    	   if (c.getName().equals(name)) {
     		   //System.out.println(this.columns.indexOf(c));
     		   return this.columns.indexOf(c);
 
     	   }
     	}
-    	return -1; //if it doesn't exist, it returns -1
+    	return -1;
     }
 
 
