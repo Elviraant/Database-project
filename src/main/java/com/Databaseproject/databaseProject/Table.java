@@ -76,7 +76,7 @@ public class Table {
 			System.out.println();
 			System.out.println("1. Integer\n2. Double\n3. Text\n4. Own Type" );
 
-			int choice = cs.nextInt();
+			int choice = Database.choice(1,4);
 			if (choice == 1 || choice == 2 || choice == 3) {
 				FieldType type = Column.findType(choice);
 				new Column(nameOfField, type, this);
@@ -171,6 +171,62 @@ public class Table {
 		}
 	}
 
+	public void manageData() {
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.startingMenu();
+			int choice = Database.choice(1,4);
+			switch (choice)
+			{
+				case 1:
+					presentData();
+					break;
+				default:
+					continueProcess = false;
+			}
+		}
+	}
+
+	public void presentData() {
+		int choice;
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.presentationMenu();
+			choice = Database.choice(1,3);
+			switch (choice)
+			{
+				case 1:
+					printAll();
+					break;
+				case 2:
+					printSpecificRows();
+					break;
+				case 3:
+					printSpecificColumns();
+					break;
+				default:
+					Menu.startingMenu();
+				}
+				System.out.println("Continue with the presentation of data?");
+				continueProcess = Database.findDecision();
+			}
+		}
+
+	/**
+	*prints all table insertions and the titles of the attributes
+	*/
+	public void printAll() {
+		System.out.println();
+		System.out.println("Table: "+this.name);
+		printHeader();
+		Column firstColumn = this.columns.get(0);
+		for (int k = 0; k < firstColumn.getField().size(); k++) {
+
+			this.presentRow(k);
+		}
+		System.out.println();
+	}
+
 	/**
 	*Prints the header with the title of the fields
 	*/
@@ -192,6 +248,51 @@ public class Table {
 		System.out.println();
 	}
 
+	//Prints one row of the table.
+    public void presentRow(int row) {
+        for (int i = 0; i < columnCounter; i++) {
+		    Column column = columns.get(i);
+			column.printElement(row);
+		}
+		System.out.println();
+	}
+
+	/**
+	*Present specific rows within a range given by the user
+	*/
+	public void printSpecificRows() {
+		System.out.println("Please insert the range of rows you want to print.");
+		int start = startingRow() - 1;
+		int end = endingRow();
+		this.printHeader();
+		for (int i = start; i < end; i++) {
+			presentRow(i);
+		}
+		System.out.println();
+	}
+	/**
+	@return starting row given by the user
+	*/
+	public int startingRow() {
+		System.out.println("Starting row: ");
+		int row = cs.nextInt();
+		while ((row > numberOfRows-1) || (row < 1)) {
+			System.out.println("Your choice is out of boundaries. Please chose another starting row.");
+			row = cs.nextInt();
+		}
+		return row;
+	}
+
+	public int endingRow() {
+		System.out.println("Ending row: ");
+		int row = cs.nextInt();
+		while ((row > numberOfRows-1) || (row < 1)) {
+			System.out.println("Your choice is out of boundaries. Please chose another ending row.");
+			row = cs.nextInt();
+		}
+		return row;
+	}
+
 	public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
 	    int spaces = 0;
 	    for (String attribute: attributes ) {
@@ -205,70 +306,6 @@ public class Table {
 			System.out.print("-");
 		}
 		System.out.println();
-	}
-
-
-	//Prints one row of the table.
-    public void presentRow(int row) {
-        for (int i = 0; i < columnCounter; i++) {
-		    Column column = columns.get(i);
-			column.printElement(row);
-		}
-		System.out.println();
-	}
-
-	/**
-	*prints all table insertions and the titles of the attributes
-	*/
-
-	public void printAll() {
-		System.out.println();
-		System.out.println("Table: "+this.name);
-		this.printHeader();
-		Column firstColumn = this.columns.get(0);
-		for (int k = 0; k < firstColumn.getField().size(); k++) {
-
-			this.presentRow(k);
-		}
-		System.out.println();
-	}
-
-	/**
-	*Present specific rows within a range given by the user
-	*/
-	public void printSpecificRows() {
-		System.out.println();
-		System.out.println("Please insert the range of rows you want to print.");
-		int start = startingRow() - 1;
-		int end = endingRow();
-		this.printHeader();
-		for (int i = start; i < end; i++) {
-			presentRow(i);
-		}
-		System.out.println();
-	}
-
-	/**
-	@return starting row given by the user
-	*/
-	public int startingRow() {
-		int row = cs.nextInt();
-		System.out.println("Starting row: ");
-		while ((row > numberOfRows) || (row < 1)) {
-			System.out.println("Your choice is out of boundaries. Please chose another starting row.");
-			row = cs.nextInt();
-		}
-		return row;
-	}
-
-	public int endingRow() {
-		int row = cs.nextInt();
-		System.out.println("Ending row: ");
-		while ((row > numberOfRows) || (row < 1)) {
-			System.out.println("Your choice is out of boundaries. Please chose another ending row.");
-			row = cs.nextInt();
-		}
-		return row;
 	}
 
 	/**
@@ -334,7 +371,6 @@ public class Table {
         System.out.println();
         }
 	}
-
 
 	//Input name of field to change and check for existance.
 	public int inputFieldName () {
