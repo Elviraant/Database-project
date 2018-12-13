@@ -356,7 +356,30 @@ public class Table {
 				return ex;
 	}
 
-	/* search if there is a PrimaryKey Column.
+	public void changeFieldName() {
+		StringType name = new StringType();
+		int pos = this.inputFieldName();
+		Column col = this.getColumns().get(pos);
+		System.out.println("Give the new name of the field");
+		String newName = name.getData();
+		int k = this.containsName(newName);
+		if (k == -1){
+			col.setName(newName);
+		}
+		else {
+			System.out.println ("This name is already in use.");
+			System.out.println ("Do u want to try again?");
+			Boolean answer = Database.findDecision();
+			if(answer){
+				inputFieldName();
+			}
+			else {
+				//call method with menu of choices
+			}
+		}
+	}
+
+    /* search if there is a PrimaryKey Column.
 	Then calls method primaryKeyColumn. */
 	public void findPrimaryKeyColumn() {
 		int j = 0;
@@ -420,5 +443,17 @@ public class Table {
 			Object newValue = x.getType().getData();
 			x.getField().set(position, newValue);
 			System.out.println("Change succeed");
-	}
+		}
+
+
+		public void changeAllData() {
+			int pos = this.inputFieldName();
+			Column col = this.getColumns().get(pos);
+			for ( int i=0 ; i<=col.getField().size() ; i++) {
+				System.out.println("Enter the new value of element you want to change");
+				Object newValue = col.getType().getData();
+				col.getField().set(i, newValue);
+			}
+		}
+
 }
