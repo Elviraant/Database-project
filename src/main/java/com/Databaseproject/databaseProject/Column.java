@@ -33,6 +33,10 @@ public class Column {
 		this.name = name;
 	}
 
+	public boolean getPrimaryKey() {
+		return isPrimaryKey;
+	}
+
 	public void setPrimaryKey() {
 		isPrimaryKey = true;
 	}
