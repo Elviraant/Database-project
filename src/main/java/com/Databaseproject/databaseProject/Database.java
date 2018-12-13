@@ -46,9 +46,7 @@ public class Database {
 
 		table.setFieldNames();
 		table.callFiller();
-		table.printAll();
-		table.printSpecificRows();
-		table.printSpecificColumns();
+		table.manageData();
 
 	}
 
@@ -82,4 +80,19 @@ public class Database {
 		}
 		return yn;
 	}
+	/**
+	*returns number of choice from given range checking it is valid
+	*@param start starting number of the range of options
+	*@param end ending number of the range of options
+	*@return choice returns the final option
+	*/
+	public static int choice(int start, int end) {
+		int choice = cs.nextInt();
+		while ((choice < start) || (choice > end)) {
+			System.out.println("Please chose a valid option");
+			choice = cs.nextInt();
+		}
+		return choice;
+	}
 }
+
