@@ -309,35 +309,45 @@ public class Table {
 	}
 
 	/**
-	*Presents columns given by the user
+	*Gets the names of the attributes by the user and puts them in an ArrayList
+	*@return the ArrayList of the attributes given by the user
 	*/
-	public void printSpecificColumns() {
+	public ArrayList <String> inputSpecificColumns() {
 		ArrayList <String>  attributes = new ArrayList<String>();
+		boolean continueProcess = true;
+		String attribute;
 
-		System.out.println("Type the first attribute that you want print."
-		    + "If you're done, type Done.");
-		String attribute = cs.next();
-		while (!attribute.equals("Done"))	                     {
+		while (continueProcess)	{
+			System.out.println("Type an attribute that you want print:");
+			attribute = cs.next();
 			if (this.containsName(attribute) != -1) {
 				attributes.add(attribute);
-				System.out.println("Type another attribute that you want print."
-				    + "If you're done, type Done.");
-				attribute = cs.next();
+				System.out.println("Do you want to continue? Y/N");
+				continueProcess = Database.findDecision();
+
 			} else {
-				System.out.println("There's no such attribute. Try again."
-						+ "If you're done, type Done.");
-				attribute = cs.next();
+				System.out.println("There's no such attribute.");
+				System.out.println("Do you want to continue? Y/N");
+				continueProcess = Database.findDecision();
 			}
 		}
-
-		if (attributes.isEmpty()) {
-			System.out.println("There's nothing to be presented");
-		} else {
-		    this.printHeaderOfSpecificColumns(attributes);
-		    this.presentColumns(attributes);
-		}
-
+		return attributes;
 	}
+
+	/**
+	*Prints columns according to a list given by the user
+	*/
+	public void printSpecificColumns() {
+		ArrayList<String> attributes = inputSpecificColumns();
+		if (attributes.isEmpty()) {
+			System.out.println("There's nothing to be presented.\n");
+		} else {
+			this.presentColumns(attributes);
+		}
+	}
+
+
+
 
     /**
      *	Checks by name, if a Column exists in a Table
@@ -359,11 +369,12 @@ public class Table {
     }
 
 	/**
-	*present columns according to a list of attributes given by the user
+	*present columns according to a list of attributes
 	*@param attributes the list of the attributes
 	*/
     public void presentColumns( ArrayList <String> attributes) {
-		for (int i = 0; i < this.columns.get(0).getField().size(); i++)  {
+		this.printHeaderOfSpecificColumns(attributes);
+		for (int i = 0; i < numberOfRows -1; i++)  {
 			for (String a: attributes) {
 				Column column = columns.get(this.containsName(a));
 		        column.printElement(i);
