@@ -1,7 +1,8 @@
 import java.util.Scanner;
+import java.io.Serializable;
 
-public class DoubleType extends FieldType {
-	Scanner cs = new Scanner(System.in);
+public class DoubleType extends FieldType implements Serializable {
+	transient Scanner cs = new Scanner(System.in);
 
 	public boolean correctValue(String a) {
 		return true;
