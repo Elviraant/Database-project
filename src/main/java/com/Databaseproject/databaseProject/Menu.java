@@ -20,25 +20,9 @@ public final class Menu {
 		System.out.println();
 		System.out.println("-----------------");
 		System.out.println(String.format("%s\n%s\n%s\n%s\n", "1. Change name of Field", "2. Change specific value of an element in a list.",
-											"3.Change all values of elements in a field.", "4.Change all values of elements with the same value"));
+										 "3. Change all values of elements in a field.", "4. Change all values of elements with the same value"));
 		System.out.println("Please chose one of the above options: ");
-		int choice = Database.choice(1, 4);
-		Table table = new Table("Students");
-
-		switch(choice) {
-
-			case(1): table.changeFieldName();
-								break;
-
-			case(2): table.changeValue();
-								break;
-
-			case(3): table.changeAllData();
-								break;
-
-			case(4): table.sameValue();
-								break;
 	}
-}
+
 }
 

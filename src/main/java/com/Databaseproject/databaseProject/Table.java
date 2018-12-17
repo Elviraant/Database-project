@@ -181,6 +181,9 @@ public class Table {
 				case 1:
 					presentData();
 					break;
+				case 2:
+					changeData();
+					break;
 				default:
 					continueProcess = false;
 			}
@@ -211,6 +214,33 @@ public class Table {
 				continueProcess = Database.findDecision();
 			}
 		}
+
+	public void changeData() {
+		int choice;
+		boolean decision;
+		do {
+			Menu.changeMenu();
+			choice = Database.choice(1,4);
+			switch(choice) {
+
+				case(1): changeFieldName();
+										break;
+
+
+				case(2): changeValue();
+									break;
+
+
+				case(3): changeAllData();
+							 		 break;
+
+				case(4): sameValue();
+									break;
+			}
+			System.out.println("Do you want to continue the process of changing data?Yes/No");
+			decision = Database.findDecision();
+		 }  while (decision);
+	}
 
 	/**
 	*prints all table insertions and the titles of the attributes
@@ -385,23 +415,23 @@ public class Table {
 
 	//Input name of field to change and check for existance.
 	public int inputFieldName () {
-				StringType name = new StringType();
-				System.out.println("Which field you want to update?(give name of field)");
-				String nameofField = name.getData();
-				int ex = this.containsName(nameofField);
-				if (ex == -1) {
-					System.out.println("This name of field doesn't exist in your Data Base");
-					System.out.println("Do you want to try again?");
-					//System.out.println("Answer Yes or No");
-					Boolean answer = Database.findDecision();
-					if (answer == true) {
-						inputFieldName();
-					} else if (answer == false) {
-						Menu.presentationMenu();
-					}
+			System.out.println("Give name of field you want to update");
+			StringType name = new StringType();
+			String nameofField = name.getData();
+			int ex = this.containsName(nameofField);
+			if (ex == -1) {
+				System.out.println("This name of field doesn't exist in your Data Base");
+				System.out.println("Do you want to try again?");
+				//System.out.println("Answer Yes or No");
+				Boolean answer = Database.findDecision();
+				if (answer == true) {
+					inputFieldName();
+		    	} else if (answer == false) {
+					Menu.presentationMenu();
 				}
-					return ex;
 			}
+			return ex;
+		}
 
 
 	public void changeFieldName() {
@@ -429,37 +459,44 @@ public class Table {
 	}
 
     /* search if there is a PrimaryKey Column.
-	Then calls method primaryKeyColumn. */
-	public int findPrimaryKeyColumn() {
-				int j = 0;
-				int exprimarykey = -1;
-				do {
-					Column col = this.getColumns().get(j);
-					if (col.getPrimaryKey() == true) {
-						exprimarykey = j;
-					}
-						j++;
-				} while (exprimarykey == -1 && j< this.columnCounter);
-				 System.out.println( "" + exprimarykey + "");
-				return  primaryKeyColumn(exprimarykey);
-		}
+	 Then calls method primaryKeyColumn.
+	 attribute: position of field to be changed.*/
+	public int findPrimaryKeyColumn(int pfield) {
+		int j = 0;
+		int exprimarykey = -1;
+		do {
+			Column col = this.getColumns().get(j);
+			if (col.getPrimaryKey() == true) {
+				exprimarykey = j;
+			} else {
+				j++;
+			}
+		} while (exprimarykey == -1 && j< this.columnCounter);
+		  return  primaryKeyColumn(exprimarykey);
+	}
+
+	public int createIncreasedNumber() {
+		FieldType type = Column.findType(1);
+		Column newcolumn = new Column("Increased Number",type, this); //create a new list with increased number.
+			for(int i=0; i < numberOfRows - 1; i++) {
+				newcolumn.getField().add(i + 1);
+				//fill the new list.
+			}
+		newcolumn.setPrimaryKey(true);
+		return this.containsName("Increased Number");
+	}
+
 
 		 /*if a column with primary keys exists, keeps the position in table and calls informUser.
 		  Else make a new list in table with increased number that it will be a primary key list
-		 and calls informUser()*/
-			public int primaryKeyColumn(int exprimaryKey) {
-				if(exprimaryKey == -1) {
-					Column col = this.getColumns().get(this.inputFieldName()); //create an object of column with the name of field.
-					FieldType type = col.findType(1);
-						Column newcolumn = new Column("Increased_Number",type, this); //create a new list with increased number.
-						for(int i=0; i < col.getField().size(); i++) {
-							 newcolumn.getField().add(i);
-							 //fill the new list.
-						}
-							exprimaryKey = this.containsName("Increased_Number");
-					}
-						return informUser(exprimaryKey);
-				}
+		  and calls informUser()*
+		  attributes: position of of primarykey list position of field to be changed*/
+		public int primaryKeyColumn(int exprimaryKey) {
+			if(exprimaryKey == -1) {
+			exprimaryKey = createIncreasedNumber();
+			}
+				return informUser(exprimaryKey);
+		}
 
 
 	/*if a column with primary keys exists, keeps the position in table and calls informUser.
@@ -493,7 +530,7 @@ public class Table {
 
 	public void changeValue() {
 		int pfield = inputFieldName();
-		int pkeypos = findPrimaryKeyColumn();
+		int pkeypos = findPrimaryKeyColumn(pfield);
 		Column x = this.getColumns().get(pfield);
 		System.out.println("Enter the new value of element you want to change");
 		Object nValue = x.getType().getData();
