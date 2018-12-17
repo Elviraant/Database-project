@@ -3,8 +3,9 @@ Represents a table of our database.
 */
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.Serializable;
 
-public class Table {
+public class Table implements Serializable {
 	private ArrayList<Column> columns = new ArrayList<>();
 	private int columnCounter = 0;
 	private String name;
@@ -17,15 +18,15 @@ public class Table {
 	* @param name name of this table
 	* @param numberOfRows number of row insertions from user
 	*/
-	 public Table(String name) {
+	 public Table(String name, Database d1) {
 	    this.name = name;
-	    Database.getTables().add(this);
-	    int counter = Database.getTableCounter();
+	    d1.getTables().add(this);
+	    int counter = d1.getTableCounter();
 	    counter++;
-	    Database.setTableCounter(counter);
+	    d1.setTableCounter(counter);
     }
 
-    Scanner cs = new Scanner(System.in);
+    transient Scanner cs = new Scanner(System.in);
 
     public ArrayList<Column> getColumns() {
 	    return columns;
@@ -107,7 +108,7 @@ public class Table {
 		}
 		if (filltype == 1) {
 			this.columnFillerByRow();
-		}else if (filltype == 2) {
+		} else if (filltype == 2) {
 			this.columnFillerByColumn();
 		}
 		System.out.println("");
@@ -138,7 +139,7 @@ public class Table {
 			continueProcess = Database.findDecision();
 			//if (decision) continueProcess = true; else continueProcess = false;
 		}
-		 this.setNumberOfRows((insertions + 1));
+		numberOfRows = insertions;
 	}
 
 
@@ -146,8 +147,8 @@ public class Table {
 	*Fill in with Data, Fills by column
 	*/
 	public void columnFillerByColumn() {
-		for (int i = 0; i < this.getColumnCounter(); i++){
-			Column column = this.getColumns().get(i);
+		for (int i = 0; i < columnCounter; i++){
+			Column column = columns.get(i);
 			System.out.println("How many cells would you like to fill for " + column.getName());
 			int decision = cs.nextInt();
 			//System.out.println("Please insert the values for array " + column.getName() + ". Enter EXIT to stop");
@@ -209,11 +210,12 @@ public class Table {
 					break;
 				default:
 					Menu.startingMenu();
-				}
+			}
 				System.out.println("Continue with the presentation of data?");
 				continueProcess = Database.findDecision();
 			}
 		}
+
 
 	public void changeData() {
 		int choice;
@@ -224,18 +226,18 @@ public class Table {
 			switch(choice) {
 
 				case(1): changeFieldName();
-										break;
+						break;
 
 
 				case(2): changeValue();
-									break;
+						break;
 
 
 				case(3): changeAllData();
-							 		 break;
+						break;
 
 				case(4): sameValue();
-									break;
+						 break;
 			}
 			System.out.println("Do you want to continue the process of changing data?Yes/No");
 			decision = Database.findDecision();
@@ -249,33 +251,24 @@ public class Table {
 		System.out.println();
 		System.out.println("Table: "+this.name);
 		printHeader();
-		Column firstColumn = this.columns.get(0);
+		Column firstColumn = columns.get(0);
 		for (int k = 0; k < firstColumn.getField().size(); k++) {
 
-			this.presentRow(k);
+			presentRow(k);
 		}
 		System.out.println();
 	}
 
 	/**
-	*Prints the header with the title of the fields
+	*Prints the header with the title of all the fields
 	*/
 	public void printHeader() {
-		int spaces = 0;
-		String title;
-		for (int i = 0; i < this.getColumnCounter(); i++) {
-			Column column = this.getColumns().get(i);
-			title = String.format("|%-15s|", column.getName());
-			System.out.print(title);
-			spaces =spaces + title.length() + 5;
-			System.out.print("     ");
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < columnCounter; i++) {
+			Column column = columns.get(i);
+			list.add(column.getName());
 		}
-		System.out.println();
-		for (int i = 0; i < spaces - 5; i++) {
-			System.out.print("-");
-	    }
-
-		System.out.println();
+		printHeaderOfSpecificColumns(list);
 	}
 
 	//Prints one row of the table.
@@ -292,35 +285,22 @@ public class Table {
 	*/
 	public void printSpecificRows() {
 		System.out.println("Please insert the range of rows you want to print.");
-		int start = startingRow() - 1;
-		int end = endingRow();
-		this.printHeader();
+		int start = 1;
+		int end = 0;
+		while (start >= end) {
+			System.out.println("Starting row: ");
+			start = Database.choice(1, numberOfRows)-1;
+			System.out.println("Ending row: ");
+			end = Database.choice(1,numberOfRows);
+			if (start >= end) {
+				System.out.println("Starting can't be greater than ending row");
+			}
+		}
+		printHeader();
 		for (int i = start; i < end; i++) {
 			presentRow(i);
 		}
 		System.out.println();
-	}
-	/**
-	@return starting row given by the user
-	*/
-	public int startingRow() {
-		System.out.println("Starting row: ");
-		int row = cs.nextInt();
-		while ((row > numberOfRows-1) || (row < 1)) {
-			System.out.println("Your choice is out of boundaries. Please chose another starting row.");
-			row = cs.nextInt();
-		}
-		return row;
-	}
-
-	public int endingRow() {
-		System.out.println("Ending row: ");
-		int row = cs.nextInt();
-		while ((row > numberOfRows-1) || (row < 1)) {
-			System.out.println("Your choice is out of boundaries. Please chose another ending row.");
-			row = cs.nextInt();
-		}
-		return row;
 	}
 
 	public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
@@ -376,10 +356,7 @@ public class Table {
 		}
 	}
 
-
-
-
-    /**
+	 /**
      *	Checks by name, if a Column exists in a Table
      *	If the column exists, returns its position at ArrayList columns.
      *  If it doesn't exist, returns -1
@@ -397,21 +374,21 @@ public class Table {
     	}
     	return -1;
     }
-
 	/**
 	*present columns according to a list of attributes
 	*@param attributes the list of the attributes
 	*/
     public void presentColumns( ArrayList <String> attributes) {
-		this.printHeaderOfSpecificColumns(attributes);
-		for (int i = 0; i < numberOfRows -1; i++)  {
+		printHeaderOfSpecificColumns(attributes);
+		for (int i = 0; i < numberOfRows; i++)  {
 			for (String a: attributes) {
-				Column column = columns.get(this.containsName(a));
+				Column column = columns.get(containsName(a));
 		        column.printElement(i);
             }
         System.out.println();
         }
 	}
+
 
 	//Input name of field to change and check for existance.
 	public int inputFieldName () {
@@ -461,11 +438,13 @@ public class Table {
     /* search if there is a PrimaryKey Column.
 	 Then calls method primaryKeyColumn.
 	 attribute: position of field to be changed.*/
+
+
 	public int findPrimaryKeyColumn(int pfield) {
 		int j = 0;
 		int exprimarykey = -1;
 		do {
-			Column col = this.getColumns().get(j);
+			Column col = columns.get(j);
 			if (col.getPrimaryKey() == true) {
 				exprimarykey = j;
 			} else {
@@ -478,7 +457,7 @@ public class Table {
 	public int createIncreasedNumber() {
 		FieldType type = Column.findType(1);
 		Column newcolumn = new Column("Increased Number",type, this); //create a new list with increased number.
-			for(int i=0; i < numberOfRows - 1; i++) {
+			for(int i=0; i < numberOfRows; i++) {
 				newcolumn.getField().add(i + 1);
 				//fill the new list.
 			}
@@ -491,6 +470,7 @@ public class Table {
 		  Else make a new list in table with increased number that it will be a primary key list
 		  and calls informUser()*
 		  attributes: position of of primarykey list position of field to be changed*/
+
 		public int primaryKeyColumn(int exprimaryKey) {
 			if(exprimaryKey == -1) {
 			exprimaryKey = createIncreasedNumber();
@@ -502,39 +482,37 @@ public class Table {
 	/*if a column with primary keys exists, keeps the position in table and calls informUser.
 	Else make a new list in table with increased number that it will be a primary key list
 	and calls informUser()*/
-		public int informUser(int ex){
-					Column col = this.getColumns().get(ex);
-					System.out.println("This is your Database :");
-					this.printAll();
-					//Inform him which list is primary key.
-					System.out.print("This is the list with the primary keys of your elements ");
-					System.out.println(col.getName());
-					System.out.println("Type the primary key of element you want to change");
-					Object searchKey = col.getType().getData();
-						if ( !col.getField().contains(searchKey)) {
-							System.out.println("The primary key you typed doesn't exist.");
-							System.out.println("Do you want to try again?");
-							//System.out.println("Answer Yes or No");
-							Boolean answer = Database.findDecision();
-							if (answer) {
-								informUser(ex);
-							} else {
-								Menu.presentationMenu();
-							}
-					}
-						return col.getField().indexOf(searchKey); //position of primary key in list.
 
-
+	public int informUser(int ex){
+		Column col = columns.get(ex);
+		System.out.println("This is your Database :");
+		printAll();
+		//Inform him which list is primary key.
+		System.out.print("This is the list with the primary keys of your elements ");
+		System.out.println(col.getName());
+		System.out.println("Type the primary key of element you want to change");
+		Object searchKey = col.getType().getData();
+		if ( !col.getField().contains(searchKey)) {
+			System.out.println("The primary key you typed doesn't exist.");
+			System.out.println("Do you want to try again?");
+			//System.out.println("Answer Yes or No");
+			Boolean answer = Database.findDecision();
+			if (answer) {
+				informUser(ex);
+			} else {
+				Menu.presentationMenu();
 			}
+		}
+		return col.getField().indexOf(searchKey); //position of primary key in list.
+	}
 
 
 	public void changeValue() {
 		int pfield = inputFieldName();
 		int pkeypos = findPrimaryKeyColumn(pfield);
-		Column x = this.getColumns().get(pfield);
+		Column x = columns.get(pfield);
 		System.out.println("Enter the new value of element you want to change");
 		Object nValue = x.getType().getData();
-
 		x.getField().set(pkeypos, nValue);
 		System.out.println("Change succeed");
 	}

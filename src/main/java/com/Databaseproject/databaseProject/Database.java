@@ -1,58 +1,79 @@
 /**
 Represents our Database
 */
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.EOFException;
+import java.io.NotSerializableException;
 import java.util.InputMismatchException;
+import java.io.Serializable;
 
-public class Database {
-	private static ArrayList<Table> tables = new ArrayList<Table>();
-	private static int tableCounter;
-	private static String name;
+public class Database implements Serializable {
+	private ArrayList<Table> tables = new ArrayList<Table>();
+	private int tableCounter;
+	private String name;
 
-	public static ArrayList<Table> getTables() {
+	public Database(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<Table> getTables() {
 		return tables;
 	}
 
-	public static void setTables(ArrayList<Table> tables) {
-		Database.tables = tables;
+	public void setTables(ArrayList<Table> tables) {
+		this.tables = tables;
 	}
 
-	public static int getTableCounter() {
+	public int getTableCounter() {
 		return tableCounter;
 	}
 
-	public static void setTableCounter(int tableCounter) {
-		Database.tableCounter = tableCounter;
+	public void setTableCounter(int tableCounter) {
+		this.tableCounter = tableCounter;
 	}
 
-	public static String getName() {
+	public String getName() {
 		return name;
 	}
 
-	public static void setName(String name) {
-		Database.name = name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public static Scanner cs = new Scanner(System.in);
+	public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException{
+		Database d1 = Database.startBase();
+		d1.getTables().get(0).manageData();
+		d1.save();
+	}
 
-	public static void main(String[] args) {
-		System.out.println("Name of database: ");
-		String name = cs.nextLine();
-		Database.setName(name);
-		System.out.println("Database: "+ name);
-
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		Table table = new Table("student");
-
-		table.setFieldNames();
-		table.callFiller();
-		table.manageData();
-
+	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
+		Database d1 = new Database("");
+		if (Database.wantsToRetrieve()) {
+			d1 = Database.readObject();
+		} else {
+			Scanner cs = new Scanner(System.in);
+			System.out.println("Name of database: ");
+			String name = cs.next();
+			d1 = new Database(name);
+			System.out.println("Database: "+ name);
+			Table table = new Table("student", d1);
+			table.setFieldNames();
+			table.callFiller();
+		}
+		return d1;
 	}
 
 	//YES OR NO METHOD
 	public static boolean findDecision() {
+		Scanner cs = new Scanner(System.in);
 		boolean yn = true;
 		String decision = cs.next();
 		boolean answerfound = false;
@@ -87,12 +108,21 @@ public class Database {
 	*@param end ending number of the range of options
 	*@return choice returns the final option
 	*/
+	public static int choice(int start, int end) {
+		int choice = valid();
+		while ((choice < start) || (choice > end)) {
+			System.out.println("Please chose a valid option");
+			choice = valid();
+		}
+		return choice;
+	}
 
 	/**
 	*checks if user gives an integer and handles Exception.
 	*@param return integer given by the user.
 	*/
 	public static int valid() {
+		Scanner cs = new Scanner(System.in);
 		int choice = 0;
 		boolean hasError = true;
 		while (hasError) {
@@ -107,13 +137,66 @@ public class Database {
 		return choice;
 	}
 
-	public static int choice(int start, int end) {
-		int choice = valid();
-		while ((choice < start) || (choice > end)) {
-			System.out.println("Please chose a valid option");
-			choice = valid();
+//SAVING
+
+	public void save() throws IOException {
+		if (wantsToSave()) {
+			writeObject();
 		}
-		return choice;
+	}
+
+	public boolean wantsToSave() {
+		System.out.println("Do you want to save your database?");
+		return Database.findDecision();
+	}
+
+	/**
+	*Checks if user wants to save the data
+	*@return true if user doesn't want to create a new Database
+	*/
+	public static boolean wantsToRetrieve() {
+		System.out.println("Do you want to create a new Database?");
+		return (!(Database.findDecision()));
+	}
+
+	//works only with right path
+	public void writeObject() throws IOException {
+		Scanner cs = new Scanner(System.in);
+		String filename = this.getName();
+
+		try {
+			System.out.println("Please insert the path where you would like to save your database");
+			String path = cs.next();
+			FileOutputStream file = new FileOutputStream(path+"\\"+ filename);
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			out.writeObject(this);
+			out.reset();
+			out.close();
+			System.out.println("Your database was saved successfully");
+		} catch (FileNotFoundException e) {
+			System.err.println("Unable to open file " + filename + ": " + e.getMessage());
+		}
+	}
+	//Works only with right path
+	public static Database readObject() throws ClassNotFoundException, IOException {
+		Scanner cs = new Scanner(System.in);
+		System.out.println("Which database do you want to open?");
+		String filename = cs.next();
+		Database d1= new Database("");
+		System.out.println("Please insert the path where your database is stored.");
+		String path = cs.next();
+		FileInputStream file = new FileInputStream(path +"\\" +filename);
+		ObjectInputStream in = new ObjectInputStream(file);
+		try {
+			d1 = (Database) in.readObject();
+			System.out.println("Data retrieved successfully");
+		} catch (EOFException e) {
+			System.out.println("There is no database with this name");
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println("This table can't be stored");
+		}
+		return d1;
 	}
 }
 

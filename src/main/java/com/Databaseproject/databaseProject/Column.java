@@ -1,9 +1,9 @@
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Column {
+public class Column implements Serializable{
 	private String name;
 	private FieldType type;
-	//private static int counter = 0;
 	private boolean isPrimaryKey;
 	private ArrayList<Object> field;
 
@@ -37,8 +37,8 @@ public class Column {
 		return isPrimaryKey;
 	}
 
-	public void setPrimaryKey() {
-		isPrimaryKey = true;
+	public void setPrimaryKey(boolean isPrimaryKey) {
+		this.isPrimaryKey = isPrimaryKey;
 	}
 
 	public ArrayList<Object> getField() {
@@ -83,7 +83,7 @@ public class Column {
 			}
 		}
 		if (exists) {
-			System.out.println("That data is already exist. Try again");
+			System.out.println("That data already exists. Please try again");
 		} else {
 			field.add(data);
 		}
