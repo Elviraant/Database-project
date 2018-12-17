@@ -6,7 +6,7 @@ import org.junit.Test;
 public class TestTable {
 
 	private Database d1 = new Database("SUPER");
-	private Table table = new Table("Test");
+	private Table table = new Table("Test", d1);
 	private Column column;
 	private FieldType type;
 	private final String firstElement = "NAME";
@@ -14,7 +14,7 @@ public class TestTable {
 
 	@Before
 	public void setUp() {
-		Database d1 = new Database("SUPER");
+		d1 = new Database("SUPER");
 		table = new Table("Test", d1 );
 		type = new StringType();
 		column = new Column(firstElement, type, table);
