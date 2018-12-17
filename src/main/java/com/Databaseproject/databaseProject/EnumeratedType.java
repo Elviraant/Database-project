@@ -1,10 +1,11 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class EnumeratedType extends FieldType{
+public class EnumeratedType extends FieldType implements Serializable{
 
 	private ArrayList<String> allowedStrings;
-	static Scanner cs = new Scanner(System.in);
+	transient static Scanner cs = new Scanner(System.in);
 
 	public EnumeratedType() {
 		allowedStrings = new ArrayList<String>();

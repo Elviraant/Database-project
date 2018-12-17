@@ -1,4 +1,6 @@
-abstract class FieldType {
+import java.io.Serializable;
+
+abstract class FieldType implements Serializable {
 	enum Type {
 		STRING,
 		INTEGER,

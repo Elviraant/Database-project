@@ -1,8 +1,9 @@
 import java.util.Scanner;
+import java.io.Serializable;
 
-public class StringType extends FieldType {
+public class StringType extends FieldType implements Serializable {
 
-	Scanner cs = new Scanner(System.in);
+	transient Scanner cs = new Scanner(System.in);
 
 	public boolean correctValue(String a) {
 		return true;

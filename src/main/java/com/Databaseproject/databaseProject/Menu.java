@@ -1,4 +1,5 @@
-public final class Menu {
+import java.io.Serializable;
+public class Menu implements Serializable{
 
 	public static void presentationMenu() {
 		System.out.println();
