@@ -5,6 +5,7 @@ import org.junit.Test;
 
 public class TestTable {
 
+	private Database d1 = new Database("SUPER");
 	private Table table = new Table("Test");
 	private Column column;
 	private FieldType type;
