@@ -13,7 +13,8 @@ public class TestTable {
 
 	@Before
 	public void setUp() {
-		table = new Table("Test");
+		Database d1 = new Database("SUPER");
+		table = new Table("Test", d1 );
 		type = new StringType();
 		column = new Column(firstElement, type, table);
 
