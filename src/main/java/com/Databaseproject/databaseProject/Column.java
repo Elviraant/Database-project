@@ -5,10 +5,12 @@ public class Column implements Serializable{
 	private String name;
 	private FieldType type;
 	private boolean isPrimaryKey;
+	private boolean isForeignKey;
 	private ArrayList<Object> field;
+	private ArrayList<ArrayList> foreignKey;
 
 	/**
-	 * Constructor for Column class
+	 * First Constructor for Column class
 	 * @param name 	name of this field
 	 * @param type 	type of this field
 	 * @param table database's entity of this field
@@ -17,6 +19,23 @@ public class Column implements Serializable{
 		this.name = name;
 		this.type = type;
 		field = new ArrayList<Object>();
+		table.getColumns().add(this);
+		table.setColumnCounter(table.getColumnCounter() + 1);
+	}
+
+	/**
+	 * Second Constructor for Column class
+	 * Used by Correlation for the foreign keys
+	 * @param name 	name of this field
+	 * @param table database's entity of this field
+	 * @param isForeignKey sets true is this Column is a foreign key
+	 */
+
+	public Column(String name, Table table, boolean isForeignKey) {
+		this.name = name;
+		field = new ArrayList<Object>();
+		foreignKey.add(field);
+		this.isForeignKey = isForeignKey;
 		table.getColumns().add(this);
 		table.setColumnCounter(table.getColumnCounter() + 1);
 	}
@@ -41,6 +60,14 @@ public class Column implements Serializable{
 		this.isPrimaryKey = isPrimaryKey;
 	}
 
+	public void setForeignKey(boolean isForeignKey) {
+		this.isForeignKey = isForeignKey;
+	}
+
+	public boolean getForeignKey() {
+		return isForeignKey;
+	}
+
 	public ArrayList<Object> getField() {
 		return field;
 	}
@@ -49,16 +76,10 @@ public class Column implements Serializable{
 		return type;
 	}
 
-	/**public Column findName(String name) {
+	public void setFieldType(FieldType type) {
+		this.type = type;
+	}
 
-		Column column = null;
-		for(Column c : columns){
-			if (c.getName().equals(name)) {
-				column = c;
-			}
-		}
-		return column;
-	} ***/
 
 	public void printElement(int row) {
 		String data = String.format("|%-15s|", this.field.get(row).toString());
@@ -98,11 +119,38 @@ public class Column implements Serializable{
 			break;
 			case 3: {type = new StringType();}
 			break;
-			//case 4: {type = new EnumeratedType();}
-			//break;
 			default: {type = new StringType();}
 		}
 		return type;
+	}
+
+	public void fillPrimaryKeyField(Object data) {
+
+		if (this.getPrimaryKey()) {
+			boolean unique = this.checkUniqueness(data);
+			while (!unique) {
+				System.out.print("This data alredy exists. Try again: ");
+				data = this.getType().getData();
+				unique = this.checkUniqueness(data);
+			}
+			this.getField().add(data);
+
+		}else {
+			this.getField().add(data);
+		}
+
+	}
+
+	public boolean checkUniqueness(Object data) {
+
+		boolean unique = true;
+		for (Object f : field) {
+			if (f.equals(data)) {
+				unique = false;
+			}
+		}
+		return unique;
+
 	}
 
 }

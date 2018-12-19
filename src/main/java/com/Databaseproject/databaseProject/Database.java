@@ -54,6 +54,10 @@ public class Database implements Serializable {
 		d1.save();
 	}
 
+	public static Scanner cs = new Scanner(System.in);
+
+
+
 	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
 		Database d1 = new Database("");
 		if (Database.wantsToRetrieve()) {

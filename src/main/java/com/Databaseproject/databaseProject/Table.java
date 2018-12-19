@@ -10,6 +10,7 @@ public class Table implements Serializable {
 	private int columnCounter = 0;
 	private String name;
 	private int numberOfRows;
+	private int positionOfFK;
 
 	/**
 	*Constructor for Table class
@@ -59,6 +60,13 @@ public class Table implements Serializable {
     public void setNumberOfRows(int numberOfRows) {
 	    this.numberOfRows = numberOfRows;
     }
+ 	public void setPositionOfFK(int positionOfFK) {
+ 		this.positionOfFK = positionOfFK;
+ 	}
+
+ 	public int getPositionOfFK() {
+ 		return positionOfFK;
+	}
 
 	/**
 	*create field names and call method findType to create the arrays
@@ -90,9 +98,50 @@ public class Table implements Serializable {
 			System.out.println();
 			System.out.println("Please insert name of the next field");
 			System.out.print("#" +  counter + " Field Name: ");
-			nameOfField = cs.next();
+
+			int check = -2;
+			while(check != -1) {
+
+				nameOfField = cs.next();
+				check = this.containsName(nameOfField);
+				if (check != -1) {
+					System.out.println("That name already exists. Please try with another: ");
+				}
+			}
+
+
 		}
 		System.out.println();
+	}
+
+
+
+	/*
+	 *	Defines, which Column is the primary Key field
+	 *	Checks, if the name of a field exists at this Table
+	 *  If it exists, sets the boolean instance variable true
+	 */
+	public void definePrimaryKey(){
+
+		System.out.println("Do you want to set a field as primary key? ");
+		boolean continueProcess;
+		continueProcess = Database.findDecision();
+		if (continueProcess) {
+			continueProcess = true;
+			while(continueProcess) {
+				System.out.print("Please, insert the name of the primary key field: ");
+				String primaryKeyName = cs.next();
+				int exists = this.containsName(primaryKeyName);
+				if (exists != -1) {
+					this.getColumns().get(exists).setPrimaryKey(true);
+					continueProcess = false;
+				} else {
+					System.out.print(primaryKeyName + "No such field at this entity.");
+					System.out.print("Do you want to try again? ");
+					continueProcess = Database.findDecision();
+				}
+			}
+		}
 	}
 
 	/**
@@ -115,7 +164,7 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*Fill in with Data, Fills by row//
+	*Fill in with Data, Fills by row
 	*/
 	public void columnFillerByRow() {
 		//System.out.println("mpike sthn filler by row");
@@ -123,16 +172,11 @@ public class Table implements Serializable {
 		int insertions = 0;
 		while (continueProcess) {
 			System.out.println("#" + (insertions + 1) + " Row: ");
-			/****for (int i = 0; i < this.getColumnCounter(); i++) {
-				Column column = this.getColumns().get(i);
-				System.out.println("Give "+ column.getName());
-				Object data = column.getType().getData();
-				column.getField().add(data);
-			} ****/
 			for(Column column : this.getColumns()) {
 				System.out.println("Give "+ column.getName());
 				Object data = column.getType().getData();
-				column.getField().add(data);
+				//column.getField().add(data);
+				column.fillPrimaryKeyField(data);
 			}
 			insertions++;
 			System.out.println("Do you want to continue? Y/N");
@@ -141,6 +185,7 @@ public class Table implements Serializable {
 		}
 		numberOfRows = insertions;
 	}
+
 
 
 	/**
