@@ -4,6 +4,7 @@ Represents a table of our database.
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.Serializable;
+import java.util.Collections;
 
 public class Table implements Serializable {
 	private ArrayList<Column> columns = new ArrayList<>();
@@ -287,6 +288,34 @@ public class Table implements Serializable {
 			System.out.println("Do you want to continue the process of changing data?Yes/No");
 			decision = Database.findDecision();
 		 }  while (decision);
+	}
+
+	public void deleteData() {
+		int choice;
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.deletionMenu();
+			choice = Database.choice(1,4);
+			switch (choice)
+			{
+			case 1:
+				deleteRows();
+				break;
+			case 2:
+				break;
+			case 3:
+				deleteElements();
+				break;
+			case 4:
+				break;
+			case 5:
+				deleteAll();
+				break;
+			}
+			System.out.println("Deletion completed successfully");
+			System.out.println("Continue with the deletion of data?");
+			continueProcess = Database.findDecision();
+		}
 	}
 
 	/**
@@ -583,4 +612,109 @@ public class Table implements Serializable {
 		}
 		this.printAll();
 	}
+
+	public int checkOffLimitsRows() {
+		int x;
+		Column firstColumn = this.getColumns().get(0);
+		do {
+			x = cs.nextInt();
+			if ((x > numberOfRows) || (x<0)) {
+				System.out.println("The number that you gave was off limits.\nPlease try again:");
+			}
+		} while ((x > numberOfRows) || (x<0));
+		return x;
+	}
+
+	public void deleteRows() {
+		System.out.println(String.format("%s\n%s\n", "1. Delete Specific Rows", "2. Delete specific range of rows"));
+		int choice;
+		choice = Database.choice(1,2);
+		switch (choice)
+		{
+		case 1:
+			deleteSpecificRows();
+			break;
+		case 2:
+			deleteSpecificRangeofRows();
+			break;
+		}
+	}
+
+	/** deletes any row you want(one or more)*/
+	public void deleteSpecificRows() {
+		System.out.println("How many rows do you want to delete?");
+		int x = checkOffLimitsRows();
+		int counter=0;
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i<x; i++) {
+			System.out.println("Which row do you want to delete?");
+			int y = checkOffLimitsRows();
+			list.add(y);
+		}
+		Collections.sort(list);
+		System.out.println(list);
+		for (int k=0; k<this.getColumnCounter(); k++) {
+			Column column = this.getColumns().get(k);
+			for (int j=0; j<list.size(); j++) {
+				column.getField().remove(list.get(j)-1-counter);
+				counter++;
+			}
+		}
+		numberOfRows=numberOfRows-counter;
+	}
+
+	/**
+	* deletes specific rows, which are within a range given by the user
+	*/
+	public void deleteSpecificRangeofRows(){
+		System.out.println("Please insert the range of rows you want to delete.");
+		int startRow;
+		int endRow;
+		do {
+			System.out.println("Starting row: ");
+			startRow = Database.choice(1, numberOfRows)-1;
+			System.out.println("Ending row: ");
+			endRow = Database.choice(1,numberOfRows);
+			if (startRow>= endRow) {
+				System.out.println("Starting can't be greater than ending row");
+			}
+		} while ( startRow>= endRow);
+		for (int i=0; i<this.getColumnCounter(); i++) {
+			Column column = this.getColumns().get(i);
+			for (int j=startRow; j<endRow; j++) {
+				column.getField().remove(j);
+			}
+		}
+	}
+
+	/**
+	* deletes any element you want
+	*/
+	public void deleteElements(){
+		boolean continueProcess = true;
+		while (continueProcess) {
+			int x;
+			do{
+				System.out.println("Please insert the name of the column in which the element exists: ");
+				String name = cs.next();
+				x = containsName(name);
+			} while ( x == -1);
+			Column column = this.getColumns().get(x);
+			System.out.println("Please enter the element you want to delete: ");
+			Object element = column.getType().getData();
+			System.out.println("Please insert the row in which the element exists: ");
+			int y = Database.choice(1,numberOfRows);
+			column.getField().set(y-1, " ");
+			System.out.println("Do you want to continue? Y/N");
+			continueProcess = Database.findDecision();
+		}
+	}
+
+	/*deletes a whole table*/
+	public void deleteAll() {
+		for (int i=0; i< this.getColumnCounter(); i++) {
+			this.getColumns().remove(i);
+		}
+	}
+
 }

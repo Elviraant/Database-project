@@ -25,5 +25,14 @@ public class Menu implements Serializable{
 		System.out.println("Please chose one of the above options: ");
 	}
 
+	public static void deletionMenu() {
+		System.out.println();
+		System.out.println("Deletion Options:");
+		System.out.println("-----------------");
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Delete Rows", "2. Delete Columns", "3. Delete Elements", "4. Delete by condition", "5. Delete All"));
+		System.out.println("Please choose one of the above options: ");
+	}
+
+
 }
 
