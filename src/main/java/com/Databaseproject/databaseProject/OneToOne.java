@@ -1,3 +1,3 @@
-public class OneToOne extends Correlation {
+public class OneToOne {
 
 }
