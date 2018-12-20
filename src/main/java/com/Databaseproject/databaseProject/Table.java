@@ -487,6 +487,18 @@ public class Table implements Serializable {
 			return ex;
 		}
 
+	public void changeDataByRow() {
+		int posprimarykey = findPrimaryKeyColumn();
+		for (int i=0; i<= getColumnCounter() ; i++) {
+			Column col= columns.get(i);
+			System.out.println("Field:" +col.getName() );
+			System.out.println("Give the new value:");
+			Object nValue = col.getType().getData();
+		    col.getField().set(posprimarykey, nValue);
+		}
+	}
+
+
 
 	public void changeFieldName() {
 		StringType name = new StringType();
@@ -517,7 +529,7 @@ public class Table implements Serializable {
 	 attribute: position of field to be changed.*/
 
 
-	public int findPrimaryKeyColumn(int pfield) {
+	public int findPrimaryKeyColumn() {
 		int j = 0;
 		int exprimarykey = -1;
 		do {
@@ -586,7 +598,7 @@ public class Table implements Serializable {
 
 	public void changeValue() {
 		int pfield = inputFieldName();
-		int pkeypos = findPrimaryKeyColumn(pfield);
+		int pkeypos = findPrimaryKeyColumn();
 		Column x = columns.get(pfield);
 		System.out.println("Enter the new value of element you want to change");
 		Object nValue = x.getType().getData();
