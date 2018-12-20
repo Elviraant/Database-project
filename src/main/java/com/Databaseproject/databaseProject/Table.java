@@ -231,6 +231,9 @@ public class Table implements Serializable {
 				case 2:
 					changeData();
 					break;
+				case 3:
+					deleteData();
+					break;
 				default:
 					continueProcess = false;
 			}
@@ -643,12 +646,12 @@ public class Table implements Serializable {
 	/** deletes any row you want(one or more)*/
 	public void deleteSpecificRows() {
 		System.out.println("How many rows do you want to delete?");
-		int x = checkOffLimitsRows();
+		int x = Database.choice(1,numberOfRows);
 		int counter=0;
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i<x; i++) {
 			System.out.println("Which row do you want to delete?");
-			int y = checkOffLimitsRows();
+			int y = Database.choice(1,numberOfRows);
 			list.add(y);
 		}
 		Collections.sort(list);
@@ -656,6 +659,7 @@ public class Table implements Serializable {
 		for (int k=0; k<this.getColumnCounter(); k++) {
 			Column column = this.getColumns().get(k);
 			for (int j=0; j<list.size(); j++) {
+				System.out.println(list.get(j)-1-counter);
 				column.getField().remove(list.get(j)-1-counter);
 				counter++;
 			}
