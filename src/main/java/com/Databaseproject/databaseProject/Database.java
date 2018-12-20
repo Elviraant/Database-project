@@ -50,13 +50,9 @@ public class Database implements Serializable {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException{
 		Database d1 = Database.startBase();
-		d1.getTables().get(0).manageData();
+		d1.manageTables();
 		d1.save();
 	}
-
-	public static Scanner cs = new Scanner(System.in);
-
-
 
 	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
 		Database d1 = new Database("");
@@ -67,12 +63,53 @@ public class Database implements Serializable {
 			System.out.println("Name of database: ");
 			String name = cs.next();
 			d1 = new Database(name);
-			System.out.println("Database: "+ name);
-			Table table = new Table("student", d1);
-			table.setFieldNames();
-			table.callFiller();
 		}
 		return d1;
+	}
+
+	public void manageTables() {
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.multipleTablesMenu();
+			int choice = Database.choice(1,4);
+			switch (choice)
+			{
+				case 1:
+					Table table = createNewTable();
+					table.setFieldNames();
+					table.callFiller();
+					break;
+				case 2:
+					table = chooseTable();
+					table.manageData();
+					break;
+				case 3:
+					continueProcess = false;
+					break;
+				default:
+					continueProcess = false;
+			}
+		}
+	}
+
+	public Table createNewTable() {
+		Scanner cs = new Scanner(System.in);
+		System.out.println("Name of table:");
+		String name = cs.next();
+		return new Table(name, this);
+	}
+
+
+	public Table chooseTable() {
+		Scanner cs = new Scanner(System.in);
+		System.out.println("Choose one of your tables: ");
+		for (int i = 0; i < tableCounter; i++) {
+			Table table = tables.get(i);
+			System.out.println(String.format("%s %s %s", (i +1), ". ", table.getName()));
+		}
+		System.out.println("Insert the number of your choice: ");
+		int choice = Database.choice(1, tableCounter);
+		return tables.get(choice - 1);
 	}
 
 	//YES OR NO METHOD

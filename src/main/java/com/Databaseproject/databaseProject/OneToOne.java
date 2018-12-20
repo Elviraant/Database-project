@@ -1,4 +1,3 @@
-public class OneToOne {
-
+public class OneToOne extends Correlation {
 
 }

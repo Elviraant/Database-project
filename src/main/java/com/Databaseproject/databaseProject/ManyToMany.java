@@ -29,4 +29,5 @@ public class ManyToMany extends Correlation {
 	public void setColumn2(Column column) {
 		column2 = column;
 	}
+
 }
