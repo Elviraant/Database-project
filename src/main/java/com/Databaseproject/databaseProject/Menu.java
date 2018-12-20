@@ -17,6 +17,14 @@ public class Menu implements Serializable{
 		System.out.println("Please chose one of the above options: ");
 	}
 
+	public static void multipleTablesMenu() {
+		System.out.println();
+		System.out.println("Manage your tables: ");
+		System.out.println("---------------------");
+		System.out.println(String.format("%s\n%s\n%s\n%s\n", "1. Create new table", "2. Manage Tables", "3. Ask Questions", "4. Exit"));
+		System.out.println("Plese choose one of the above options");
+	}
+
 	public static void changeMenu() {
 		System.out.println();
 		System.out.println("-----------------");
