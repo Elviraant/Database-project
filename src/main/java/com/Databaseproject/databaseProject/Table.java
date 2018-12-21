@@ -309,6 +309,7 @@ public class Table implements Serializable {
 				deleteRows();
 				break;
 			case 2:
+				deleteColumns();
 				break;
 			case 3:
 				deleteElements();
@@ -734,6 +735,49 @@ public class Table implements Serializable {
 			}
 		}
 	}
+
+	public void setDeleteCounter() {
+		this.setColumnCounter(columnCounter-1);
+			}
+
+
+	public int checkOffLimitsColumns() {
+		int x;
+		do {
+			x = cs.nextInt();
+			if ((x> this.getColumnCounter()) || (x<0)) {
+				System.out.println("The number that you gave was off limits.\nPlease try again:");
+			}
+			} while ((x> this.getColumnCounter()) || (x<0));
+			return x;
+		}
+
+	/**
+	* deletes any columns you want
+	*/
+	public void deleteColumns() {
+		System.out.println("How many columns do you want to delete?");
+		int x = checkOffLimitsColumns();
+		for (int i=0; i<x; i++) {
+			System.out.print("Please give me the name of the column you want to delete: ");
+			boolean cont = false;
+			while (!cont){
+				String y = cs.next();
+				for (int k=0; k<this.getColumnCounter(); k++) {
+					Column column = this.getColumns().get(k);
+						if (y.equals(column.getName())) {
+							this.setDeleteCounter();
+							this.getColumns().remove(k);
+							cont = true;
+						}
+
+					}if (!cont) {
+						System.out.println("The name you inserted is not valid. Please try again.");
+				}
+			}
+		}
+	}
+
 
 	/**
 	* deletes any element you want
