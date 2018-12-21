@@ -445,8 +445,10 @@ public class Table implements Serializable {
      *	@returns int position
      */
 	public int containsName(String name) {
-
-    	for (Column c: this.columns) {
+		if (name.equals("Row")) {;
+			return -1;
+		}
+		for (Column c: this.columns) {
     	   if (c.getName().equals(name)) {
     		   //System.out.println(this.columns.indexOf(c));
     		   return columns.indexOf(c);
@@ -490,15 +492,14 @@ public class Table implements Serializable {
 		}
 
 	public void changeDataByRow() {
-		int posprimarykey = findPrimaryKeyColumn();
-		if (posprimarykey!=-1) {
-			for (int i=0; i< getColumnCounter()-1 ; i++) {
-				Column col= columns.get(i);
-				System.out.println("Field:" +col.getName() );
-				System.out.println("Give the new value:");
-				Object nValue = col.getType().getData();
-			    col.getField().set(posprimarykey, nValue);
-			}
+		System.out.println("Which row do you want to change?");
+		int x = Database.choice(1, numberOfRows);
+		for (int i=1; i< columnCounter; i++) {
+			Column col= columns.get(i);
+			System.out.println("Field:" +col.getName() );
+			System.out.println("Give the new value:");
+			Object nValue = col.getType().getData();
+		    col.getField().set(x - 1, nValue);
 		}
 	}
 
@@ -516,11 +517,11 @@ public class Table implements Serializable {
 				if (k == -1){
 					col.setName(newName);
 					answer=false;
-					System.out.println("Change succeed");
+					System.out.println("Change completed successfully");
 				}
 				else {
 					System.out.println ("This name is already in use.");
-					System.out.println ("Do u want to try again?");
+					System.out.println ("Do you want to try again?");
 					answer = Database.findDecision();
 				}
 			}
@@ -537,12 +538,12 @@ public class Table implements Serializable {
 		int exprimarykey = -1;
 		do {
 			Column col = columns.get(j);
-			if (col.getPrimaryKey() == true) {
+			if (col.getPrimaryKey()) {
 				exprimarykey = j;
 			} else {
 				j++;
 			}
-		} while (exprimarykey == -1 && j< this.columnCounter);
+		} while (exprimarykey == -1 && j< columnCounter);
 		  return  primaryKeyColumn(exprimarykey);
 	}
 
@@ -605,13 +606,17 @@ public class Table implements Serializable {
 	public void changeValue() {
 		int pfield = inputFieldName();
 		if(pfield != -1 ) {
-			int pkeypos = findPrimaryKeyColumn();
+			System.out.println("Which row do you want to have changed?");
+			printAll();
+			int pkeypos = Database.choice(1, numberOfRows) - 1;
 			if (pkeypos != -1 ) {
 				Column x = columns.get(pfield);
 				System.out.println("Enter the new value of element you want to change");
 				Object nValue = x.getType().getData();
 				x.getField().set(pkeypos, nValue);
-				System.out.println("Change succeed");
+				System.out.println("Change completed successfully");
+			} else {
+				System.out.println("There is no such attribute or the field you chose can't be changed");
 			}
 		}
 	}
@@ -640,29 +645,16 @@ public class Table implements Serializable {
 	}*/
 
 	public void sameValue() {
-		int fieldpos = inputFieldName();
 		int pfield = inputFieldName();
 		if(pfield != -1 ) {
-			Column col = this.getColumns().get(fieldpos);
+			Column col = this.getColumns().get(pfield);
 			System.out.println("Insert the new value of all elements");
 			Object newValue = col.getType().getData();
 			for (int i=0; i < col.getField().size(); i++) {
 				col.getField().set(i,newValue);
-		}
-			this.printAll();
-		}
-	}
-
-	public int checkOffLimitsRows() {
-		int x;
-		Column firstColumn = this.getColumns().get(0);
-		do {
-			x = cs.nextInt();
-			if ((x > numberOfRows) || (x<0)) {
-				System.out.println("The number that you gave was off limits.\nPlease try again:");
 			}
-		} while ((x > numberOfRows) || (x<0));
-		return x;
+			printAll();
+		}
 	}
 
 	public void deleteRows() {
@@ -682,26 +674,22 @@ public class Table implements Serializable {
 
 	/** deletes any row you want(one or more)*/
 	public void deleteSpecificRows() {
-		System.out.println("How many rows do you want to delete?");
-		int x = Database.choice(1,numberOfRows);
-		int counter=0;
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		for (int i = 0; i<x; i++) {
+		boolean continueProcess = true;
+		while (continueProcess) {
 			System.out.println("Which row do you want to delete?");
-			int y = Database.choice(1,numberOfRows);
-			list.add(y);
-		}
-		Collections.sort(list);
-		System.out.println(list);
-		for (int k=0; k<this.getColumnCounter(); k++) {
-			Column column = this.getColumns().get(k);
-			for (int j=0; j<list.size(); j++) {
-				System.out.println(list.get(j)-1-counter);
-				column.getField().remove(list.get(j)-1-counter);
-				counter++;
+			int x = Database.choice(1,numberOfRows);
+			for (int k=0; k<columnCounter; k++) {
+				Column column = columns.get(k);
+				column.getField().remove(x-1);
 			}
+			numberOfRows--;
+			for (int i = 0; i < numberOfRows; i++) {
+				columns.get(0).getField().set(i,i+1);
+			}
+			printAll();
+			System.out.println("Delete another row?");
+			continueProcess = Database.findDecision();
 		}
-		numberOfRows=numberOfRows-counter;
 	}
 
 	/**
@@ -729,18 +717,18 @@ public class Table implements Serializable {
 	}
 
 	public void setDeleteCounter() {
-		this.setColumnCounter(columnCounter-1);
+		setColumnCounter(columnCounter-1);
 			}
 
 
 	public int checkOffLimitsColumns() {
 		int x;
 		do {
-			x = cs.nextInt();
-			if ((x> this.getColumnCounter()) || (x<0)) {
+			x = Database.valid();
+			if ((x> columnCounter - 1) || (x<0)) {
 				System.out.println("The number that you gave was off limits.\nPlease try again:");
 			}
-			} while ((x> this.getColumnCounter()) || (x<0));
+			} while ((x> columnCounter - 1) || (x<0));
 			return x;
 		}
 
@@ -755,21 +743,24 @@ public class Table implements Serializable {
 			boolean cont = false;
 			while (!cont){
 				String y = cs.next();
+				while (y.equals("Row")) {
+					System.out.println("You can't delete this field");
+					y = cs.next();
+				}
 				for (int k=0; k<this.getColumnCounter(); k++) {
 					Column column = this.getColumns().get(k);
-						if (y.equals(column.getName())) {
-							this.setDeleteCounter();
-							this.getColumns().remove(k);
-							cont = true;
-						}
-
-					}if (!cont) {
-						System.out.println("The name you inserted is not valid. Please try again.");
+					if (y.equals(column.getName())) {
+						this.setDeleteCounter();
+						this.getColumns().remove(k);
+						cont = true;
+					}
+				}
+				if (!cont) {
+					System.out.println("The name you inserted is not valid. Please try again.");
 				}
 			}
 		}
 	}
-
 
 	/**
 	* deletes any element you want
