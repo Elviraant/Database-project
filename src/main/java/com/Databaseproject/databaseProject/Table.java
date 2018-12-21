@@ -483,10 +483,8 @@ public class Table implements Serializable {
 				System.out.println("Do you want to try again?");
 				//System.out.println("Answer Yes or No");
 				Boolean answer = Database.findDecision();
-				if (answer == true) {
+				if (answer ) {
 					return inputFieldName();
-		    	} else if (answer == false) {
-					Menu.startingMenu();
 				}
 			}
 			return ex;
@@ -494,51 +492,47 @@ public class Table implements Serializable {
 
 	public void changeDataByRow() {
 		int posprimarykey = findPrimaryKeyColumn();
-		for (int i=0; i< getColumnCounter() ; i++) {
-			Column col= columns.get(i);
-			System.out.println("Field:" +col.getName() );
-			System.out.println("Give the new value:");
-			Object nValue = col.getType().getData();
-		    col.getField().set(posprimarykey, nValue);
+		if (posprimarykey!=-1) {
+			for (int i=0; i< getColumnCounter()-1 ; i++) {
+				Column col= columns.get(i);
+				System.out.println("Field:" +col.getName() );
+				System.out.println("Give the new value:");
+				Object nValue = col.getType().getData();
+			    col.getField().set(posprimarykey, nValue);
+			}
 		}
 	}
-
-
-
 
 
 	public void changeFieldName() {
 		StringType name = new StringType();
 		int pos = this.inputFieldName();
-		if(pos != -1) {
-			Column col = this.getColumns().get(pos);
-			System.out.println("Give the new name of the field");
-			String newName = name.getData();
-			int k = this.containsName(newName);
-			if (k == -1){
-				col.setName(newName);
+		Boolean answer = true;
+			if(pos != -1) {
+				Column col = this.getColumns().get(pos);
+				while (answer){
+				System.out.println("Give the new name of the field");
+				String newName = name.getData();
+				int k = this.containsName(newName);
+				if (k == -1){
+					col.setName(newName);
+					answer=false;
+					System.out.println("Change succeed");
+				}
+				else {
+					System.out.println ("This name is already in use.");
+					System.out.println ("Do u want to try again?");
+					answer = Database.findDecision();
+				}
 			}
-			else {
-				System.out.println ("This name is already in use.");
 		}
-			System.out.println ("Do u want to try again?");
-			Boolean answer = Database.findDecision();
-			if(answer){
-				inputFieldName();
-			}
-			else {
-				Menu.startingMenu();
-			}
-		}
-
 	}
-
 
     /* search if there is a PrimaryKey Column.
 	 Then calls method primaryKeyColumn.
 	 attribute: position of field to be changed.*/
 
-	public int findPrimaryKeyColumn() {   //int pfield
+	public int findPrimaryKeyColumn() {
 
 		int j = 0;
 		int exprimarykey = -1;
@@ -600,10 +594,9 @@ public class Table implements Serializable {
 							Boolean answer = Database.findDecision();
 							if (answer) {
 								return informUser(ex);
-							} else  {
-								Menu.startingMenu();
-
 							}
+
+
 				    	}
 
 						return col.getField().indexOf(searchKey); //position of primary key in list.
