@@ -285,8 +285,12 @@ public class Table implements Serializable {
 				case(3): changeAllData();
 						break;
 
-				case(4): sameValue();
+				case(4): changeDataByRow();
+				        break;
+
+				case(5): sameValue();
 						 break;
+
 			}
 			System.out.println("Do you want to continue the process of changing data?Yes/No");
 			decision = Database.findDecision();
