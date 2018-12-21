@@ -518,7 +518,7 @@ public class Table implements Serializable {
 				inputFieldName();
 			}
 			else {
-				//call method with menu of choices
+				Menu.startingMenu();
 			}
 		}
 
@@ -579,7 +579,7 @@ public class Table implements Serializable {
 		//Inform him which list is primary key.
 		System.out.print("This is the list with the primary keys of your elements ");
 		System.out.println(col.getName());
-		System.out.println("Type the primary key of element you want to change");
+		System.out.println("Type the primary key of row you want to update");
 		Object searchKey = col.getType().getData();
 		if ( !col.getField().contains(searchKey)) {
 			System.out.println("The primary key you typed doesn't exist.");
