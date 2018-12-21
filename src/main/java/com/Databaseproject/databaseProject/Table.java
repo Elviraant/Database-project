@@ -281,15 +281,15 @@ public class Table implements Serializable {
 				case(2): changeValue();
 						break;
 
+				/*case(3): changeDataByColumn();
+						break; */
 
-				case(3): changeAllData();
-						break;
-
-				case(4): changeDataByRow();
+				case(3): changeDataByRow();
 				        break;
 
-				case(5): sameValue();
+				case(4): sameValue();
 						 break;
+
 
 			}
 			System.out.println("Do you want to continue the process of changing data?Yes/No");
@@ -483,9 +483,9 @@ public class Table implements Serializable {
 				//System.out.println("Answer Yes or No");
 				Boolean answer = Database.findDecision();
 				if (answer == true) {
-					inputFieldName();
+					return inputFieldName();
 		    	} else if (answer == false) {
-					Menu.presentationMenu();
+					Menu.startingMenu();
 				}
 			}
 			return ex;
@@ -493,7 +493,7 @@ public class Table implements Serializable {
 
 	public void changeDataByRow() {
 		int posprimarykey = findPrimaryKeyColumn();
-		for (int i=0; i<= getColumnCounter() ; i++) {
+		for (int i=0; i< getColumnCounter() ; i++) {
 			Column col= columns.get(i);
 			System.out.println("Field:" +col.getName() );
 			System.out.println("Give the new value:");
@@ -504,18 +504,22 @@ public class Table implements Serializable {
 
 
 
+
+
 	public void changeFieldName() {
 		StringType name = new StringType();
 		int pos = this.inputFieldName();
-		Column col = this.getColumns().get(pos);
-		System.out.println("Give the new name of the field");
-		String newName = name.getData();
-		int k = this.containsName(newName);
-		if (k == -1){
-			col.setName(newName);
+		if(pos != -1) {
+			Column col = this.getColumns().get(pos);
+			System.out.println("Give the new name of the field");
+			String newName = name.getData();
+			int k = this.containsName(newName);
+			if (k == -1){
+				col.setName(newName);
+			}
+			else {
+				System.out.println ("This name is already in use.");
 		}
-		else {
-			System.out.println ("This name is already in use.");
 			System.out.println ("Do u want to try again?");
 			Boolean answer = Database.findDecision();
 			if(answer){
@@ -528,12 +532,13 @@ public class Table implements Serializable {
 
 	}
 
+
     /* search if there is a PrimaryKey Column.
 	 Then calls method primaryKeyColumn.
 	 attribute: position of field to be changed.*/
 
+	public int findPrimaryKeyColumn() {   //int pfield
 
-	public int findPrimaryKeyColumn() {
 		int j = 0;
 		int exprimarykey = -1;
 		do {
@@ -548,14 +553,16 @@ public class Table implements Serializable {
 	}
 
 	public int createIncreasedNumber() {
-		FieldType type = Column.findType(1);
-		Column newcolumn = new Column("Increased Number",type, this); //create a new list with increased number.
-			for(int i=0; i < numberOfRows; i++) {
-				newcolumn.getField().add(i + 1);
-				//fill the new list.
-			}
-		newcolumn.setPrimaryKey(true);
-		return this.containsName("Increased Number");
+
+			FieldType type = Column.findType(1);
+			Column newcolumn = new Column("Increased Number",type, this); //create a new list with increased number.
+				for(int i=0; i < numberOfRows; i++) {
+					newcolumn.getField().add(i + 1);
+					//fill the new list.
+				}
+			newcolumn.setPrimaryKey(true);
+			return this.containsName("Increased Number");
+
 	}
 
 
@@ -566,7 +573,7 @@ public class Table implements Serializable {
 
 		public int primaryKeyColumn(int exprimaryKey) {
 			if(exprimaryKey == -1) {
-			exprimaryKey = createIncreasedNumber();
+				exprimaryKey =createIncreasedNumber();
 			}
 				return informUser(exprimaryKey);
 		}
@@ -576,60 +583,81 @@ public class Table implements Serializable {
 	Else make a new list in table with increased number that it will be a primary key list
 	and calls informUser()*/
 
-	public int informUser(int ex){
-		Column col = columns.get(ex);
-		System.out.println("This is your Database :");
-		printAll();
-		//Inform him which list is primary key.
-		System.out.print("This is the list with the primary keys of your elements ");
-		System.out.println(col.getName());
-		System.out.println("Type the primary key of row you want to update");
-		Object searchKey = col.getType().getData();
-		if ( !col.getField().contains(searchKey)) {
-			System.out.println("The primary key you typed doesn't exist.");
-			System.out.println("Do you want to try again?");
-			//System.out.println("Answer Yes or No");
-			Boolean answer = Database.findDecision();
-			if (answer) {
-				informUser(ex);
-			} else {
-				Menu.presentationMenu();
-			}
-		}
-		return col.getField().indexOf(searchKey); //position of primary key in list.
-	}
+		public int informUser(int ex){
+					Column col = columns.get(ex);
+					System.out.println("This is your Database :");
+					this.printAll();
+					//Inform him which list is primary key.
+					System.out.print("This is the list with the primary keys of your elements ");
+					System.out.println(col.getName());
+					System.out.println("Type the primary key of element you want to change");
+					Object searchKey = col.getType().getData();
+						if ( !col.getField().contains(searchKey)) {
+							System.out.println("The primary key you typed doesn't exist.");
+							System.out.println("Do you want to try again?");
+							//System.out.println("Answer Yes or No");
+							Boolean answer = Database.findDecision();
+							if (answer) {
+								return informUser(ex);
+							} else  {
+								Menu.startingMenu();
+
+							}
+				    	}
+
+						return col.getField().indexOf(searchKey); //position of primary key in list.
+				}
 
 
 	public void changeValue() {
 		int pfield = inputFieldName();
-		int pkeypos = findPrimaryKeyColumn();
-		Column x = columns.get(pfield);
-		System.out.println("Enter the new value of element you want to change");
-		Object nValue = x.getType().getData();
-		x.getField().set(pkeypos, nValue);
-		System.out.println("Change succeed");
+		if(pfield != -1 ) {
+			int pkeypos = findPrimaryKeyColumn();
+			if (pkeypos != -1 ) {
+				Column x = columns.get(pfield);
+				System.out.println("Enter the new value of element you want to change");
+				Object nValue = x.getType().getData();
+				x.getField().set(pkeypos, nValue);
+				System.out.println("Change succeed");
+			}
+		}
 	}
 
 
-	public void changeAllData() {
-			int pos = this.inputFieldName();
-			Column col = this.getColumns().get(pos);
-			for ( int i=0 ; i<col.getField().size() ; i++) {
-				System.out.println("Enter the new value of element you want to change");
-				Object newValue = col.getType().getData();
-				col.getField().set(i, newValue);
+
+
+	/*public void changeDataByColumn() {
+			int pfield = inputFieldName();
+			if (pfield != -1 ) {
+				int pkeypos = findPrimaryKeyColumn();
+				if(pkeypos != -1) {
+					Column x = this.getColumns().get(pfield);
+					do {
+						System.out.println("Enter the new value of element you want to change");
+						Object nValue = x.getType().getData();
+						x.getField().set(pkeypos, nValue);
+						System.out.println("Do you want to continue?Y/N");
+						Boolean decision = Database.decision();
+						System.out.println("Enter primary key of next element(else enter 0 to exit");
+						pkeypos = Database.choice(1,numberOfRows);
+					} while ();
+
 			}
 		}
+	}*/
 
 	public void sameValue() {
-		int fieldpos = this.inputFieldName();
-		Column col = this.getColumns().get(fieldpos);
-		System.out.println("Insert the new value of all elements");
-		Object newValue = col.getType().getData();
-		for (int i=0; i < col.getField().size(); i++) {
-			col.getField().set(i,newValue);
+		int fieldpos = inputFieldName();
+		int pfield = inputFieldName();
+		if(pfield != -1 ) {
+			Column col = this.getColumns().get(fieldpos);
+			System.out.println("Insert the new value of all elements");
+			Object newValue = col.getType().getData();
+			for (int i=0; i < col.getField().size(); i++) {
+				col.getField().set(i,newValue);
 		}
-		this.printAll();
+			this.printAll();
+		}
 	}
 
 	public int checkOffLimitsRows() {

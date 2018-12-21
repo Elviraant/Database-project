@@ -66,6 +66,7 @@ public class Column implements Serializable{
 
 	public boolean getForeignKey() {
 		return isForeignKey;
+
 	}
 
 	public ArrayList<Object> getField() {
