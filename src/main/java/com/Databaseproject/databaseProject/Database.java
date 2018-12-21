@@ -16,12 +16,15 @@ import java.util.InputMismatchException;
 import java.io.Serializable;
 
 public class Database implements Serializable {
+	transient private static ArrayList<String> saved = new ArrayList<String>();
 	private ArrayList<Table> tables = new ArrayList<Table>();
 	private int tableCounter;
 	private String name;
+	private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
 	public Database(String name) {
 		this.name = name;
+		saved.add(name);
 	}
 
 	public ArrayList<Table> getTables() {
@@ -80,8 +83,12 @@ public class Database implements Serializable {
 					table.callFiller();
 					break;
 				case 2:
-					table = chooseTable();
-					table.manageData();
+					if (tableCounter == 0) {
+						System.out.println("No tables in your base");
+					} else {
+						table = chooseTable();
+						table.manageData();
+					}
 					break;
 				case 3:
 					continueProcess = false;
@@ -101,15 +108,19 @@ public class Database implements Serializable {
 
 
 	public Table chooseTable() {
-		Scanner cs = new Scanner(System.in);
-		System.out.println("Choose one of your tables: ");
-		for (int i = 0; i < tableCounter; i++) {
-			Table table = tables.get(i);
-			System.out.println(String.format("%s %s %s", (i +1), ". ", table.getName()));
-		}
-		System.out.println("Insert the number of your choice: ");
-		int choice = Database.choice(1, tableCounter);
-		return tables.get(choice - 1);
+		Table table = tables.get(0);
+		if (tableCounter > 1) {
+			Scanner cs = new Scanner(System.in);
+			System.out.println("Choose one of your tables: ");
+			for (int i = 0; i < tableCounter; i++) {
+				table = tables.get(i);
+				System.out.println(String.format("%s%s%s", (i +1), ". ", table.getName()));
+			}
+			System.out.println("Insert the number of your choice: ");
+			int choice = Database.choice(1, tableCounter);
+			table = tables.get(choice - 1);
+		} else if (tableCounter == 1) table = tables.get(0);
+		return table;
 	}
 
 	//YES OR NO METHOD
@@ -206,7 +217,7 @@ public class Database implements Serializable {
 		String filename = this.getName();
 
 		try {
-			System.out.println("Please insert the path where you would like to save your database");
+			System.out.println("Please insert a valid filepath: ");
 			String path = cs.next();
 			FileOutputStream file = new FileOutputStream(path+"\\"+ filename);
 			ObjectOutputStream out = new ObjectOutputStream(file);

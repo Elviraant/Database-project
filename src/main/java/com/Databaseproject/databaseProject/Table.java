@@ -74,6 +74,7 @@ public class Table implements Serializable {
 	*/
 
 	public void setFieldNames() {
+		Column rows = new Column("Row", new IntegerType(), this);
 		System.out.println("Set the names of the fields that you want to create?\nEnter EXIT to stop");
 		int counter = 1;
 		System.out.print("#" +  counter + " Field Name: ");
@@ -151,11 +152,7 @@ public class Table implements Serializable {
 	public void callFiller() {
 		System.out.println("How would you like to fill the table?");
 		System.out.println("1. By row\n2. By column");
-		int filltype = cs.nextInt();
-		while (!((filltype == 1) || (filltype == 2))) {
-				System.out.print("select 1 or 2: ");
-				filltype = cs.nextInt();
-		}
+		int filltype = Database.choice(1,2);
 		if (filltype == 1) {
 			this.columnFillerByRow();
 		} else if (filltype == 2) {
@@ -173,12 +170,14 @@ public class Table implements Serializable {
 		int insertions = 0;
 		while (continueProcess) {
 			System.out.println("#" + (insertions + 1) + " Row: ");
-			for(Column column : this.getColumns()) {
+			for(int i =1; i < columnCounter; i++) {
+				Column column = columns.get(i);
 				System.out.println("Give "+ column.getName());
 				Object data = column.getType().getData();
 				//column.getField().add(data);
 				column.fillPrimaryKeyField(data);
 			}
+			columns.get(0).getField().add(insertions + 1);
 			insertions++;
 			System.out.println("Do you want to continue? Y/N");
 			continueProcess = Database.findDecision();
@@ -193,10 +192,10 @@ public class Table implements Serializable {
 	*Fill in with Data, Fills by column
 	*/
 	public void columnFillerByColumn() {
-		for (int i = 0; i < columnCounter; i++){
+		for (int i = 1; i < columnCounter; i++){
 			Column column = columns.get(i);
 			System.out.println("How many cells would you like to fill for " + column.getName());
-			int decision = cs.nextInt();
+			int decision = Database.valid();
 			//System.out.println("Please insert the values for array " + column.getName() + ". Enter EXIT to stop");
 			System.out.println("	" + column.getName());
 			System.out.println("-----------------");
@@ -797,8 +796,8 @@ public class Table implements Serializable {
 
 	/*deletes a whole table*/
 	public void deleteAll() {
-		for (int i=0; i< this.getColumnCounter(); i++) {
-			this.getColumns().remove(i);
+		for (int i=0; i< columnCounter; i++) {
+			columns.remove(i);
 		}
 	}
 
