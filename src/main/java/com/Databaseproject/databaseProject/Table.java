@@ -314,8 +314,6 @@ public class Table implements Serializable {
 				deleteElements();
 				break;
 			case 4:
-				break;
-			case 5:
 				deleteAll();
 				break;
 			}
@@ -332,8 +330,7 @@ public class Table implements Serializable {
 		System.out.println();
 		System.out.println("Table: "+this.name);
 		printHeader();
-		Column firstColumn = columns.get(0);
-		for (int k = 0; k < firstColumn.getField().size(); k++) {
+		for (int k = 0; k < numberOfRows; k++) {
 
 			presentRow(k);
 		}
@@ -484,7 +481,7 @@ public class Table implements Serializable {
 				System.out.println("Do you want to try again?");
 				//System.out.println("Answer Yes or No");
 				Boolean answer = Database.findDecision();
-				if (answer ) {
+				if (answer) {
 					return inputFieldName();
 				}
 			}
@@ -606,7 +603,7 @@ public class Table implements Serializable {
 	public void changeValue() {
 		int pfield = inputFieldName();
 		if(pfield != -1 ) {
-			System.out.println("Which row do you want to have changed?");
+			System.out.println("Which row do you want to change?");
 			printAll();
 			int pkeypos = Database.choice(1, numberOfRows) - 1;
 			if (pkeypos != -1 ) {
@@ -703,17 +700,25 @@ public class Table implements Serializable {
 			System.out.println("Starting row: ");
 			startRow = Database.choice(1, numberOfRows)-1;
 			System.out.println("Ending row: ");
-			endRow = Database.choice(1,numberOfRows);
-			if (startRow>= endRow) {
+			endRow = Database.choice(1,numberOfRows) ;
+			if (startRow > endRow) {
 				System.out.println("Starting can't be greater than ending row");
 			}
-		} while ( startRow>= endRow);
-		for (int i=0; i<this.getColumnCounter(); i++) {
-			Column column = this.getColumns().get(i);
-			for (int j=startRow; j<endRow; j++) {
+		} while ( startRow> endRow);
+
+		for (int i = 0; i < getColumnCounter(); i++) {
+			Column column = columns.get(i);
+			for (int j = startRow; j < endRow ; j++) {
 				column.getField().remove(j);
 			}
 		}
+		numberOfRows = numberOfRows - (endRow - startRow);
+		for (int i = 0; i < numberOfRows; i++) {
+
+			columns.get(0).getField().set(i, i + 1);
+		}
+
+
 	}
 
 	public void setDeleteCounter() {
@@ -738,7 +743,7 @@ public class Table implements Serializable {
 	public void deleteColumns() {
 		System.out.println("How many columns do you want to delete?");
 		int x = checkOffLimitsColumns();
-		for (int i=0; i<x; i++) {
+		for (int i = 0; i < x; i++) {
 			System.out.print("Please give me the name of the column you want to delete: ");
 			boolean cont = false;
 			while (!cont){
@@ -747,14 +752,18 @@ public class Table implements Serializable {
 					System.out.println("You can't delete this field");
 					y = cs.next();
 				}
-				for (int k=0; k<this.getColumnCounter(); k++) {
-					Column column = this.getColumns().get(k);
+				for (int k = 1; k < columnCounter; k++) {
+					Column column = columns.get(k);
 					if (y.equals(column.getName())) {
-						this.setDeleteCounter();
-						this.getColumns().remove(k);
+						setDeleteCounter();
+						columns.remove(k);
 						cont = true;
 					}
 				}
+				if (columnCounter == 1) {
+					columns.remove(0);
+				}
+
 				if (!cont) {
 					System.out.println("The name you inserted is not valid. Please try again.");
 				}
@@ -787,9 +796,12 @@ public class Table implements Serializable {
 
 	/*deletes a whole table*/
 	public void deleteAll() {
-		for (int i=0; i< columnCounter; i++) {
+		for (int i = columnCounter - 1 ; i >= 0 ; i--) {
 			columns.remove(i);
+
 		}
+		columnCounter = 0;
+		numberOfRows = 0;
 	}
 
 }
