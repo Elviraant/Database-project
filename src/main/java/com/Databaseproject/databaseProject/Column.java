@@ -83,7 +83,7 @@ public class Column implements Serializable{
 
 
 	public void printElement(int row) {
-		String data = String.format("|%-15s|", this.field.get(row).toString());
+		String data = String.format("|%-20s|", field.get(row).toString());
 		System.out.print(data);
 		System.out.print("     ");
 

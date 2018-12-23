@@ -327,14 +327,16 @@ public class Table implements Serializable {
 	*prints all table insertions and the titles of the attributes
 	*/
 	public void printAll() {
-		System.out.println();
-		System.out.println("Table: "+this.name);
-		printHeader();
-		for (int k = 0; k < numberOfRows; k++) {
-
-			presentRow(k);
+		if (numberOfRows != 0) {
+			System.out.println();
+			System.out.println("Table: "+this.name);
+			printHeader();
+			for (int k = 0; k < numberOfRows; k++) {
+				presentRow(k);
+			}
+		} else {
+			System.out.println("No records in this table");
 		}
-		System.out.println();
 	}
 
 	/**
@@ -353,7 +355,12 @@ public class Table implements Serializable {
     public void presentRow(int row) {
         for (int i = 0; i < columnCounter; i++) {
 		    Column column = columns.get(i);
-			column.printElement(row);
+		    if (i == 0) {
+		    	System.out.print(String.format("|%-6s|", columns.get(0).getField().get(row).toString()));
+				System.out.print("     ");
+			} else {
+				column.printElement(row);
+			}
 		}
 		System.out.println();
 	}
@@ -362,31 +369,39 @@ public class Table implements Serializable {
 	*Present specific rows within a range given by the user
 	*/
 	public void printSpecificRows() {
-		System.out.println("Please insert the range of rows you want to print.");
-		int start = 1;
-		int end = 0;
-		while (start >= end) {
-			System.out.println("Starting row: ");
-			start = Database.choice(1, numberOfRows)-1;
-			System.out.println("Ending row: ");
-			end = Database.choice(1,numberOfRows);
-			if (start >= end) {
-				System.out.println("Starting can't be greater than ending row");
+		if (numberOfRows != 0) {
+			System.out.println("Please insert the range of rows you want to print.");
+			int start = 1;
+			int end = 0;
+			while (start >= end) {
+				System.out.println("Starting row: ");
+				start = Database.choice(1, numberOfRows)-1;
+				System.out.println("Ending row: ");
+				end = Database.choice(1,numberOfRows);
+				if (start >= end) {
+					System.out.println("Starting can't be greater than ending row");
+				}
 			}
+			printHeader();
+			for (int i = start; i < end; i++) {
+				presentRow(i);
+			}
+		} else {
+			System.out.println("No records in this table");
 		}
-		printHeader();
-		for (int i = start; i < end; i++) {
-			presentRow(i);
-		}
-		System.out.println();
 	}
 
 	public void printHeaderOfSpecificColumns(ArrayList <String> attributes) {
 	    int spaces = 0;
+	    String title = "";
 	    for (String attribute: attributes ) {
-	    	String title = String.format("|%-15s|", attribute);
+			if (attribute.equals("Row")) {
+				title = String.format("|%-6s|", attribute);
+			} else {
+	    		title = String.format("|%-15s|", attribute);
+			}
 			System.out.print(title);
-			spaces =spaces + title.length() + 5;
+			spaces = spaces + title.length() + 5;
 			System.out.print("     ");
 	    }
 	    System.out.println();
@@ -402,6 +417,7 @@ public class Table implements Serializable {
 	*/
 	public ArrayList <String> inputSpecificColumns() {
 		ArrayList <String>  attributes = new ArrayList<String>();
+		attributes.add("Row");
 		boolean continueProcess = true;
 		String attribute;
 
@@ -415,7 +431,7 @@ public class Table implements Serializable {
 
 			} else {
 				System.out.println("There's no such attribute.");
-				System.out.println("Do you want to continue? Y/N");
+				System.out.println("Do you want to try again? Y/N");
 				continueProcess = Database.findDecision();
 			}
 		}
@@ -428,7 +444,7 @@ public class Table implements Serializable {
 	public void printSpecificColumns() {
 		ArrayList<String> attributes = inputSpecificColumns();
 		if (attributes.isEmpty()) {
-			System.out.println("There's nothing to be presented.\n");
+			System.out.println("No records in this table.\n");
 		} else {
 			this.presentColumns(attributes);
 		}
@@ -462,11 +478,17 @@ public class Table implements Serializable {
 		printHeaderOfSpecificColumns(attributes);
 		for (int i = 0; i < numberOfRows; i++)  {
 			for (String a: attributes) {
-				Column column = columns.get(containsName(a));
-		        column.printElement(i);
-            }
-        System.out.println();
-        }
+				Column column = columns.get(0);
+				if (a != "Row") {
+					column = columns.get(containsName(a));
+			        column.printElement(i);
+				} else {
+		    		System.out.print(String.format("|%-6s|", columns.get(0).getField().get(i).toString()));
+					System.out.print("     ");
+				}
+			}
+			System.out.println();
+		}
 	}
 
 
@@ -749,10 +771,10 @@ public class Table implements Serializable {
 			while (!cont){
 				String y = cs.next();
 				while (y.equals("Row")) {
-					System.out.println("You can't delete this field");
+					System.out.println("You can't delete this field. Please try again");
 					y = cs.next();
 				}
-				for (int k = 1; k < columnCounter; k++) {
+				for (int k=1; k<columnCounter; k++) {
 					Column column = columns.get(k);
 					if (y.equals(column.getName())) {
 						setDeleteCounter();
@@ -763,7 +785,6 @@ public class Table implements Serializable {
 				if (columnCounter == 1) {
 					columns.remove(0);
 				}
-
 				if (!cont) {
 					System.out.println("The name you inserted is not valid. Please try again.");
 				}
@@ -784,8 +805,6 @@ public class Table implements Serializable {
 				x = containsName(name);
 			} while ( x == -1);
 			Column column = this.getColumns().get(x);
-			System.out.println("Please enter the element you want to delete: ");
-			Object element = column.getType().getData();
 			System.out.println("Please insert the row in which the element exists: ");
 			int y = Database.choice(1,numberOfRows);
 			column.getField().set(y-1, " ");
