@@ -443,7 +443,7 @@ public class Table implements Serializable {
 	*/
 	public void printSpecificColumns() {
 		ArrayList<String> attributes = inputSpecificColumns();
-		if (attributes.isEmpty()) {
+		if (attributes.size() == 1) {
 			System.out.println("No records in this table.\n");
 		} else {
 			this.presentColumns(attributes);
