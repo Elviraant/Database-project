@@ -318,7 +318,7 @@ public class Table implements Serializable {
 
 
 			}
-			System.out.println("Do you want to continue the process of changing data?Yes/No");
+			System.out.println("Continue with the changing of data? Yes/No");
 			decision = Database.findDecision();
 		 }  while (decision);
 	}
@@ -467,7 +467,7 @@ public class Table implements Serializable {
 	    int spaces = 0;
 	    String title = "";
 	    for (String attribute: attributes ) {
-			if (attribute.equals("Row")) {
+			if (attribute.equals("Record")) {
 				title = String.format("|%-6s|", attribute);
 			} else {
 	    		title = String.format("|%-15s|", attribute);
@@ -531,7 +531,7 @@ public class Table implements Serializable {
      *	@returns int position
      */
 	public int containsName(String name) {
-		if (name.equals("Row")) {;
+		if (name.equals("Record")) {;
 			return -1;
 		}
 		for (Column c: this.columns) {

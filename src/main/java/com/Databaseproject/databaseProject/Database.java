@@ -236,18 +236,20 @@ public class Database implements Serializable {
 		System.out.println("Which database do you want to open?");
 		String filename = cs.next();
 		Database d1= new Database("");
-		System.out.println("Please insert the path where your database is stored.");
-		String path = cs.next();
-		FileInputStream file = new FileInputStream(path +"\\" +filename);
-		ObjectInputStream in = new ObjectInputStream(file);
 		try {
+			System.out.println("Please insert the path where your database is stored.");
+			String path = cs.next();
+			FileInputStream file = new FileInputStream(path +"\\" +filename);
+			ObjectInputStream in = new ObjectInputStream(file);
 			d1 = (Database) in.readObject();
 			System.out.println("Data retrieved successfully");
 		} catch (EOFException e) {
-			System.out.println("There is no database with this name");
+			System.out.println("Error: There is no such database");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			System.out.println("This table can't be stored");
+		} catch (FileNotFoundException e) {
+			System.out.println("Error: There is no such database");
 		}
 		return d1;
 	}
