@@ -89,27 +89,6 @@ public class Column implements Serializable{
 
 	}
 
-	/**
-	 * Returns void
-	 * Checks uniqueness and adds data in a field
-	 * Use for Primary Key Field
-	 */
-	public void checkUniqueness() {
-
-		boolean exists = false;
-		Object data = getType().getData();
-
-		for (Object f : field) {
-			if (f.equals(data)) {
-				exists = true;
-			}
-		}
-		if (exists) {
-			System.out.println("That data already exists. Please try again");
-		} else {
-			field.add(data);
-		}
-	}
 
 	public static FieldType findType(int choice) {
 		FieldType type;
@@ -125,9 +104,13 @@ public class Column implements Serializable{
 		return type;
 	}
 
+	/**
+	 * Returns void
+	 * Fills the Primary Key Field
+	 * @param data user's insertion
+	 */
 	public void fillPrimaryKeyField(Object data) {
 
-		if (this.getPrimaryKey()) {
 			boolean unique = this.checkUniqueness(data);
 			while (!unique) {
 				System.out.print("This data alredy exists. Try again: ");
@@ -135,13 +118,13 @@ public class Column implements Serializable{
 				unique = this.checkUniqueness(data);
 			}
 			this.getField().add(data);
-
-		}else {
-			this.getField().add(data);
-		}
-
 	}
 
+	/**
+	 * Returns true if the data is unique
+	 * Use for Primary Key Field
+	 * @param data user's insertion
+	 */
 	public boolean checkUniqueness(Object data) {
 
 		boolean unique = true;

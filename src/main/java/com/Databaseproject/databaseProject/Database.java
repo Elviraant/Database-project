@@ -79,12 +79,13 @@ public class Database implements Serializable {
 			{
 				case 1:
 					Table table = createNewTable();
-					table.setFieldNames();
+					table.setUpColumns();
+					table.definePrimaryKey();
 					table.callFiller();
 					break;
 				case 2:
 					if (tableCounter == 0) {
-						System.out.println("No tables in your base");
+						System.out.println("No tables in your database");
 					} else {
 						table = chooseTable();
 						table.manageData();

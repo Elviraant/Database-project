@@ -12,7 +12,7 @@ public class Table implements Serializable {
 	private ArrayList<Column> columns = new ArrayList<>();
 	private int columnCounter = 0;
 	private String name;
-	private int numberOfRows;
+	private int numberOfRows = 0;
 	private int positionOfFK;
 
 	/**
@@ -72,14 +72,20 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*create field names and call method findType to create the arrays
-	*/
+	 * Returns void
+	 * Creates fields for a Table and calls findType method, to create the correct ArrayList
+	 */
 
+
+	public void setUpColumns() {
+		Column rows = new Column("Record", new IntegerType(), this);
+		setFieldNames();
+	}
 	public void setFieldNames() {
-		Column rows = new Column("Row", new IntegerType(), this);
-		System.out.println("Set the names of the fields that you want to create?\nEnter EXIT to stop");
-		int counter = 1;
-		System.out.print("#" +  counter + " Field Name: ");
+		System.out.println("Set the names of the fields that you want to create\nEnter EXIT to stop");
+		//int counter = 1;
+		//columnCounter = 1;
+		System.out.print("#" +  columnCounter + " Field Name: ");
 		String nameOfField = cs.next();
 		System.out.println();
 
@@ -98,10 +104,10 @@ public class Table implements Serializable {
 				type.defineEnumeration();
 				new Column(nameOfField, type, this);
 			}
-			counter++;
+			//counter++;
 			System.out.println();
 			System.out.println("Please insert name of the next field");
-			System.out.print("#" +  counter + " Field Name: ");
+			System.out.print("#" +  columnCounter + " Field Name: ");
 
 			int check = -2;
 			while(check != -1) {
@@ -140,7 +146,7 @@ public class Table implements Serializable {
 					this.getColumns().get(exists).setPrimaryKey(true);
 					continueProcess = false;
 				} else {
-					System.out.print(primaryKeyName + "No such field at this entity.");
+					System.out.print(primaryKeyName + ". No such field at this entity.");
 					System.out.print("Do you want to try again? ");
 					continueProcess = Database.findDecision();
 				}
@@ -167,26 +173,29 @@ public class Table implements Serializable {
 	*Fill in with Data, Fills by row
 	*/
 	public void columnFillerByRow() {
-		//System.out.println("mpike sthn filler by row");
 		boolean continueProcess = true;
-		int insertions = 0;
 		while (continueProcess) {
-			System.out.println("#" + (insertions + 1) + " Row: ");
-			for(int i =1; i < columnCounter; i++) {
-				Column column = columns.get(i);
-				System.out.println("Give "+ column.getName());
-				Object data = column.getType().getData();
-				//column.getField().add(data);
-				column.fillPrimaryKeyField(data);
+			System.out.println("#" + (numberOfRows + 1) + " Row: ");
+			for(Column column : this.getColumns()) {
+				if (this.getColumns().get(0).equals(column)) {
+					column.getField().add(numberOfRows + 1);
+				} else {
+					System.out.println("Give "+ column.getName());
+					Object data = column.getType().getData();
+					if (column.getPrimaryKey()) {
+						column.fillPrimaryKeyField(data);
+					} else {
+						column.getField().add(data);
+					}
+				}
 			}
-			columns.get(0).getField().add(insertions + 1);
-			insertions++;
+			numberOfRows++;
 			System.out.println("Do you want to continue? Y/N");
 			continueProcess = Database.findDecision();
-			//if (decision) continueProcess = true; else continueProcess = false;
 		}
-		numberOfRows = insertions;
+		//numberOfRows+= insertions;
 	}
+
 
 
 
@@ -194,36 +203,46 @@ public class Table implements Serializable {
 	*Fill in with Data, Fills by column
 	*/
 	public void columnFillerByColumn() {
-		for (int i = 1; i < columnCounter; i++){
-			Column column = columns.get(i);
-			System.out.println("How many cells would you like to fill for " + column.getName());
-			int decision = Database.valid();
-			//System.out.println("Please insert the values for array " + column.getName() + ". Enter EXIT to stop");
-			System.out.println("	" + column.getName());
-			System.out.println("-----------------");
-			//int j = 1;
-			for (int j = 0 ; j < decision; j++) {
-				System.out.print("#"+ (j+1)+" Row: ");
-				Object data = column.getType().getData();
-				column.getField().add(data);
+
+		if (numberOfRows == 0 ){
+			System.out.println("How many records would you like to fill for " + this.getName());
+			numberOfRows = Database.valid();
+		}
+		for (Column column : columns) {
+			if (column.getField().isEmpty()) {
+				if (column.getPrimaryKey()) {
+					System.out.println("	" + column.getName());
+					System.out.println("-----------------");
+					for (int j = 0 ; j < numberOfRows; j++) {
+						System.out.print("#"+ (j+1)+" Row: ");
+						Object data = column.getType().getData();
+						column.fillPrimaryKeyField(data);
+					}
+				} else if(columns.get(0).equals(column)) {
+					for(int i=0; i < numberOfRows; i++) {
+						column.getField().add(i + 1);
+						//fill the record column.
+					}
+				} else {
+					System.out.println("	" + column.getName());
+					System.out.println("-----------------");
+					for (int j = 0 ; j < numberOfRows; j++) {
+						System.out.print("#"+ (j+1)+" Row: ");
+						Object data = column.getType().getData();
+						column.getField().add(data);
+					}
+				}
 			}
 			System.out.println();
-			//String decision = cs.next();
-		/*	while (!decision.equals("EXIT")) {
-				j++;
-				System.out.print("#"+ j+" Row: ");
-				Object data = column.getType().getData();
-				column.getField().add(data);
-			//	decision = column.getData();
-			} */
 		}
+
 	}
 
 	public void manageData() {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.startingMenu();
-			int choice = Database.choice(1,5);
+			int choice = Database.choice(1,6);
 			switch (choice)
 			{
 				case 1:
@@ -237,6 +256,9 @@ public class Table implements Serializable {
 					break;
 				case 4:
 					sortData();
+					break;
+				case 5:
+					addData();
 					break;
 				default:
 					continueProcess = false;
@@ -328,6 +350,7 @@ public class Table implements Serializable {
 		}
 	}
 
+
 	public void sortData(){
 		int choice;
 		boolean continueProcess = true;
@@ -345,6 +368,29 @@ public class Table implements Serializable {
 			}
 			System.out.println("Assortment completed successfully");
 			System.out.println("Continue with the assortment of data?");
+			continueProcess = Database.findDecision();
+		}
+	}
+
+
+	public void addData() {
+		int choice;
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.additionMenu();
+			choice = Database.choice(1,2);
+			switch (choice)
+			{
+			case 1:
+				columnFillerByRow();
+				break;
+			case 2:
+				setFieldNames();
+				callFiller();
+				break;
+			}
+			System.out.println("Add completed successfully");
+			System.out.println("Continue with the add of data?");
 			continueProcess = Database.findDecision();
 		}
 	}

@@ -13,7 +13,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Exit" ));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data", "6. Exit" ));
 		System.out.println("Please chose one of the above options: ");
 	}
 
@@ -47,6 +47,7 @@ public class Menu implements Serializable{
 		System.out.println("Please choose one of the above options: ");
 	}
 
+
 	public static void assortmentMenu() {
 			System.out.println();
 			System.out.println("Assortment Options:");
@@ -55,6 +56,14 @@ public class Menu implements Serializable{
 			System.out.println("Please choose one of the above options: ");
 		}
 
+
+	public static void additionMenu() {
+		System.out.println();
+		System.out.println("Add Options:");
+		System.out.println("-----------------");
+		System.out.println(String.format("%s\n%s\n", "1. Add records", "2. Add Columns"));
+		System.out.println("Please choose one of the above options: ");
+	}
 
 
 }
