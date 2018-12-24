@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.*;
+import java.io.*;
 
 public class Table implements Serializable {
 	private ArrayList<Column> columns = new ArrayList<>();
@@ -233,6 +235,9 @@ public class Table implements Serializable {
 				case 3:
 					deleteData();
 					break;
+				case 4:
+					sortData();
+					break;
 				default:
 					continueProcess = false;
 			}
@@ -319,6 +324,27 @@ public class Table implements Serializable {
 			}
 			System.out.println("Deletion completed successfully");
 			System.out.println("Continue with the deletion of data?");
+			continueProcess = Database.findDecision();
+		}
+	}
+
+	public void sortData(){
+		int choice;
+		boolean continueProcess = true;
+		while (continueProcess) {
+			Menu.assortmentMenu();
+			choice = Database.choice(1,2);
+			switch (choice)
+			{
+				case 1:
+					sortInAlphabeticalOrder();
+					break;
+				case 2:
+					break;
+
+			}
+			System.out.println("Assortment completed successfully");
+			System.out.println("Continue with the assortment of data?");
 			continueProcess = Database.findDecision();
 		}
 	}
@@ -691,6 +717,7 @@ public class Table implements Serializable {
 		}
 	}
 
+
 	/** deletes any row you want(one or more)*/
 	public void deleteSpecificRows() {
 		boolean continueProcess = true;
@@ -823,4 +850,77 @@ public class Table implements Serializable {
 		numberOfRows = 0;
 	}
 
+
+	/**
+	* Compares two given datas(Strings)
+	*if the Strings are equal returns 0
+	*if the first given String is greater than the second returns a positive number
+	*if the first given String is less than the second returns a negative number
+	*/
+	public int compareTo(String str1,String str2) {
+		return str1.compareTo(str2);
+	}
+
+
+	/**
+	*changes the data in order to create a table in ascesing order
+	*/
+	public void sortInAscendingOrder(int j, Object s1, Object s2,Column column1) {
+		Object temp = s2;
+		column1.getField().set(j,s1);
+		column1.getField().set(j-1,temp);
+	}
+
+
+	/**
+	*changes the data in order to create a table in descending order
+	*/
+	public void sortInDescendingOrder(int j, Object s1, Object s2,Column column1) {
+		Object temp= s1;
+		column1.getField().set(j-1,s2);
+		column1.getField().set(j,temp);
+	}
+
+
+	/**
+	*Sorts the table based on a column given by the user
+	*/
+	public void sortInAlphabeticalOrder() {
+		int x;
+		do{
+			System.out.println("Please insert the name of the column on which you want the assortment to be based on: ");
+			String name = cs.next();
+			x = containsName(name);
+		} while ( x == -1);
+		System.out.println("Sort in ascending or descending order?\n1.Ascending order\n2.Descending order");
+		int choice;
+		choice = Database.choice(1,2);
+		Column column = this.getColumns().get(x);
+		if (column.getType() instanceof StringType) {
+			for (int i=1; i<numberOfRows; i++) {
+				for (int j=numberOfRows-1; j>=i; j--) {
+					Object str1 = column.getField().get(j-1);
+					Object str2 = column.getField().get(j);
+					String st1= String.valueOf(str1);
+					String st2 = String.valueOf(str2);
+					int result = compareTo(st1,st2);
+						for (int k=1; k<columnCounter; k++) {
+							Column column1 = this.getColumns().get(k);
+							Object s1 = column1.getField().get(j-1);
+							Object s2 = column1.getField().get(j);
+							if (choice ==1) {
+								if (result>0) {
+									sortInAscendingOrder(j,s1,s2,column1);
+								}
+							} else {
+								if (result<0) {
+									sortInDescendingOrder(j, s1,s2,column1);
+								}
+							}
+						}
+				}
+			}
+		}
+	}
 }
+
