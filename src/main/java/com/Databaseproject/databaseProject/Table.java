@@ -223,7 +223,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.startingMenu();
-			int choice = Database.choice(1,4);
+			int choice = Database.choice(1,5);
 			switch (choice)
 			{
 				case 1:
@@ -446,20 +446,21 @@ public class Table implements Serializable {
 		attributes.add("Row");
 		boolean continueProcess = true;
 		String attribute;
+		int position = -1;
 
-		while (continueProcess)	{
-			System.out.println("Type an attribute that you want print:");
-			attribute = cs.next();
-			if (this.containsName(attribute) != -1) {
-				attributes.add(attribute);
-				System.out.println("Do you want to continue? Y/N");
-				continueProcess = Database.findDecision();
+		if (numberOfRows != 0) {
+			while (continueProcess)	{
+				position = inputFieldName("be presented");
+				if ( position != -1) {
+					Column col = columns.get(position);
+					attributes.add(col.getName());
+				}
+					System.out.println("\nDo you want to present another column? Y/N");
+					continueProcess = Database.findDecision();
 
-			} else {
-				System.out.println("There's no such attribute.");
-				System.out.println("Do you want to try again? Y/N");
-				continueProcess = Database.findDecision();
 			}
+		} else  {
+			System.out.println("\nNo records in this table.\n");
 		}
 		return attributes;
 	}
@@ -519,8 +520,8 @@ public class Table implements Serializable {
 
 
 	//Input name of field to change and check for existance.
-	public int inputFieldName () {
-			System.out.println("Give name of field you want to update");
+	public int inputFieldName (String function) {
+			System.out.println("Give the name of the field you want to " + function + ".");
 			StringType name = new StringType();
 			String nameofField = name.getData();
 			int ex = this.containsName(nameofField);
@@ -530,7 +531,7 @@ public class Table implements Serializable {
 				//System.out.println("Answer Yes or No");
 				Boolean answer = Database.findDecision();
 				if (answer) {
-					return inputFieldName();
+					return inputFieldName(function);
 				}
 			}
 			return ex;
@@ -551,7 +552,7 @@ public class Table implements Serializable {
 
 	public void changeFieldName() {
 		StringType name = new StringType();
-		int pos = this.inputFieldName();
+		int pos = this.inputFieldName("change");
 		Boolean answer = true;
 			if(pos != -1) {
 				Column col = this.getColumns().get(pos);
@@ -649,7 +650,7 @@ public class Table implements Serializable {
 
 
 	public void changeValue() {
-		int pfield = inputFieldName();
+		int pfield = inputFieldName("change");
 		if(pfield != -1 ) {
 			System.out.println("Which row do you want to change?");
 			printAll();
@@ -690,7 +691,7 @@ public class Table implements Serializable {
 	}*/
 
 	public void sameValue() {
-		int pfield = inputFieldName();
+		int pfield = inputFieldName("change");
 		if(pfield != -1 ) {
 			Column col = this.getColumns().get(pfield);
 			System.out.println("Insert the new value of all elements");
