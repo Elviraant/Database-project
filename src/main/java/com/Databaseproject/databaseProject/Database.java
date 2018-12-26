@@ -14,9 +14,12 @@ import java.io.EOFException;
 import java.io.NotSerializableException;
 import java.util.InputMismatchException;
 import java.io.Serializable;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
 
 public class Database implements Serializable {
-	transient private static ArrayList<String> saved = new ArrayList<String>();
 	private ArrayList<Table> tables = new ArrayList<Table>();
 	private int tableCounter;
 	private String name;
@@ -24,7 +27,6 @@ public class Database implements Serializable {
 
 	public Database(String name) {
 		this.name = name;
-		saved.add(name);
 	}
 
 	public ArrayList<Table> getTables() {
@@ -59,11 +61,20 @@ public class Database implements Serializable {
 
 	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
 		Database d1 = new Database("");
+		boolean can = true;
+		boolean wants = false;
 		if (Database.wantsToRetrieve()) {
-			d1 = Database.readObject();
-		} else {
+			wants = true;
+			String name = Database.chooseBase();
+			if (!name.equals("no bases")) {
+				d1 = Database.readObject(name);
+			} else {
+				can = false;
+			}
+		}
+		if (!(wants && can)) {
 			Scanner cs = new Scanner(System.in);
-			System.out.println("Name of database: ");
+			System.out.println("Name of new database: ");
 			String name = cs.next();
 			d1 = new Database(name);
 		}
@@ -216,11 +227,22 @@ public class Database implements Serializable {
 	public void writeObject() throws IOException {
 		Scanner cs = new Scanner(System.in);
 		String filename = this.getName();
+		try {
+			//System.out.println("Please insert a valid filepath: ");
+			//String path = cs.next();
+			FileWriter file = new FileWriter("saved", true); //(path+"\\"+ filename);
+			BufferedWriter out = new BufferedWriter(file);
+			out.write(filename);
+			out.newLine();
+			out.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("Unable to open file " + filename + ": " + e.getMessage());
+		}
 
 		try {
-			System.out.println("Please insert a valid filepath: ");
-			String path = cs.next();
-			FileOutputStream file = new FileOutputStream(path+"\\"+ filename);
+			//System.out.println("Please insert a valid filepath: ");
+			//String path = cs.next();
+			FileOutputStream file = new FileOutputStream(filename); //(path+"\\"+ filename);
 			ObjectOutputStream out = new ObjectOutputStream(file);
 			out.writeObject(this);
 			out.reset();
@@ -231,15 +253,13 @@ public class Database implements Serializable {
 		}
 	}
 	//Works only with right path
-	public static Database readObject() throws ClassNotFoundException, IOException {
-		Scanner cs = new Scanner(System.in);
-		System.out.println("Which database do you want to open?");
-		String filename = cs.next();
-		Database d1= new Database("");
+	public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
+		Database d1 = new Database("");
+		String filename = nameOfBase;
 		try {
-			System.out.println("Please insert the path where your database is stored.");
-			String path = cs.next();
-			FileInputStream file = new FileInputStream(path +"\\" +filename);
+			//System.out.println("Please insert the path where your database is stored.");
+			//String path = cs.next();
+			FileInputStream file = new FileInputStream(filename);
 			ObjectInputStream in = new ObjectInputStream(file);
 			d1 = (Database) in.readObject();
 			System.out.println("Data retrieved successfully");
@@ -252,6 +272,53 @@ public class Database implements Serializable {
 			System.out.println("Error: There is no such database");
 		}
 		return d1;
+	}
+
+	public static String chooseBase() {
+		ArrayList<String> saved = new ArrayList<String>();
+		try {
+			//System.out.println("Please insert the path where your database is stored.");
+			//String path = cs.next();
+			FileReader file = new FileReader("saved");
+			BufferedReader in = new BufferedReader(file);
+			int i = 1;
+			String line;
+			while ((line = in.readLine()) != null) {
+				saved.add(line);
+			}
+		} catch (EOFException e) {
+			System.out.println("Error: There are no bases stored");
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			System.out.println("Error: There are no bases stored");
+		} catch (IOException e) {
+			System.out.println("Unable to save");
+		}
+		if (saved.size() != 0) {
+			System.out.println("Which database do you want to open?");
+			ArrayList<String> diff = new ArrayList<String>();
+			diff.add(saved.get(0));
+			boolean exists;
+			for (int i =1; i < saved.size(); i++) {
+				String base = saved.get(i);
+				exists = false;
+				for (int k = 0; k < diff.size(); k++) {
+					if (base.equals(diff.get(k))) {
+						exists = true;
+					}
+				}
+				if (!exists) {
+					diff.add(base);
+				}
+			}
+			for (int i = 0; i < diff.size(); i++) {
+				System.out.println(String.format("%s.%s", (i+1), diff.get(i)));
+			}
+			int choice = choice(1, saved.size());
+			return saved.get(choice-1);
+		} else {
+			return "no bases";
+		}
 	}
 }
 
