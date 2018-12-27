@@ -21,8 +21,8 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your tables: ");
 		System.out.println("---------------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n", "1. Create new table", "2. Manage Tables", "3. Ask Questions", "4. Exit"));
-		System.out.println("Plese choose one of the above options");
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Create new table", "2. Manage Tables", "3. Ask Questions", "4. Make Correlationship", "5. Exit"));
+		System.out.println("Please choose one of the above options");
 	}
 
 	public static void changeMenu() {
@@ -63,6 +63,23 @@ public class Menu implements Serializable{
 		System.out.println("-----------------");
 		System.out.println(String.format("%s\n%s\n", "1. Add records", "2. Add Columns"));
 		System.out.println("Please choose one of the above options: ");
+	}
+
+	public static int correlationOptions() {
+		System.out.println(String.format("%s\n%s\n%s\n%s\n" ,"What kind of corrleation do you want to create between your tables?"
+							,"1. One to one"
+							,"2. One to Many"
+							,"3. Many to Many"
+							,"4. None"));
+		return Database.choice(1,4);
+	}
+
+	public static int menuForNoPkColumn() {
+		System.out.println(String.format("%s\n%s\n"
+							,"1. Add a Primary Key Column"
+							,"2. Choose another table"));
+		System.out.println("Please choose one of the above options: ");
+		return Database.choice(1,2);
 	}
 
 

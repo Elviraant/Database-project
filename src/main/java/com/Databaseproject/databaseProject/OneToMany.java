@@ -12,28 +12,9 @@ public class OneToMany extends Correlation{
 	public OneToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		column = new Column(name, table2, true);
-		table2.setPositionOfFK(table2.getColumnCounter() + 1);
+		column = new Column(table2, true);
+		column.createFkColumnName(table1);
+		table2.setPositionOffFk((table2.getColumnCounter() + 1), table1);
 
 	}
-
-/**
-*Defines the table the rows of which will be linked to multiple
-*rows of the other as table1
-*/
-/**	public void define() {
-		Table temp;
-		System.out.println("This is an One-To-Many relationship.");
-		System.out.println("Please choose the table of the rows that will be linked to multiple rows of the other table");
-		System.out.println(String.format("%s %s\n%s %s\n", "1. ", table1.getName(), "2. ", table2.getName()));
-		int choice = Database.choice(1,2);
-		if (choice == 2) {
-			temp = table2();
-			table2 = table1;
-			table1 = temp;
-		}
-	}**/
-
-
-
 }

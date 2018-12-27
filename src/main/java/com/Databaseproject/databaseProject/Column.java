@@ -31,10 +31,10 @@ public class Column implements Serializable{
 	 * @param isForeignKey sets true is this Column is a foreign key
 	 */
 
-	public Column(String name, Table table, boolean isForeignKey) {
-		this.name = name;
+	public Column(Table table, boolean isForeignKey) {
+		//this.name = name;
 		field = new ArrayList<Object>();
-		foreignKey.add(field);
+		//foreignKey.add(field);
 		this.isForeignKey = isForeignKey;
 		table.getColumns().add(this);
 		table.setColumnCounter(table.getColumnCounter() + 1);
@@ -137,4 +137,10 @@ public class Column implements Serializable{
 
 	}
 
+	public void createFkColumnName(Table table) {
+
+		String name =("Fk_from_").concat(table.getName());
+		setName(name);
+
+	}
 }

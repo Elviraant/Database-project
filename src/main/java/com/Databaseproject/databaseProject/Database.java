@@ -85,7 +85,7 @@ public class Database implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.multipleTablesMenu();
-			int choice = Database.choice(1,4);
+			int choice = Database.choice(1,5);
 			switch (choice)
 			{
 				case 1:
@@ -104,6 +104,13 @@ public class Database implements Serializable {
 					break;
 				case 3:
 					continueProcess = false;
+					break;
+				case 4:
+					if (tableCounter == 0) {
+						System.out.println("No tables in your database");
+					} else {
+						defineCorrelation();
+					}
 					break;
 				default:
 					continueProcess = false;
@@ -274,6 +281,7 @@ public class Database implements Serializable {
 		return d1;
 	}
 
+
 	public static String chooseBase() {
 		ArrayList<String> saved = new ArrayList<String>();
 		try {
@@ -319,6 +327,73 @@ public class Database implements Serializable {
 		} else {
 			return "no bases";
 		}
+	}
+
+	public void defineCorrelation() {
+		if ((getTableCounter() != 1)) {
+			System.out.println("Please choose the entities you want to relate"); //check for Pk column
+			System.out.print("First table: ");
+			Table table1 = chooseTable();
+			table1 = chooseRightTableForCorrelation(table1);
+			System.out.print("Second table: ");
+			Table table2 = chooseTable();
+			table2 = chooseRightTableForCorrelation(table2);
+			do {											//diffrent tables
+				if (table2.equals(table1)) {
+					System.out.println("Error: Same table chosen");
+					System.out.println("Please try again");
+					table2 = chooseTable();
+				}
+			} while (table2.equals(table1));
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
+			String name = sc.next();
+			int option = Menu.correlationOptions();
+			switch (option) {
+				case (1): correlations.add(new OneToOne(name, table1, table2));
+				case (2): correlations.add(new OneToMany(name, table1, table2));
+				case (3): correlations.add(new ManyToMany(name, table1, table2));
+			}
+
+			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			table2.printAll();
+	 	} else {
+			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");
+		}
+	}
+
+	public Table chooseRightTableForCorrelation(Table table) {
+			while(!table.primaryKeyColumnExists()) {
+				System.out.println("This table has not a primary key Column.");
+				int choice = Menu.menuForNoPkColumn();
+				switch (choice)
+				{
+					case 1:
+						table = chooseTable();
+						//return true;
+						break;
+					case 2:
+						table = chooseTable();
+						//return false;
+						break;
+					default:
+						//return false;
+						break;
+				}
+
+			}
+			return table;
+	}
+
+	public boolean checkingCorrelation(Table table1,Table table2) {
+		boolean exists;
+		for(Correlation c : correlations) {
+			if((c.getTable1().equals(table1) && c.getTable2().equals(table2))
+				|| (c.getTable1().equals(table2) && c.getTable2().equals(table1))) {
+				exists = true;
+			}
+		}
+		return true; //not ready yet
 	}
 }
 

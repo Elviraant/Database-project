@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.*;
 import java.io.*;
 
+
 public class Table implements Serializable {
 	private ArrayList<Column> columns = new ArrayList<>();
 	private int columnCounter = 0;
 	private String name;
 	private int numberOfRows = 0;
-	private int positionOfFK;
+	private HashMap <Integer, Table> positionOffFk ;
 
 	/**
 	*Constructor for Table class
@@ -63,12 +64,10 @@ public class Table implements Serializable {
     public void setNumberOfRows(int numberOfRows) {
 	    this.numberOfRows = numberOfRows;
     }
- 	public void setPositionOfFK(int positionOfFK) {
- 		this.positionOfFK = positionOfFK;
- 	}
 
- 	public int getPositionOfFK() {
- 		return positionOfFK;
+    public void setPositionOffFk(Integer key, Table value) {
+
+		positionOffFk.put(key,value);
 	}
 
 	/**
@@ -637,6 +636,17 @@ public class Table implements Serializable {
 			}
 		} while (exprimarykey == -1 && j< columnCounter);
 		  return  primaryKeyColumn(exprimarykey);
+	}
+
+	public boolean primaryKeyColumnExists() {
+
+		boolean exists = false;
+		for (Column column : columns) {
+			if(column.getPrimaryKey()) {
+				exists = true;
+			}
+		}
+		return exists;
 	}
 
 	public int createIncreasedNumber() {
