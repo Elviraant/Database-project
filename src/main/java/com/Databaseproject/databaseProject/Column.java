@@ -143,4 +143,27 @@ public class Column implements Serializable{
 		setName(name);
 
 	}
+
+	public static void searchElement(Object element, ArrayList<Object> field) {
+		int search = -1;
+		int i = 0;
+		do{
+			if( element.equals(field.get(i)) ) {
+				search = i;
+			}
+			i++;
+		} while(search == -1 && i < field.size());
+		if (search != -1) {
+			System.out.println(element);
+			System.out.print("found in position:");
+			System.out.println(search);
+		} else {
+			System.out.print(element);
+			System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
+			Boolean answer = Database.findDecision();
+			if(answer) {
+				Menu.searchingMenu();
+			}
+		}
+	}
 }

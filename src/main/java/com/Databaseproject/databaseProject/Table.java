@@ -259,6 +259,15 @@ public class Table implements Serializable {
 				case 5:
 					addData();
 					break;
+				case 6:
+					searchData();
+					break;
+				case 7:
+					findMax();
+					break;
+				case 8:
+					findMin();
+					break;
 				default:
 					continueProcess = false;
 			}
@@ -371,7 +380,6 @@ public class Table implements Serializable {
 		}
 	}
 
-
 	public void addData() {
 		int choice;
 		boolean continueProcess = true;
@@ -391,6 +399,41 @@ public class Table implements Serializable {
 			System.out.println("Add completed successfully");
 			System.out.println("Continue with the add of data?");
 			continueProcess = Database.findDecision();
+		}
+	}
+
+	public void searchData() {
+			Menu.searchingMenu();
+			Boolean answer = Database.findDecision();
+			if(answer) {
+				int pfield = inputFieldName("to search for element");
+				if ( pfield != -1) {
+					Column col = getColumns().get(pfield);
+					System.out.println("Enter the element you want to search");
+					Object element = col.getType().getData();
+					Column.searchElement(element, col.getField());
+					Menu.startingMenu();
+				}
+			}
+		}
+
+ 	public void findMax() {
+		int pfield = inputFieldName("find the maximum value");
+		if (pfield != -1) {
+			Column col = this.getColumns().get(pfield);
+			Object max = Collections.max(col.getField(), null);
+			System.out.println("The maximum value is : " +max);
+			System.out.println("at row : " +(col.getField().indexOf(max)));
+		}
+	}
+
+	public void findMin() {
+		int pfield = inputFieldName("find the minimum value");
+		if (pfield != -1) {
+			Column col = this.getColumns().get(pfield);
+			Object min = Collections.min(col.getField(), null);
+			System.out.println("The minimum value is : " +min);
+			System.out.println("at row : " +(col.getField().indexOf(min)));
 		}
 	}
 

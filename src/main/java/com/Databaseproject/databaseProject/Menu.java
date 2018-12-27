@@ -13,8 +13,8 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data", "6. Exit" ));
-		System.out.println("Please chose one of the above options: ");
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
+					       "6. Search Data", "7. Find Maximum Element", "8. Find Minimum Element", "9. Exit" ));
 	}
 
 	public static void multipleTablesMenu() {
@@ -63,6 +63,10 @@ public class Menu implements Serializable{
 		System.out.println("-----------------");
 		System.out.println(String.format("%s\n%s\n", "1. Add records", "2. Add Columns"));
 		System.out.println("Please choose one of the above options: ");
+	}
+
+	public static void searchingMenu() {
+		System.out.println("Do you want to search for a specific element? (Yes/No)");
 	}
 
 	public static int correlationOptions() {
