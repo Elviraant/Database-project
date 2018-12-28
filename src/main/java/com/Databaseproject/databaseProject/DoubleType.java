@@ -2,13 +2,13 @@ import java.util.Scanner;
 import java.io.Serializable;
 
 public class DoubleType extends FieldType implements Serializable {
-	transient Scanner cs = new Scanner(System.in);
 
 	public boolean correctValue(String a) {
 		return true;
 	}
 
 	public Double getData() {
+		Scanner cs = new Scanner(System.in);
 		double data = 0;
 		while (true) {
 			try {

@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class EnumeratedType extends FieldType implements Serializable{
 
 	private ArrayList<String> allowedStrings;
-	transient static Scanner cs = new Scanner(System.in);
 
 	public EnumeratedType() {
 		allowedStrings = new ArrayList<String>();
@@ -16,7 +15,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	public String getData() {
-
+		Scanner cs = new Scanner(System.in);
 		String data = null;
 		boolean flag = true;
 		while(flag == true) {
@@ -33,6 +32,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	public void defineEnumeration() {
+		Scanner cs = new Scanner(System.in);
 		System.out.println("Please insert the types you want to fill your fields with. Enter EXIT to stop");
 		String type = cs.nextLine();
 		while (!type.equals("EXIT")) {

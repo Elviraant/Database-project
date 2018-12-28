@@ -31,7 +31,6 @@ public class Table implements Serializable {
 	    d1.setTableCounter(counter);
     }
 
-    transient Scanner cs = new Scanner(System.in);
 
     public ArrayList<Column> getColumns() {
 	    return columns;
@@ -81,6 +80,7 @@ public class Table implements Serializable {
 		setFieldNames();
 	}
 	public void setFieldNames() {
+		Scanner cs = new Scanner(System.in);
 		System.out.println("Set the names of the fields that you want to create\nEnter EXIT to stop");
 		//int counter = 1;
 		//columnCounter = 1;
@@ -110,7 +110,6 @@ public class Table implements Serializable {
 
 			int check = -2;
 			while(check != -1) {
-
 				nameOfField = cs.next();
 				check = this.containsName(nameOfField);
 				if (check != -1) {
@@ -131,7 +130,7 @@ public class Table implements Serializable {
 	 *  If it exists, sets the boolean instance variable true
 	 */
 	public void definePrimaryKey(){
-
+		Scanner cs = new Scanner(System.in);
 		System.out.println("Do you want to set a field as primary key? ");
 		boolean continueProcess;
 		continueProcess = Database.findDecision();
@@ -890,6 +889,7 @@ public class Table implements Serializable {
 	* deletes any columns you want
 	*/
 	public void deleteColumns() {
+		Scanner cs = new Scanner(System.in);
 		System.out.println("How many columns do you want to delete?");
 		int x = checkOffLimitsColumns();
 		for (int i = 0; i < x; i++) {
@@ -923,6 +923,7 @@ public class Table implements Serializable {
 	* deletes any element you want
 	*/
 	public void deleteElements(){
+		Scanner cs = new Scanner(System.in);
 		boolean continueProcess = true;
 		while (continueProcess) {
 			int x;
@@ -986,6 +987,7 @@ public class Table implements Serializable {
 	*Sorts the table based on a column given by the user
 	*/
 	public void sortInAlphabeticalOrder() {
+		Scanner cs = new Scanner(System.in);
 		int x;
 		do{
 			System.out.println("Please insert the name of the column on which you want the assortment to be based on: ");
