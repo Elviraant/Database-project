@@ -49,7 +49,7 @@ public class ManyToMany extends Correlation {
 		Column primaryKeyColumn1 = table1.getColumns().get(posP1);
 		int posP2 = table2.findPrimaryKeyColumn();
 		Column primaryKeyColumn2 = table2.getColumns().get(posP2);
-		/*createTable2Lists();*/
+		createTable2Lists();
 
 		for ( int i = 0; i < table1.getNumberOfRows(); i++) {
 			ArrayList <Object> foreignKeys1 = new ArrayList<Object>();
@@ -68,8 +68,11 @@ public class ManyToMany extends Correlation {
 					int pos = primaryKeyColumn2.getField().indexOf(key);
 					if (pos != -1) {
 						foreignKeys1.add(key);
-						 //column2.getForeignKeys().get(pos).add(pKey1);
-						continueProcess = false;
+
+						System.out.println("" + pos + "");
+						column2.getForeignKeys().get(pos).add(pKey1);
+						repeat = false;
+
 					} else {
 						System.out.println(" This primary key doesn't exist. Do you want to try again?");
 						repeat = Database.findDecision();
@@ -84,11 +87,11 @@ public class ManyToMany extends Correlation {
 			}
 		}
 
-	/*public void createTable2Lists() {
+	public void createTable2Lists() {
 		for (int i = 0; i < table2.getColumnCounter(); i++) {
 			column2.getForeignKeys().add(new ArrayList <Object>());
 		}
-	}*/
+	}
 
 	@Override
 	public void viewProperties() {

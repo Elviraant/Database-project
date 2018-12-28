@@ -1,3 +1,4 @@
+//package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
 import java.io.Serializable;
 
@@ -7,7 +8,7 @@ public class Column implements Serializable{
 	private boolean isPrimaryKey;
 	private boolean isForeignKey;
 	private ArrayList<Object> field;
-	private ArrayList<ArrayList> foreignKey;
+	private ArrayList<ArrayList<Object>> foreignKeys = new ArrayList<ArrayList<Object>>();;
 
 	/**
 	 * First Constructor for Column class
@@ -79,6 +80,10 @@ public class Column implements Serializable{
 
 	public void setFieldType(FieldType type) {
 		this.type = type;
+	}
+
+	public ArrayList<ArrayList<Object>> getForeignKeys() {
+		return foreignKeys;
 	}
 
 

@@ -1,3 +1,4 @@
+//package com.databaseProject.Databaseproject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 		String data = null;
 		boolean flag = true;
 		while(flag == true) {
+
 			data = cs.nextLine();
 
 			if (correctValue(data)) {
