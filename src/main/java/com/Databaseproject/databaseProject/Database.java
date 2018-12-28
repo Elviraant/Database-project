@@ -349,14 +349,16 @@ public class Database implements Serializable {
 			System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
 			String name = sc.next();
 			int option = Menu.correlationOptions();
+			System.out.println(option);
 			switch (option) {
 				case (1): correlations.add(new OneToOne(name, table1, table2));
+						  break;
 				case (2): correlations.add(new OneToMany(name, table1, table2));
+						  break;
 				case (3): correlations.add(new ManyToMany(name, table1, table2));
+						  break;
 			}
-
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			table2.printAll();
+			table2.printHeader();
 	 	} else {
 			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");
 		}
@@ -364,7 +366,7 @@ public class Database implements Serializable {
 
 	public Table chooseRightTableForCorrelation(Table table) {
 			while(!table.primaryKeyColumnExists()) {
-				System.out.println("This table has not a primary key Column.");
+				System.out.println("This table doesn't have a primary key Column.");
 				int choice = Menu.menuForNoPkColumn();
 				switch (choice)
 				{
@@ -395,5 +397,7 @@ public class Database implements Serializable {
 		}
 		return true; //not ready yet
 	}
+
+
 }
 
