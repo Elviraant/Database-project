@@ -15,10 +15,10 @@ public class OneToMany extends Correlation{
 	public OneToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		column = new Column(table1, true);
-		column.createFkColumnName(table1);
+		column = new Column(table2, true);
+		column.createFkColumnName(table2);
 		posF = table2.getColumnCounter();
-		table2.setPositionOffFk(table2, posF);
+		table2.setPositionOffFk(table1, posF);
 
 	}
 
