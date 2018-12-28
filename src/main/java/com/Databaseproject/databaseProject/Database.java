@@ -1,6 +1,7 @@
 /**
 Represents our Database
 */
+//package com.databaseProject.Databaseproject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -351,13 +352,22 @@ public class Database implements Serializable {
 			int option = Menu.correlationOptions();
 			System.out.println(option);
 			switch (option) {
-				case (1): correlations.add(new OneToOne(name, table1, table2));
+				case (1): System.out.println("asdf");
+						 OneToOne c1 = new OneToOne(name, table1, table2);
+						 correlations.add(c1);
+						 System.out.println("asdf");
+						 c1.fillForeignKeyColumn();
 						  break;
-				case (2): correlations.add(new OneToMany(name, table1, table2));
+				case (2): OneToMany c2 = new OneToMany(name, table1, table2);
+						  correlations.add(c2);
+						  c2.fillForeignKeyColumn();
 						  break;
-				case (3): correlations.add(new ManyToMany(name, table1, table2));
+				case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
+						  correlations.add(c3);
+						  c3.fillForeignKeyColumn();
 						  break;
 			}
+
 			table2.printHeader();
 	 	} else {
 			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");

@@ -10,14 +10,15 @@ import java.util.Scanner;
 public class OneToMany extends Correlation{
 
 	private Column column;
+	private int posF;
 
 	public OneToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		column = new Column(table2, true);
+		column = new Column(table1, true);
 		column.createFkColumnName(table1);
 		posF = table2.getColumnCounter();
-		table2.setPositionOffFk(table1, posF);
+		table2.setPositionOffFk(table2, posF);
 
 	}
 
@@ -32,18 +33,19 @@ public class OneToMany extends Correlation{
 
 		Column primaryKeyColumnMany = table2.getColumns().get(posPMany);
 		Column primaryKeyColumnOne = table1.getColumns().get(posPOne);
-		Column foreignKeyColumn = table2.getColumns().get(posF);
 
-		for (int i = 0; i < table2.getNumberOfRows(); i++) {
+
+		for (int i = 0; i < table1.getNumberOfRows(); i++) {
 			boolean continueProcess = true;
 			while (continueProcess) {
-				System.out.println("Insert the primary key of the correlated record of " + primaryKeyColumnMany.getField().get(i)
-										+ " from" + table2.getName() + ":");
-				Object key = primaryKeyColumnOne.getType().getData();
-				int pos = primaryKeyColumnOne.getField().indexOf(key);
+				System.out.println("Insert the primary key of record that is correlated with " + primaryKeyColumnOne.getField().get(i)
+										+ " from " + table1.getName() + ":");
+				Object key = primaryKeyColumnMany.getType().getData();
+				int pos = primaryKeyColumnMany.getField().indexOf(key);
 
 				if (pos != -1)	{
-					foreignKeyColumn.getField().add(key);
+					column.getField().add(key);
+					continueProcess = false;
 				} else {
 					System.out.println(" This primary key doesn't exist. Do you want to try again?");
 					continueProcess = Database.findDecision();

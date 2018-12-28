@@ -6,7 +6,7 @@ public class Correlation {
 	protected String name;
 	protected Table table1; //entity 1
 	protected Table table2; //entity 2
-	protected int posF;
+
 	/**
 	*Constructor for Correlation class
 	* @param name name of correlationship between the entities
@@ -35,5 +35,6 @@ public class Correlation {
 	public String toString() {
 		return table1.getName() + " " + name + " " + table2.getName();
 	}
+
 
 }
