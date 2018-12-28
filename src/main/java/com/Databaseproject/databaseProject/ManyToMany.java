@@ -80,13 +80,26 @@ public class ManyToMany extends Correlation {
 					continueProcess = Database.findDecision();
 				}
 				if (!foreignKeys1.isEmpty()) {
-					//column1.getForeignKeys().add(foreignKeys1);
+					column1.getForeignKeys().add(foreignKeys1);
 				}
 			}
+			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
+				for ( Object a: c) {
+					System.out.print( "" + a + "   |");
+				}
+				System.out.println();
+		}
+		for ( ArrayList <Object> c: column2.getForeignKeys() ) {
+						for ( Object a: c) {
+							System.out.print( "" + a + "   |");
+						}
+						System.out.println();
+		}
+
 		}
 
 	public void createTable2Lists() {
-		for (int i = 0; i < table2.getColumnCounter(); i++) {
+		for (int i = 0; i < table2.getNumberOfRows(); i++) {
 			column2.getForeignKeys().add(new ArrayList <Object>());
 		}
 	}
