@@ -68,8 +68,6 @@ public class ManyToMany extends Correlation {
 					int pos = primaryKeyColumn2.getField().indexOf(key);
 					if (pos != -1) {
 						foreignKeys1.add(key);
-
-						System.out.println("" + pos + "");
 						column2.getForeignKeys().get(pos).add(pKey1);
 						repeat = false;
 
