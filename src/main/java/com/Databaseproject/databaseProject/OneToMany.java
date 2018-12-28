@@ -5,7 +5,7 @@ Represents a relationship between two tables where the rows of table1
 */
 //package com.databaseProject.Databaseproject;
 import java.util.Scanner;
-
+import java.util.HashMap;
 
 public class OneToMany extends Correlation{
 
@@ -54,5 +54,32 @@ public class OneToMany extends Correlation{
 		}
 	}
 
+	@Override
+	public void viewProperties() {
+		boolean continueProcess = true;
+ 		while (continueProcess) {
+			int choice = Menu.viewPopertiesMenu();
+			switch (choice)
+			{
+				case 1:
+					System.out.println(this.toString());
+					System.out.println("This is an one-to-many relationship");
+					System.out.println("The table where one record can be linked to multiple records of the other is: "
+					+ table1.getName());
+					System.out.println("The table where the records are linked only to one record of the other table is: "
+					+ table2.getName());
+				case 2:
+					break;
+				case 3:
+					this.search();
+					break;
+			}
+		}
+	}
+
+	public int fK() {
+		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
+		return foreignKeyMapping.get(table1);
+	}
 
 }

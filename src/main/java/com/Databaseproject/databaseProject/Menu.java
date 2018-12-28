@@ -5,7 +5,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Presentation Options:");
 		System.out.println("---------------------");
-		System.out.println(String.format("%s\n%s\n%s\n", "1. Present all", "2. Present specific rows", "3. Present specific columns"));
+		System.out.println(String.format("%s\n%s\n%s\n", "1. Present all", "2. Present range of rows", "3. Present specific columns"));
 		System.out.println("Please chose one of the above options: ");
 	}
 
@@ -86,6 +86,22 @@ public class Menu implements Serializable{
 		return Database.choice(1,2);
 	}
 
+	public static int manageCorrelationsMenu() {
+		System.out.println(String.format("%s\n%s\n%s\n"
+							,"1. How many correlations have I created?"
+							,"2. View all correlated tables"
+							,"3. View properties"));
+		System.out.println("Please choose one of the above options: ");
+		return Database.choice(1,3);
+	}
 
+	public static int viewPopertiesMenu() {
+		System.out.println(String.format("%s\n%s\n%s\n"
+							,"1. Show info"
+							,"2. View all related records"
+							,"3. Search related records"));
+		System.out.println("Please choose one of the above options: ");
+		return Database.choice(1,3);
+	}
 }
 

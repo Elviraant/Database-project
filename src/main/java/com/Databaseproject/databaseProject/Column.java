@@ -144,19 +144,14 @@ public class Column implements Serializable{
 
 	}
 
-	public static void searchElement(Object element, ArrayList<Object> field) {
-		int search = -1;
-		int i = 0;
-		do{
-			if( element.equals(field.get(i)) ) {
-				search = i;
-			}
-			i++;
-		} while(search == -1 && i < field.size());
-		if (search != -1) {
+	public void searchElement(Object element) {
+		ArrayList<Integer> rows = matchingRows(element);
+		if (rows.size() != 0) {
 			System.out.println(element);
-			System.out.print("found in position:");
-			System.out.println(search);
+			System.out.print("found in position(s):");
+			for (Integer row : rows) {
+				System.out.println(row);
+			}
 		} else {
 			System.out.print(element);
 			System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
@@ -165,5 +160,15 @@ public class Column implements Serializable{
 				Menu.searchingMenu();
 			}
 		}
+	}
+
+	public ArrayList<Integer> matchingRows(Object element) {
+		ArrayList<Integer> rows = new ArrayList<Integer>();
+		for (int i = 0; i < getField().size(); i++) {
+			if (element.equals(getField().get(i))) {
+				rows.add(i);
+			}
+		}
+		return rows;
 	}
 }

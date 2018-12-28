@@ -54,6 +54,10 @@ public class Database implements Serializable {
 		this.name = name;
 	}
 
+	public ArrayList<Correlation> getCorrelations() {
+		return correlations;
+	}
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException{
 		Database d1 = Database.startBase();
 		d1.manageTables();
@@ -104,7 +108,7 @@ public class Database implements Serializable {
 					}
 					break;
 				case 3:
-					continueProcess = false;
+					Correlation.manageCorrelations(this);
 					break;
 				case 4:
 					if (tableCounter == 0) {
@@ -407,7 +411,6 @@ public class Database implements Serializable {
 		}
 		return true; //not ready yet
 	}
-
 
 }
 
