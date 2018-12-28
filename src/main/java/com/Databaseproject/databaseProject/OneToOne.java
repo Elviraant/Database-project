@@ -1,5 +1,7 @@
+
 //package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OneToOne extends Correlation {
 
@@ -12,6 +14,30 @@ public class OneToOne extends Correlation {
 		column.createFkColumnName(table1);
 		posF = table2.getColumnCounter();
 		table2.setPositionOffFk(table1, posF);
+	}
+
+	@Override
+	/**
+	*Shows the options concerning the management of an one to one correlation
+	*/
+	public void viewProperties() {
+		boolean continueProcess = true;
+ 		while (continueProcess) {
+			int choice = Menu.viewPopertiesMenu();
+			switch (choice)
+			{
+				case 1:
+					System.out.println(this.toString());
+					System.out.println("This is an One-To-One correlation");
+					System.out.println("Every record of a table should be linked to ecxactly one record of the other.");
+					break;
+				case 2:
+					break;
+				case 3:
+					this.search();
+					break;
+			}
+		}
 	}
 
 	/**

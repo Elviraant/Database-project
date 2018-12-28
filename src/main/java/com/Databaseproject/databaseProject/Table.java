@@ -18,6 +18,7 @@ public class Table implements Serializable {
 	private int numberOfRows = 0;
 	private HashMap <Table , Integer> positionOffFk = new HashMap<Table, Integer>();
 
+
 	/**
 	*Constructor for Table class
 	* @param columns arraylist with objects of Column
@@ -66,8 +67,11 @@ public class Table implements Serializable {
 	    this.numberOfRows = numberOfRows;
     }
 
-    public void setPositionOffFk(Table key,Integer value) {
+    public HashMap<Table, Integer> getPositionOffFk() {
+		return positionOffFk;
+	}
 
+    public void setPositionOffFk(Table key, Integer value) {
 		positionOffFk.put(key,value);
 	}
 
@@ -299,7 +303,7 @@ public class Table implements Serializable {
 					printAll();
 					break;
 				case 2:
-					printSpecificRows();
+					printRangeOfRows();
 					break;
 				case 3:
 					printSpecificColumns();
@@ -410,7 +414,7 @@ public class Table implements Serializable {
 				break;
 			}
 			System.out.println("Add completed successfully");
-			System.out.println("Continue with the add of data?");
+			System.out.println("Continue with the adding of data?");
 			continueProcess = Database.findDecision();
 		}
 	}
@@ -424,7 +428,7 @@ public class Table implements Serializable {
 					Column col = getColumns().get(pfield);
 					System.out.println("Enter the element you want to search");
 					Object element = col.getType().getData();
-					col.searchElement(element, col.getField());
+					col.searchElement(element);
 					Menu.startingMenu();
 				}
 			}
@@ -491,11 +495,10 @@ public class Table implements Serializable {
 		}
 		System.out.println();
 	}
-
 	/**
 	*Present specific rows within a range given by the user
 	*/
-	public void printSpecificRows() {
+	public void printRangeOfRows() {
 		if (numberOfRows != 0) {
 			System.out.println("Please insert the range of rows you want to print.");
 			int start = 1;
@@ -515,6 +518,13 @@ public class Table implements Serializable {
 			}
 		} else {
 			System.out.println("No records in this table");
+		}
+	}
+
+	public void specificRows(ArrayList<Integer> rows) {
+		printHeader();
+		for (Integer row : rows) {
+			presentRow(row - 1);
 		}
 	}
 
@@ -749,29 +759,26 @@ public class Table implements Serializable {
 	Else make a new list in table with increased number that it will be a primary key list
 	and calls informUser()*/
 
-		public int informUser(int ex){
-					Column col = columns.get(ex);
-					System.out.println("This is your Database :");
-					this.printAll();
-					//Inform him which list is primary key.
-					System.out.print("This is the list with the primary keys of your elements ");
-					System.out.println(col.getName());
-					System.out.println("Type the primary key of element you want to change");
-					Object searchKey = col.getType().getData();
-						if ( !col.getField().contains(searchKey)) {
-							System.out.println("The primary key you typed doesn't exist.");
-							System.out.println("Do you want to try again?");
-							//System.out.println("Answer Yes or No");
-							Boolean answer = Database.findDecision();
-							if (answer) {
-								return informUser(ex);
-							}
-
-
-				    	}
-
-						return col.getField().indexOf(searchKey); //position of primary key in list.
-				}
+	public int informUser(int ex){
+		Column col = columns.get(ex);
+		System.out.println("This is your Database :");
+		this.printAll();
+		//Inform him which list is primary key.
+		System.out.print("This is the list with the primary keys of your elements ");
+		System.out.println(col.getName());
+		System.out.println("Type the primary key of element you want to change");
+		Object searchKey = col.getType().getData();
+		if ( !col.getField().contains(searchKey)) {
+			System.out.println("The primary key you typed doesn't exist.");
+			System.out.println("Do you want to try again?");
+			//System.out.println("Answer Yes or No");
+			Boolean answer = Database.findDecision();
+			if (answer) {
+				return informUser(ex);
+			}
+		}
+		return col.getField().indexOf(searchKey); //position of primary key in list.
+	}
 
 
 	public void changeValue() {
