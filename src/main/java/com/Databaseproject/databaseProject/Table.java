@@ -14,7 +14,7 @@ public class Table implements Serializable {
 	private int columnCounter = 0;
 	private String name;
 	private int numberOfRows = 0;
-	private HashMap <Integer, Table> positionOffFk ;
+	private HashMap <Integer, Table> positionOffFk = new HashMap<Integer, Table>();
 
 	/**
 	*Constructor for Table class
