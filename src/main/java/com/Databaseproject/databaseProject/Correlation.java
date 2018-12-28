@@ -1,11 +1,12 @@
+//package com.databaseProject.Databaseproject;
 import java.util.Scanner;
 
 public class Correlation {
 
-	private String name;
-	private Table table1; //entity 1
-	private Table table2; //entity 2
-
+	protected String name;
+	protected Table table1; //entity 1
+	protected Table table2; //entity 2
+	protected int posF;
 	/**
 	*Constructor for Correlation class
 	* @param name name of correlationship between the entities

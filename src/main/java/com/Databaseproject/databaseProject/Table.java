@@ -1,7 +1,9 @@
 /**
 Represents a table of our database.
 */
+//package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.io.Serializable;
 import java.util.Collections;
@@ -14,7 +16,7 @@ public class Table implements Serializable {
 	private int columnCounter = 0;
 	private String name;
 	private int numberOfRows = 0;
-	private HashMap <Integer, Table> positionOffFk = new HashMap<Integer, Table>();
+	private HashMap <Table , Integer> positionOffFk = new HashMap<Table, Integer>();
 
 	/**
 	*Constructor for Table class
@@ -64,10 +66,16 @@ public class Table implements Serializable {
 	    this.numberOfRows = numberOfRows;
     }
 
-    public void setPositionOffFk(Integer key, Table value) {
+    public void setPositionOffFk(Table key,Integer value) {
 
 		positionOffFk.put(key,value);
 	}
+
+/**public HashMap<Table, Integer> getPositionOfFK() {
+		return positionOffFk;
+	}**/
+
+
 
 	/**
 	 * Returns void
@@ -173,26 +181,31 @@ public class Table implements Serializable {
 	public void columnFillerByRow() {
 		boolean continueProcess = true;
 		while (continueProcess) {
-			System.out.println("#" + (numberOfRows + 1) + " Row: ");
-			for(Column column : this.getColumns()) {
-				if (this.getColumns().get(0).equals(column)) {
-					column.getField().add(numberOfRows + 1);
-				} else {
-					System.out.println("Give "+ column.getName());
-					Object data = column.getType().getData();
-					if (column.getPrimaryKey()) {
-						column.fillPrimaryKeyField(data);
-					} else {
-						column.getField().add(data);
-					}
-				}
-			}
+			addRow();
 			numberOfRows++;
 			System.out.println("Do you want to continue? Y/N");
 			continueProcess = Database.findDecision();
 		}
 		//numberOfRows+= insertions;
 	}
+
+	public void addRow() {
+		System.out.println("#" + (numberOfRows + 1) + " Row: ");
+		for(Column column : this.getColumns()) {
+			if (this.getColumns().get(0).equals(column)) {
+				column.getField().add(numberOfRows + 1);
+			} else {
+				System.out.println("Give "+ column.getName());
+				Object data = column.getType().getData();
+				if (column.getPrimaryKey()) {
+					column.fillPrimaryKeyField(data);
+				} else {
+					column.getField().add(data);
+				}
+			}
+		}
+
+}
 
 
 
@@ -201,6 +214,7 @@ public class Table implements Serializable {
 	*Fill in with Data, Fills by column
 	*/
 	public void columnFillerByColumn() {
+
 
 		if (numberOfRows == 0 ){
 			System.out.println("How many records would you like to fill for " + this.getName());
@@ -410,7 +424,7 @@ public class Table implements Serializable {
 					Column col = getColumns().get(pfield);
 					System.out.println("Enter the element you want to search");
 					Object element = col.getType().getData();
-					Column.searchElement(element, col.getField());
+					col.searchElement(element, col.getField());
 					Menu.startingMenu();
 				}
 			}
@@ -677,7 +691,20 @@ public class Table implements Serializable {
 				j++;
 			}
 		} while (exprimarykey == -1 && j< columnCounter);
-		  return  primaryKeyColumn(exprimarykey);
+		  return  exprimarykey;
+	}
+
+	public  int findForeignKeyColumn() {
+
+			int posF = -1;
+			boolean cont = false;
+
+			for ( Column c: columns) {
+				if (c.getForeignKey()) {
+					return posF = columns.indexOf(c);
+				}
+			}
+			return -1;
 	}
 
 	public boolean primaryKeyColumnExists() {
@@ -710,12 +737,12 @@ public class Table implements Serializable {
 		  and calls informUser()*
 		  attributes: position of of primarykey list position of field to be changed*/
 
-		public int primaryKeyColumn(int exprimaryKey) {
+		/*public int primaryKeyColumn(int exprimaryKey) {
 			if(exprimaryKey == -1) {
 				exprimaryKey =createIncreasedNumber();
 			}
 				return informUser(exprimaryKey);
-		}
+		}*/
 
 
 	/*if a column with primary keys exists, keeps the position in table and calls informUser.
