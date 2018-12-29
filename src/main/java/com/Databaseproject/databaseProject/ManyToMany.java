@@ -88,13 +88,13 @@ public class ManyToMany extends Correlation {
 					System.out.print( "" + a + "   |");
 				}
 				System.out.println();
-		}
-		for ( ArrayList <Object> c: column2.getForeignKeys() ) {
-						for ( Object a: c) {
-							System.out.print( "" + a + "   |");
-						}
-						System.out.println();
-		}
+			}
+			for ( ArrayList <Object> c: column2.getForeignKeys() ) {
+				for ( Object a: c) {
+					System.out.print( "" + a + "   |");
+				}
+				System.out.println();
+			}
 
 		}
 

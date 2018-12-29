@@ -44,7 +44,7 @@ public class OneToOne extends Correlation {
 	 *Fills foreignKeyColumn with Data
 	 **/
 	public void fillForeignKeyColumn() {
-System.out.println("Insert the primary key that's correlated with");
+
 		int posP1 = table1.findPrimaryKeyColumn();
 		int posP2 = table2.findPrimaryKeyColumn();
 		ArrayList <Object> primaryKeyField1 = table1
@@ -56,12 +56,12 @@ System.out.println("Insert the primary key that's correlated with");
 								.get(posP2);
 
 
-
-System.out.println("" + table1.getNumberOfRows() + "");
+		initializeForeignKeyColumn();
 		for (int i = 0; i < table1.getNumberOfRows(); i++) {
+			Object pKey1 =  primaryKeyField1.get(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-				System.out.println("Insert the primary key that's correlated with " + primaryKeyField1.get(i)
+				System.out.println("Insert the primary key that's correlated with " + pKey1
 										+ " from " + table1.getName() + " :");
 				Object key = primaryKeyColumn.getType().getData();
 				int pos = primaryKeyColumn.getField().indexOf(key);
@@ -69,7 +69,7 @@ System.out.println("" + table1.getNumberOfRows() + "");
 				if (pos != -1) {
 					boolean check = column.checkUniqueness(key);
 					if (check) {
-						column.getField().add(key);
+						column.getField().set(pos, pKey1);
 						continueProcess = false;
 					} else {
 						System.out.println("This record is already correlated with another record from " + table1.getName()
@@ -81,13 +81,15 @@ System.out.println("" + table1.getNumberOfRows() + "");
 					continueProcess = Database.findDecision();
 				}
 			}
-
-
-
-
-
 		}
 	}
+
+
+
+
+
+
+
 
 }
 

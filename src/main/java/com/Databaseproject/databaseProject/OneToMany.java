@@ -34,14 +34,14 @@ public class OneToMany extends Correlation{
 		Column primaryKeyColumnMany = table2.getColumns().get(posPMany);
 		Column primaryKeyColumnOne = table1.getColumns().get(posPOne);
 
-
-		for (int i = 0; i < table1.getNumberOfRows(); i++) {
+		for (int i = 0; i < table2.getNumberOfRows(); i++) {
+			Object pKey2= primaryKeyColumnMany.getField().get(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-				System.out.println("Insert the primary key of record that is correlated with " + primaryKeyColumnOne.getField().get(i)
-										+ " from " + table1.getName() + ":");
-				Object key = primaryKeyColumnMany.getType().getData();
-				int pos = primaryKeyColumnMany.getField().indexOf(key);
+				System.out.println("Insert the primary key of record that is correlated with " + pKey2
+										+ " from " + table2.getName() + ":");
+				Object key = primaryKeyColumnOne.getType().getData();
+				int pos = primaryKeyColumnOne.getField().indexOf(key);
 
 				if (pos != -1)	{
 					column.getField().add(key);
@@ -53,6 +53,7 @@ public class OneToMany extends Correlation{
 			}
 		}
 	}
+
 
 	@Override
 	public void viewProperties() {
