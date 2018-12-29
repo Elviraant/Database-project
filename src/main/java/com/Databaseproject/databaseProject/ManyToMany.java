@@ -1,7 +1,7 @@
 
 //package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 import java.util.HashMap;
 
 
@@ -49,9 +49,11 @@ public class ManyToMany extends Correlation {
 		Column primaryKeyColumn1 = table1.getColumns().get(posP1);
 		int posP2 = table2.findPrimaryKeyColumn();
 		Column primaryKeyColumn2 = table2.getColumns().get(posP2);
+
 		createTable1Lists();
 
-		for ( int i = 0; i < table1.getNumberOfRows(); i++) {
+
+		for ( int i = 0; i < table2.getNumberOfRows(); i++) {
 			ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
 			boolean continueProcess = true;
 			int q =0;
@@ -71,7 +73,6 @@ public class ManyToMany extends Correlation {
 						foreignKeys2.add(key);
 						column2.getForeignKeys().get(pos).add(pKey2);
 						repeat = false;
-
 					} else {
 						System.out.println("This primary key doesn't exist.");
 						/*if ( q == 1) {
@@ -85,9 +86,10 @@ public class ManyToMany extends Correlation {
 					System.out.println("Are there any others correlated records of " + pKey2 + ": ");
 					continueProcess = Database.findDecision();
 				}
+
 				if (!foreignKeys2.isEmpty()) {
 					column1.getForeignKeys().add(foreignKeys2);
-				}
+
 			}
 			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
 				for ( Object a: c) {
@@ -101,9 +103,9 @@ public class ManyToMany extends Correlation {
 				}
 				System.out.println();
 			}
-
 		}
 
+}
 	public void createTable1Lists() {
 		for (int i = 0; i < table1.getNumberOfRows(); i++) {
 			column2.getForeignKeys().add(new ArrayList <Object>());
@@ -129,7 +131,6 @@ public class ManyToMany extends Correlation {
 			}
 		}
 	}
-
 	public int fK1() {
 		HashMap<Table, Integer> foreignKeyMapping = table1.getPositionOffFk();
 		return foreignKeyMapping.get(table2);
@@ -140,6 +141,23 @@ public class ManyToMany extends Correlation {
 		return foreignKeyMapping.get(table1);
 	}
 
+
+	public Table defineSearched() {
+		int choice = choice();
+		Table searched;
+		if (choice == 1) {
+			searched = table1;
+		} else {
+			searched = table2;
+		}
+		return searched;
+	}
+
+	@Override
+	public void search() {
+		Scanner cs = new Scanner(System.in);
+		Table searched = defineSearched();
+	}
 
 
 }
