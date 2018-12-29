@@ -59,6 +59,7 @@ public class OneToMany extends Correlation{
 	public void viewProperties() {
 		boolean continueProcess = true;
  		while (continueProcess) {
+			System.out.print(String.format("\n\n"));
 			int choice = Menu.viewPopertiesMenu();
 			switch (choice)
 			{
@@ -67,8 +68,10 @@ public class OneToMany extends Correlation{
 					System.out.println("This is an one-to-many relationship");
 					System.out.println("The table where one record can be linked to multiple records of the other is: "
 					+ table1.getName());
+					System.out.println();
 					System.out.println("The table where the records are linked only to one record of the other table is: "
 					+ table2.getName());
+					System.out.println();
 				case 2:
 					break;
 				case 3:

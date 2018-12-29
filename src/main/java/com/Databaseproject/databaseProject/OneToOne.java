@@ -23,13 +23,16 @@ public class OneToOne extends Correlation {
 	public void viewProperties() {
 		boolean continueProcess = true;
  		while (continueProcess) {
+			System.out.print(String.format("\n\n"));
 			int choice = Menu.viewPopertiesMenu();
 			switch (choice)
 			{
 				case 1:
 					System.out.println(this.toString());
 					System.out.println("This is an One-To-One correlation");
+					System.out.println();
 					System.out.println("Every record of a table should be linked to ecxactly one record of the other.");
+					System.out.println();
 					break;
 				case 2:
 					break;
@@ -61,7 +64,6 @@ public class OneToOne extends Correlation {
 			Object pKey2 =  primaryKeyField2.get(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-				table2.printAll();
 				table1.printAll();
 				System.out.println("Insert the primary key that's correlated with " + pKey2
 										+ " from table " + table2.getName() + " :");

@@ -23,9 +23,6 @@ public class ManyToMany extends Correlation {
 		this.column2 = new Column(table1, true);
 		this.column2.createFkColumnName(table2);
 		posF2 = table2.getColumnCounter();
-
-		//table2.setPositionOfFK(table2.getColumnCounter() + 1);
-		//table1.setPositionOfFK(table1.getColumnCounter() + 1);
 	}
 
 	public Column getColumn1() {
@@ -116,17 +113,21 @@ public class ManyToMany extends Correlation {
 	public void viewProperties() {
 		boolean continueProcess = true;
  		while (continueProcess) {
+			System.out.print(String.format("\n\n"));
 			int choice = Menu.viewPopertiesMenu();
 			switch (choice)
 			{
 				case 1:
 					System.out.println(this.toString());
 					System.out.println("This is a many-to-many correlation");
+					System.out.println();
 					System.out.println("Multiple records of one table are linked to multiple tables of the other");
+					System.out.println(String.format("\n\n"));
 					break;
 				case 2:
 					break;
 				case 3:
+					this.search();
 					break;
 			}
 		}
@@ -157,7 +158,38 @@ public class ManyToMany extends Correlation {
 	public void search() {
 		Scanner cs = new Scanner(System.in);
 		Table searched = defineSearched();
+		Table keyHolder;
+		int fKPos;
+		if (searched.equals(table1)) {
+			keyHolder = table2;
+			fKPos = fK2();
+		} else {
+			keyHolder = table1;
+			fKPos = fK1();
+		}
+		int posPK1 = keyHolder.findPrimaryKeyColumn();
+		Column pKColumnOfKeys = keyHolder.getColumns().get(posPK1);
+		int posPK2 = searched.findPrimaryKeyColumn();
+		Column pKColumnOfSearched = searched.getColumns().get(posPK2);
+		Column fKColumnOfKeys = keyHolder.getColumns().get(fKPos);
+		ArrayList<ArrayList<Object>> foreignsWithKeys = fKColumnOfKeys.getForeignKeys();
+		ArrayList<Object> foreigns = foreigns(pKColumnOfKeys,foreignsWithKeys);
+		if (foreigns.size() != 0) {
+			ArrayList<Integer> rows = pKColumnOfSearched.matchingRows(foreigns);
+			printRelated(rows, searched);
+		}
 	}
 
-
+	public ArrayList<Object> foreigns(Column column, ArrayList<ArrayList<Object>> foreignKeys) {
+		System.out.println("Please insert a primary key of the above table: ");
+		Object element = column.getType().getData();
+		ArrayList<Integer> rows = new ArrayList<Integer>();
+		rows.add(column.matchingRows(element).get(0));
+		if (rows.size() != 0) {
+			return foreignKeys.get(rows.get(0));
+		} else {
+			System.out.println("No much found");
+			return null;
+		}
+	}
 }

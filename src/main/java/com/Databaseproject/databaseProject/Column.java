@@ -176,4 +176,16 @@ public class Column implements Serializable{
 		}
 		return rows;
 	}
+
+	public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) {
+		ArrayList<Integer> rows = new ArrayList<Integer>();
+		ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
+		for (Object foreign : foreigns) {
+			rows = matchingRows(foreign);
+			if (rows.size() != 0) {
+				toBeReturned.add(rows.get(0));
+			}
+		}
+		return toBeReturned;
+	}
 }
