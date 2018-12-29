@@ -32,13 +32,15 @@ public class Column implements Serializable{
 	 * @param isForeignKey sets true is this Column is a foreign key
 	 */
 
-	public Column(Table table, boolean isForeignKey) {
+	public Column(Table table, boolean isForeignKey, Correlation correlation) {
 		//this.name = name;
 		field = new ArrayList<Object>();
 		//foreignKey.add(field);
 		this.isForeignKey = isForeignKey;
 		table.getColumns().add(this);
-		table.setColumnCounter(table.getColumnCounter() + 1);
+		if (!(correlation instanceof ManyToMany)) {
+			table.setColumnCounter(table.getColumnCounter() + 1);
+	 	}
 	}
 
 	/**public static int getCounter() {

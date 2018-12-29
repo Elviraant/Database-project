@@ -10,8 +10,8 @@ public class OneToOne extends Correlation {
 
 	public OneToOne(String name, Table table1, Table table2 ) {
 		super(name, table1, table2);
-		column = new Column(table2, true);
-		column.createFkColumnName(table1);
+		column = new Column(table2, true, this);
+		column.createFkColumnName(table2);
 		posF = table2.getColumnCounter();
 		table2.setPositionOffFk(table1, posF);
 	}
@@ -48,15 +48,9 @@ public class OneToOne extends Correlation {
 	 **/
 	public void fillForeignKeyColumn() {
 
-		int posP1 = table1.findPrimaryKeyColumn();
-		int posP2 = table2.findPrimaryKeyColumn();
-		ArrayList <Object> primaryKeyField2 = table2
-											.getColumns()
-											.get(posP1)
-											.getField();
-		Column primaryKeyColumn = table1
-								.getColumns()
-								.get(posP2);
+
+		ArrayList <Object> primaryKeyField2 = pKColumn2().getField();
+		Column primaryKeyColumn = pKColumn1();
 
 
 

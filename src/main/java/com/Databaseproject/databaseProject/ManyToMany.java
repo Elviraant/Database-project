@@ -16,11 +16,11 @@ public class ManyToMany extends Correlation {
 	public ManyToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		this.column1 = new Column(table2, true);
+		this.column1 = new Column(table2, true, this);
 		this.column1.createFkColumnName(table1);
 		posF1 = table1.getColumnCounter();
 		table2.setPositionOffFk(table1, posF1);
-		this.column2 = new Column(table1, true);
+		this.column2 = new Column(table1, true, this);
 		this.column2.createFkColumnName(table2);
 		posF2 = table2.getColumnCounter();
 	}
@@ -42,13 +42,12 @@ public class ManyToMany extends Correlation {
 	}
 
 	public void fillForeignKeyColumn() {
-		int posP1 = table1.findPrimaryKeyColumn();
-		Column primaryKeyColumn1 = table1.getColumns().get(posP1);
-		int posP2 = table2.findPrimaryKeyColumn();
-		Column primaryKeyColumn2 = table2.getColumns().get(posP2);
 
-		createTable1Lists();
+		Column primaryKeyColumn1 = pKColumn1();
+		Column primaryKeyColumn2 = pKColumn2();
 
+		createTableLists(table1, column1);
+		createTableLists(table1, column2);
 
 		for ( int i = 0; i < table2.getNumberOfRows(); i++) {
 			ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
@@ -67,9 +66,16 @@ public class ManyToMany extends Correlation {
 					Object key = primaryKeyColumn1.getType().getData();
 					int pos = primaryKeyColumn1.getField().indexOf(key);
 					if (pos != -1) {
-						foreignKeys2.add(key);
-						column2.getForeignKeys().get(pos).add(pKey2);
-						repeat = false;
+						boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
+						if (check) {
+							foreignKeys2.add(key);
+							column1.getForeignKeys().get(pos).add(pKey2);
+							repeat = false;
+						} else {
+							System.out.println("This record is already correlated with another record from " + table2.getName()
+											+ ". Do you want to try again?");
+							repeat = Database.findDecision();
+						}
 					} else {
 						System.out.println("This primary key doesn't exist.");
 						/*if ( q == 1) {
@@ -80,12 +86,12 @@ public class ManyToMany extends Correlation {
 
 					}
 				}
-					System.out.println("Are there any others correlated records of " + pKey2 + ": ");
+					System.out.println("Are there any other correlated records of " + pKey2 + ": ");
 					continueProcess = Database.findDecision();
 				}
 
 				if (!foreignKeys2.isEmpty()) {
-					column1.getForeignKeys().add(foreignKeys2);
+					column2.getForeignKeys().add(foreignKeys2);
 
 			}
 			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
@@ -103,9 +109,9 @@ public class ManyToMany extends Correlation {
 		}
 
 }
-	public void createTable1Lists() {
-		for (int i = 0; i < table1.getNumberOfRows(); i++) {
-			column2.getForeignKeys().add(new ArrayList <Object>());
+	public void createTableLists(Table table, Column column) {
+		for (int i = 0; i < table.getNumberOfRows(); i++) {
+			column.getForeignKeys().add(new ArrayList <Object>());
 		}
 	}
 
@@ -192,4 +198,16 @@ public class ManyToMany extends Correlation {
 			return null;
 		}
 	}
+
+	public boolean checkForeignKeysUniqueness(ArrayList <Object> foreignKeys, Object element) {
+		if (!foreignKeys.isEmpty()) {
+			for ( Object key: foreignKeys) {
+				if ( key == element) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 }

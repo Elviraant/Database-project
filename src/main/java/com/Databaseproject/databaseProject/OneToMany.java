@@ -15,7 +15,7 @@ public class OneToMany extends Correlation{
 	public OneToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		column = new Column(table2, true);
+		column = new Column(table2, true, this);
 		column.createFkColumnName(table2);
 		posF = table2.getColumnCounter();
 		table2.setPositionOffFk(table1, posF);
@@ -27,12 +27,8 @@ public class OneToMany extends Correlation{
 	 *Fills the foreign key column of table2
 	 **/
 	public void fillForeignKeyColumn() {
-
-		int posPMany = table2.findPrimaryKeyColumn();
-		int posPOne = table1.findPrimaryKeyColumn();
-
-		Column primaryKeyColumnMany = table2.getColumns().get(posPMany);
-		Column primaryKeyColumnOne = table1.getColumns().get(posPOne);
+		Column primaryKeyColumnMany = pKColumn2();
+		Column primaryKeyColumnOne = pKColumn1();
 
 		for (int i = 0; i < table2.getNumberOfRows(); i++) {
 			Object pKey2= primaryKeyColumnMany.getField().get(i);
@@ -47,8 +43,7 @@ public class OneToMany extends Correlation{
 					column.getField().add(key);
 					continueProcess = false;
 				} else {
-					System.out.println(" This primary key doesn't exist. Do you want to try again?");
-					continueProcess = Database.findDecision();
+					System.out.println(" This primary key doesn't exist. Try again.");
 				}
 			}
 		}
