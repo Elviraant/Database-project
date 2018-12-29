@@ -47,38 +47,40 @@ public class OneToOne extends Correlation {
 
 		int posP1 = table1.findPrimaryKeyColumn();
 		int posP2 = table2.findPrimaryKeyColumn();
-		ArrayList <Object> primaryKeyField1 = table1
+		ArrayList <Object> primaryKeyField2 = table2
 											.getColumns()
 											.get(posP1)
 											.getField();
-		Column primaryKeyColumn = table2
+		Column primaryKeyColumn = table1
 								.getColumns()
 								.get(posP2);
 
 
-		initializeForeignKeyColumn();
-		for (int i = 0; i < table1.getNumberOfRows(); i++) {
-			Object pKey1 =  primaryKeyField1.get(i);
+
+		for (int i = 0; i < table2.getNumberOfRows(); i++) {
+			Object pKey2 =  primaryKeyField2.get(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-				System.out.println("Insert the primary key that's correlated with " + pKey1
-										+ " from " + table1.getName() + " :");
+				table2.printAll();
+				table1.printAll();
+				System.out.println("Insert the primary key that's correlated with " + pKey2
+										+ " from table " + table2.getName() + " :");
 				Object key = primaryKeyColumn.getType().getData();
 				int pos = primaryKeyColumn.getField().indexOf(key);
 
 				if (pos != -1) {
 					boolean check = column.checkUniqueness(key);
 					if (check) {
-						column.getField().set(pos, pKey1);
+						column.getField().add(key);
 						continueProcess = false;
 					} else {
-						System.out.println("This record is already correlated with another record from " + table1.getName()
-											+ ". Do you want to try again?");
-						continueProcess = Database.findDecision();
+						System.out.println("This record is already correlated with another record from " + table2.getName()
+											+ ". Try again.");
+
 					}
 				} else {
-					System.out.println("This primary key doesn't exist. Do you want to try again?");
-					continueProcess = Database.findDecision();
+					System.out.println("This primary key doesn't exist. Try again.");
+
 				}
 			}
 		}
