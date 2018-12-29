@@ -49,38 +49,44 @@ public class ManyToMany extends Correlation {
 		Column primaryKeyColumn1 = table1.getColumns().get(posP1);
 		int posP2 = table2.findPrimaryKeyColumn();
 		Column primaryKeyColumn2 = table2.getColumns().get(posP2);
-		createTable2Lists();
+		createTable1Lists();
 
 		for ( int i = 0; i < table1.getNumberOfRows(); i++) {
-			ArrayList <Object> foreignKeys1 = new ArrayList<Object>();
+			ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
 			boolean continueProcess = true;
 			int q =0;
-			Object pKey1 = primaryKeyColumn1.getField().get(i);
+			Object pKey2 = primaryKeyColumn2.getField().get(i);
 
 			while (continueProcess) {
 				boolean repeat = true;
 				q++;
 				while (repeat) {
-					System.out.println("Insert the primary key of the #" + q +  " record that is correlated with "
-										+ pKey1 + " from " + table1.getName() + ": ");
 
-					Object key = primaryKeyColumn2.getType().getData();
-					int pos = primaryKeyColumn2.getField().indexOf(key);
+					System.out.println("Insert the primary key of the #" + q +  " record that is correlated with "
+										+ pKey2 + " from " + table2.getName() + ": ");
+
+					Object key = primaryKeyColumn1.getType().getData();
+					int pos = primaryKeyColumn1.getField().indexOf(key);
 					if (pos != -1) {
-						foreignKeys1.add(key);
-						column2.getForeignKeys().get(pos).add(pKey1);
+						foreignKeys2.add(key);
+						column2.getForeignKeys().get(pos).add(pKey2);
 						repeat = false;
 
 					} else {
-						System.out.println(" This primary key doesn't exist. Do you want to try again?");
-						repeat = Database.findDecision();
+						System.out.println("This primary key doesn't exist.");
+						/*if ( q == 1) {
+							System.out.println("Try again.");
+						} else {*/
+							System.out.println("Do you want to try again?");
+							repeat = Database.findDecision();
+
 					}
 				}
-					System.out.println("Are there any others correlated records of " + pKey1 + ": ");
+					System.out.println("Are there any others correlated records of " + pKey2 + ": ");
 					continueProcess = Database.findDecision();
 				}
-				if (!foreignKeys1.isEmpty()) {
-					column1.getForeignKeys().add(foreignKeys1);
+				if (!foreignKeys2.isEmpty()) {
+					column1.getForeignKeys().add(foreignKeys2);
 				}
 			}
 			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
@@ -98,8 +104,8 @@ public class ManyToMany extends Correlation {
 
 		}
 
-	public void createTable2Lists() {
-		for (int i = 0; i < table2.getNumberOfRows(); i++) {
+	public void createTable1Lists() {
+		for (int i = 0; i < table1.getNumberOfRows(); i++) {
 			column2.getForeignKeys().add(new ArrayList <Object>());
 		}
 	}
@@ -133,5 +139,7 @@ public class ManyToMany extends Correlation {
 		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
 		return foreignKeyMapping.get(table1);
 	}
+
+
 
 }
