@@ -617,7 +617,7 @@ public class Table implements Serializable {
 		for (int i = 0; i < numberOfRows; i++)  {
 			for (String a: attributes) {
 				Column column = columns.get(0);
-				if (a != "Row") {
+				if (a != "Record") {
 					column = columns.get(containsName(a));
 			        column.printElement(i);
 				} else {
@@ -1058,5 +1058,16 @@ public class Table implements Serializable {
 			}
 		}
 	}
+
+	public void printPrimaryKeyColumn() {
+		if (primaryKeyColumnExists()) {
+			System.out.println("Table: " + name + "");
+			int pos = findPrimaryKeyColumn();
+			ArrayList <String> print = new ArrayList <String>();
+			print.add(columns.get(pos).getName());
+			presentColumns(print);
+		}
+	}
+
 }
 

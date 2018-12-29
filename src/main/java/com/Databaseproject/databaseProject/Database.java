@@ -356,10 +356,8 @@ public class Database implements Serializable {
 			int option = Menu.correlationOptions();
 			System.out.println(option);
 			switch (option) {
-				case (1): System.out.println("asdf");
-						 OneToOne c1 = new OneToOne(name, table1, table2);
+				case (1):OneToOne c1 = new OneToOne(name, table1, table2);
 						 correlations.add(c1);
-						 System.out.println("asdf");
 						 c1.fillForeignKeyColumn();
 						  break;
 				case (2): OneToMany c2 = new OneToMany(name, table1, table2);

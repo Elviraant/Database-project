@@ -29,7 +29,7 @@ public class OneToMany extends Correlation{
 	public void fillForeignKeyColumn() {
 		Column primaryKeyColumnMany = pKColumn2();
 		Column primaryKeyColumnOne = pKColumn1();
-
+		printPrimaryKeyColumns() ;
 		for (int i = 0; i < table2.getNumberOfRows(); i++) {
 			Object pKey2= primaryKeyColumnMany.getField().get(i);
 			boolean continueProcess = true;
@@ -43,7 +43,7 @@ public class OneToMany extends Correlation{
 					column.getField().add(key);
 					continueProcess = false;
 				} else {
-					System.out.println(" This primary key doesn't exist. Try again.");
+					System.out.println("This primary key doesn't exist. Try again.");
 				}
 			}
 		}

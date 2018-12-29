@@ -53,12 +53,12 @@ public class OneToOne extends Correlation {
 		Column primaryKeyColumn = pKColumn1();
 
 
-
+		printPrimaryKeyColumns();
 		for (int i = 0; i < table2.getNumberOfRows(); i++) {
 			Object pKey2 =  primaryKeyField2.get(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-				table1.printAll();
+
 				System.out.println("Insert the primary key that's correlated with " + pKey2
 										+ " from table " + table2.getName() + " :");
 				Object key = primaryKeyColumn.getType().getData();

@@ -54,7 +54,7 @@ public class ManyToMany extends Correlation {
 			boolean continueProcess = true;
 			int q =0;
 			Object pKey2 = primaryKeyColumn2.getField().get(i);
-
+			printPrimaryKeyColumns();
 			while (continueProcess) {
 				boolean repeat = true;
 				q++;
@@ -91,15 +91,16 @@ public class ManyToMany extends Correlation {
 				}
 
 				if (!foreignKeys2.isEmpty()) {
-					column2.getForeignKeys().add(foreignKeys2);
-
+					column2.getForeignKeys().set( i , foreignKeys2);
 			}
+			System.out.println("" + column1.getName() + "");
 			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
 				for ( Object a: c) {
 					System.out.print( "" + a + "   |");
 				}
 				System.out.println();
 			}
+			System.out.println("" + column2.getName() + "");
 			for ( ArrayList <Object> c: column2.getForeignKeys() ) {
 				for ( Object a: c) {
 					System.out.print( "" + a + "   |");

@@ -176,4 +176,11 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 		return table2.getColumns().get(prKey2());
 	}
 
+	public void printPrimaryKeyColumns() {
+		table1.printPrimaryKeyColumn();
+		System.out.println();
+		table2.printPrimaryKeyColumn();
+	}
+
+
 }
