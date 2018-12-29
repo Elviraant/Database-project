@@ -16,29 +16,6 @@ public class OneToOne extends Correlation {
 		table2.setPositionOffFk(table1, posF);
 	}
 
-	@Override
-	/**
-	*Shows the options concerning the management of an one to one correlation
-	*/
-	public void viewProperties() {
-		boolean continueProcess = true;
- 		while (continueProcess) {
-			int choice = Menu.viewPopertiesMenu();
-			switch (choice)
-			{
-				case 1:
-					System.out.println(this.toString());
-					System.out.println("This is an One-To-One correlation");
-					System.out.println("Every record of a table should be linked to ecxactly one record of the other.");
-					break;
-				case 2:
-					break;
-				case 3:
-					this.search();
-					break;
-			}
-		}
-	}
 
 	/**
 	 *Fills foreignKeyColumn with Data
@@ -56,7 +33,7 @@ public class OneToOne extends Correlation {
 								.get(posP2);
 
 
-		initializeForeignKeyColumn();
+		Column fKColumn = fKColumn();
 		for (int i = 0; i < table1.getNumberOfRows(); i++) {
 			Object pKey1 =  primaryKeyField1.get(i);
 			boolean continueProcess = true;
@@ -84,13 +61,29 @@ public class OneToOne extends Correlation {
 		}
 	}
 
-
-
-
-
-
-
-
+	@Override
+	/**
+	*Shows the options concerning the management of an one to one correlation
+	*/
+	public void viewProperties() {
+		boolean continueProcess = true;
+ 		while (continueProcess) {
+			int choice = Menu.viewPopertiesMenu();
+			switch (choice)
+			{
+				case 1:
+					System.out.println(this.toString());
+					System.out.println("This is an One-To-One correlation");
+					System.out.println("Every record of a table should be linked to ecxactly one record of the other.");
+					break;
+				case 2:
+					break;
+				case 3:
+					this.search();
+					break;
+			}
+		}
+	}
 }
 
 

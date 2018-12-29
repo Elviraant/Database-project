@@ -258,7 +258,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.startingMenu();
-			int choice = Database.choice(1,6);
+			int choice = Database.choice(1,9);
 			switch (choice)
 			{
 				case 1:
@@ -524,7 +524,7 @@ public class Table implements Serializable {
 	public void specificRows(ArrayList<Integer> rows) {
 		printHeader();
 		for (Integer row : rows) {
-			presentRow(row - 1);
+			presentRow(row);
 		}
 	}
 

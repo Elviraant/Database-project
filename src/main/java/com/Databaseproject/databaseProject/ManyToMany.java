@@ -1,7 +1,7 @@
 
 //package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 import java.util.HashMap;
 
 
@@ -49,7 +49,7 @@ public class ManyToMany extends Correlation {
 		Column primaryKeyColumn1 = table1.getColumns().get(posP1);
 		int posP2 = table2.findPrimaryKeyColumn();
 		Column primaryKeyColumn2 = table2.getColumns().get(posP2);
-		createTable2Lists();
+		/*createTable2Lists();*/
 
 		for ( int i = 0; i < table1.getNumberOfRows(); i++) {
 			ArrayList <Object> foreignKeys1 = new ArrayList<Object>();
@@ -68,9 +68,8 @@ public class ManyToMany extends Correlation {
 					int pos = primaryKeyColumn2.getField().indexOf(key);
 					if (pos != -1) {
 						foreignKeys1.add(key);
-						column2.getForeignKeys().get(pos).add(pKey1);
-						repeat = false;
-
+						 //column2.getForeignKeys().get(pos).add(pKey1);
+						continueProcess = false;
 					} else {
 						System.out.println(" This primary key doesn't exist. Do you want to try again?");
 						repeat = Database.findDecision();
@@ -80,7 +79,7 @@ public class ManyToMany extends Correlation {
 					continueProcess = Database.findDecision();
 				}
 				if (!foreignKeys1.isEmpty()) {
-					column1.getForeignKeys().add(foreignKeys1);
+					//column1.getForeignKeys().add(foreignKeys1);
 				}
 			}
 			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
@@ -95,11 +94,12 @@ public class ManyToMany extends Correlation {
 				}
 				System.out.println();
 			}
-
 		}
 
+
+
 	public void createTable2Lists() {
-		for (int i = 0; i < table2.getNumberOfRows(); i++) {
+		for (int i = 0; i < table2.getColumnCounter(); i++) {
 			column2.getForeignKeys().add(new ArrayList <Object>());
 		}
 	}
@@ -123,7 +123,6 @@ public class ManyToMany extends Correlation {
 			}
 		}
 	}
-
 	public int fK1() {
 		HashMap<Table, Integer> foreignKeyMapping = table1.getPositionOffFk();
 		return foreignKeyMapping.get(table2);
@@ -132,6 +131,23 @@ public class ManyToMany extends Correlation {
 	public int fK2() {
 		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
 		return foreignKeyMapping.get(table1);
+	}
+
+	public Table defineSearched() {
+		int choice = choice();
+		Table searched;
+		if (choice == 1) {
+			searched = table1;
+		} else {
+			searched = table2;
+		}
+		return searched;
+	}
+
+	@Override
+	public void search() {
+		Scanner cs = new Scanner(System.in);
+		Table searched = defineSearched();
 	}
 
 }

@@ -1,6 +1,7 @@
 //package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.Collection;
 
 public class Column implements Serializable{
 	private String name;
@@ -153,13 +154,13 @@ public class Column implements Serializable{
 		ArrayList<Integer> rows = matchingRows(element);
 		if (rows.size() != 0) {
 			System.out.println(element);
-			System.out.print("found in position(s):");
+			System.out.print("found in position(s): ");
 			for (Integer row : rows) {
 				System.out.println(row);
 			}
 		} else {
 			System.out.print(element);
-			System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
+			System.out.println(" doesn't exist in this field /nDo you want to try again?(Yes/No)");
 			Boolean answer = Database.findDecision();
 			if(answer) {
 				Menu.searchingMenu();
@@ -170,8 +171,19 @@ public class Column implements Serializable{
 	public ArrayList<Integer> matchingRows(Object element) {
 		ArrayList<Integer> rows = new ArrayList<Integer>();
 		for (int i = 0; i < getField().size(); i++) {
-			if (element.equals(getField().get(i))) {
-				rows.add(i);
+			if (! ((getField().get(i)) instanceof ArrayList)) {
+				if (element.equals(getField().get(i))) {
+					System.out.println("FOUND");
+					rows.add(i);
+				}
+			} else if ((getField().get(i)) instanceof ArrayList){
+				Collection objects = (Collection) getField().get(i);
+				for (Object object : objects) {
+					if (element.equals(object)) {
+						System.out.println("FOUND");
+						rows.add(i);
+					}
+				}
 			}
 		}
 		return rows;

@@ -99,38 +99,60 @@ public class Correlation {
 	}
 
 	public void search() {
+		Scanner cs = new Scanner(System.in);
 		int choice = choice();
 		if (choice == 1) {
-			Object element = fKColumn().getType().getData();
-			ArrayList<Integer> rowsWanted = new ArrayList<Integer>();
-			ArrayList<Integer> primaryRow = table2.getColumns().get(prKey2() - 1).matchingRows(element);
-			ArrayList<Object> foreigns = new ArrayList<Object>();
-			for (Integer row: primaryRow) {
-				foreigns.add(fKColumn().getField().get(row - 1));
+			Column fColumn = fKColumn();
+			fColumn.setFieldType(pKColumn1().getType());
+			Object element = getKey(fKColumn());
+			ArrayList<Integer> rowsWanted = new ArrayList<>();
+			ArrayList<Integer> primaryRow = pKColumn2().matchingRows(element);
+			if (primaryRow.size() != 0) {
+				ArrayList<Object> foreigns = new ArrayList<Object>();
+				for (Integer row: primaryRow) {
+					System.out.println("added foreign");//will be deleted when checked
+					foreigns.add(fKColumn().getField().get(row));
+				}
+				for (Object foreign : foreigns) {
+					rowsWanted = pKColumn1().matchingRows(foreign);
+				}
+				printRelated(rowsWanted,table1);
+			} else {
+				System.out.println("No match found");
 			}
-			for (Object foreign : foreigns) {
-				rowsWanted = table1.getColumns().get(prKey1() - 1).matchingRows(foreign);
-			}
-			table1.specificRows(rowsWanted);
-			//call method to find the foreign key of table2 which matches the primaryKey given by the user
-			//call method to find the rows where the primary key of the primaryKeyColumn (table1) is equal to the foreign key (prev met)
-			//print the rows (found from the previous method)
 		} else {
-			Object element = table1.getColumns().get(prKey1() - 1).getType().getData();
+			Object element = getKey(pKColumn1());
 			ArrayList<Integer> rows = fKColumn().matchingRows(element);
-			table2.specificRows(rows);
-			//call method to find the rows where the primary key given by the user matches the foreign key of table2
-			//print the rows (found from the previous method)
+			if ( rows.size() != 0)  {
+				for (int i = 0; i < rows.size(); i++) {
+					System.out.println("Found in row: " + (i+1)); //will be deleted when checked
+				}
+				printRelated(rows, table2);
+			}
 		}
 	}
 
+	public void printRelated(ArrayList<Integer> rows, Table table) {
+		if (rows.size() == 0) {
+			System.out.println("No matching records found");
+		} else {
+			System.out.println("Related records with given primary key: ");
+			table.specificRows(rows);
+		}
+	}
 
+	public Object getKey(Column column) {
+		System.out.println("Primary key: ");
+		return column.getType().getData();
+	}
 
 	public int prKey1() {
+		System.out.println("Primary key of column one is in position" + table1.findPrimaryKeyColumn());
 		return table1.findPrimaryKeyColumn();
 	}
 
 	public int prKey2() {
+		System.out.println("Primary key of column one is in position" + table1.findPrimaryKeyColumn());
 		return table2.findPrimaryKeyColumn();
 	}
 
@@ -138,6 +160,14 @@ public class Correlation {
 		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
 		int pos = foreignKeyMapping.get(table1);
 		return table2.getColumns().get(pos - 1);
+	}
+
+	public Column pKColumn1() {
+		return table1.getColumns().get(prKey1());
+	}
+
+	public Column pKColumn2() {
+		return table2.getColumns().get(prKey2());
 	}
 
 }
