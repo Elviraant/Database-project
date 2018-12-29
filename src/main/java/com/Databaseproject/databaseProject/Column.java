@@ -155,9 +155,9 @@ public class Column implements Serializable{
 		ArrayList<Integer> rows = matchingRows(element);
 		if (rows.size() != 0) {
 			System.out.println(element);
-			System.out.print("found in position(s):");
+			System.out.print("found in row(s):");
 			for (Integer row : rows) {
-				System.out.println(row);
+				System.out.println(row+1);
 			}
 		} else {
 			System.out.print(element);

@@ -258,7 +258,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.startingMenu();
-			int choice = Database.choice(1,6);
+			int choice = Database.choice(1,9);
 			switch (choice)
 			{
 				case 1:
@@ -280,10 +280,10 @@ public class Table implements Serializable {
 					searchData();
 					break;
 				case 7:
-					findMax();
+					findMaxData();
 					break;
 				case 8:
-					findMin();
+					findMinData();
 					break;
 				default:
 					continueProcess = false;
@@ -422,36 +422,53 @@ public class Table implements Serializable {
 	public void searchData() {
 			Menu.searchingMenu();
 			Boolean answer = Database.findDecision();
-			if(answer) {
-				int pfield = inputFieldName("to search for element");
-				if ( pfield != -1) {
-					Column col = getColumns().get(pfield);
-					System.out.println("Enter the element you want to search");
-					Object element = col.getType().getData();
-					col.searchElement(element);
-					Menu.startingMenu();
+			Boolean continueProcess = true;
+			do {
+				if(answer) {
+					int pfield = inputFieldName("to search for element");
+					if ( pfield != -1) {
+						Column col = getColumns().get(pfield);
+						System.out.println("Enter the element you want to search");
+						Object element = col.getType().getData();
+						col.searchElement(element);
+					}
 				}
-			}
+				System.out.println("Search Data completed successfully");
+				System.out.println("Continue with the searching of data?");
+				continueProcess = Database.findDecision();
+			}while (continueProcess);
 		}
 
- 	public void findMax() {
-		int pfield = inputFieldName("find the maximum value");
-		if (pfield != -1) {
-			Column col = this.getColumns().get(pfield);
-			Object max = Collections.max(col.getField(), null);
-			System.out.println("The maximum value is : " +max);
-			System.out.println("at row : " +(col.getField().indexOf(max)));
-		}
+	public void findMaxData() {
+		Boolean continueProcess = true;
+		do {
+			int pfield = inputFieldName("find the maximum value");
+			if (pfield != -1) {
+				Column col = this.getColumns().get(pfield);
+				Object max = Collections.max(col.getField(), null);
+				System.out.println("The maximum value is : " +max);
+				System.out.println("at row : " +(col.getField().indexOf(max)+1));
+			}
+			System.out.println("Finding Maximum Data completed successfully");
+			System.out.println("Continue with the finding Maximum Data?");
+			continueProcess = Database.findDecision();
+		}while (continueProcess);
 	}
 
-	public void findMin() {
-		int pfield = inputFieldName("find the minimum value");
-		if (pfield != -1) {
-			Column col = this.getColumns().get(pfield);
-			Object min = Collections.min(col.getField(), null);
-			System.out.println("The minimum value is : " +min);
-			System.out.println("at row : " +(col.getField().indexOf(min)));
-		}
+	public void findMinData() {
+		Boolean continueProcess = true;
+		do {
+			int pfield = inputFieldName("find the minimum value");
+			if (pfield != -1) {
+				Column col = this.getColumns().get(pfield);
+				Object min = Collections.min(col.getField(), null);
+				System.out.println("The minimum value is : " +min);
+				System.out.println("at row : " +(col.getField().indexOf(min))+1);
+			}
+			System.out.println("Finding Minimum Data completed successfully");
+			System.out.println("Continue with finding Minimum Data?");
+			continueProcess = Database.findDecision();
+		}while (continueProcess);
 	}
 
 	/**
@@ -649,15 +666,51 @@ public class Table implements Serializable {
 		}
 
 	public void changeDataByRow() {
-		System.out.println("Which row do you want to change?");
-		int x = Database.choice(1, numberOfRows);
-		for (int i=1; i< columnCounter; i++) {
-			Column col= columns.get(i);
-			System.out.println("Field:" +col.getName() );
-			System.out.println("Give the new value:");
-			Object nValue = col.getType().getData();
-		    col.getField().set(x - 1, nValue);
-		}
+			System.out.println("Which row do you want to change?");
+			printAll();
+			int row = Database.choice(1, numberOfRows)-1;
+			if(row != -1 ) {
+				Boolean continueProcess = true;
+				int i=1;
+				System.out.println("#" + (row+1) + " Row: ");
+				do {
+					Column x = columns.get(i);
+					System.out.println("#" + (i) + " Field: ");
+					System.out.println("Give the new value of "+ x.getName());
+					Boolean answer = false;
+					do {
+						Object nValue = x.getType().getData();
+						if (x.getPrimaryKey()) {
+							if (x.checkUniqueness(nValue)) {
+								x.getField().set(row, nValue);
+								System.out.println("Change completed successfully");
+								answer = false;
+							}else {
+								System.out.println("This value of primary key already exists.Do you want to try again?(Yes/No)");
+								answer = Database.findDecision();
+								if (answer) {
+									System.out.println("Enter new value again :");
+								}
+							}
+						}else {
+							x.getField().set(row, nValue);
+							System.out.println("Change completed successfully.");
+							answer = false;
+						}
+					} while(answer);
+					if( i <= columnCounter) {
+						System.out.println("Do you want to continue? (Yes/No)");
+						continueProcess = Database.findDecision();
+						if(continueProcess) {
+							i++;
+						}else {
+							i = columnCounter+1;
+						}
+					}
+				}while(i < columnCounter);
+			} else {
+				System.out.println("The row you typed is probably incorrect.");
+			}
 	}
 
 
@@ -728,21 +781,8 @@ public class Table implements Serializable {
 		return exists;
 	}
 
-	public int createIncreasedNumber() {
 
-			FieldType type = Column.findType(1);
-			Column newcolumn = new Column("Increased Number",type, this); //create a new list with increased number.
-				for(int i=0; i < numberOfRows; i++) {
-					newcolumn.getField().add(i + 1);
-					//fill the new list.
-				}
-			newcolumn.setPrimaryKey(true);
-			return this.containsName("Increased Number");
-
-	}
-
-
-		 /*if a column with primary keys exists, keeps the position in table and calls informUser.
+	 /*if a column with primary keys exists, keeps the position in table and calls informUser.
 		  Else make a new list in table with increased number that it will be a primary key list
 		  and calls informUser()*
 		  attributes: position of of primarykey list position of field to be changed*/
@@ -783,44 +823,40 @@ public class Table implements Serializable {
 
 	public void changeValue() {
 		int pfield = inputFieldName("change");
-		if(pfield != -1 ) {
-			System.out.println("Which row do you want to change?");
-			printAll();
-			int pkeypos = Database.choice(1, numberOfRows) - 1;
-			if (pkeypos != -1 ) {
-				Column x = columns.get(pfield);
-				System.out.println("Enter the new value of element you want to change");
-				Object nValue = x.getType().getData();
-				x.getField().set(pkeypos, nValue);
-				System.out.println("Change completed successfully");
-			} else {
-				System.out.println("There is no such attribute or the field you chose can't be changed");
+			if(pfield != -1 ) {
+				System.out.println("Which row do you want to change?");
+				printAll();
+				int row = Database.choice(1, numberOfRows) - 1;
+				if (row != -1 ) {
+					Column x = columns.get(pfield);
+					System.out.println("Enter the new value of element you want to change :");
+					Boolean answer = false;
+					do {
+						Object nValue = x.getType().getData();
+						if (x.getPrimaryKey()) {
+							if (x.checkUniqueness(nValue)) {
+								x.getField().set(row, nValue);
+								System.out.println("Change completed successfully");
+								answer = false;
+							}else {
+								System.out.println("This value of primary key already exists. Do you want to try again?(Yes/No)");
+								answer = Database.findDecision();
+								if (answer) {
+									System.out.println("Enter new value again :");
+								}
+							}
+						}else {
+							x.getField().set(row-1, nValue);
+							System.out.println("Change completed successfully.");
+							answer = false;
+						}
+					} while(answer);
+				} else {
+					System.out.println("The row you typed is probably incorrect.");
+				}
 			}
-		}
 	}
 
-
-
-
-	/*public void changeDataByColumn() {
-			int pfield = inputFieldName();
-			if (pfield != -1 ) {
-				int pkeypos = findPrimaryKeyColumn();
-				if(pkeypos != -1) {
-					Column x = this.getColumns().get(pfield);
-					do {
-						System.out.println("Enter the new value of element you want to change");
-						Object nValue = x.getType().getData();
-						x.getField().set(pkeypos, nValue);
-						System.out.println("Do you want to continue?Y/N");
-						Boolean decision = Database.decision();
-						System.out.println("Enter primary key of next element(else enter 0 to exit");
-						pkeypos = Database.choice(1,numberOfRows);
-					} while ();
-
-			}
-		}
-	}*/
 
 	public void sameValue() {
 		int pfield = inputFieldName("change");
