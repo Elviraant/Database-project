@@ -322,7 +322,7 @@ public class Table implements Serializable {
 		boolean decision;
 		do {
 			Menu.changeMenu();
-			choice = Database.choice(1,4);
+			choice = Database.choice(1,5);
 			switch(choice) {
 
 				case(1): changeFieldName();
@@ -340,9 +340,9 @@ public class Table implements Serializable {
 
 				case(4): sameValue();
 						 break;
+				case(5): Menu.startingMenu();
 
-
-			}
+		}
 			System.out.println("Continue with the changing of data? Yes/No");
 			decision = Database.findDecision();
 		 }  while (decision);
