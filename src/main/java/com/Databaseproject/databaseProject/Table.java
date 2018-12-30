@@ -541,7 +541,7 @@ public class Table implements Serializable {
 	public void specificRows(ArrayList<Integer> rows) {
 		printHeader();
 		for (Integer row : rows) {
-			presentRow(row - 1);
+			presentRow(row);
 		}
 	}
 

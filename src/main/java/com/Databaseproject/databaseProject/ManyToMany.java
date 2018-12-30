@@ -139,16 +139,6 @@ public class ManyToMany extends Correlation {
 			}
 		}
 	}
-	public int fK1() {
-		HashMap<Table, Integer> foreignKeyMapping = table1.getPositionOffFk();
-		return foreignKeyMapping.get(table2);
-	}
-
-	public int fK2() {
-		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
-		return foreignKeyMapping.get(table1);
-	}
-
 
 	public Table defineSearched() {
 		int choice = choice();
@@ -166,19 +156,18 @@ public class ManyToMany extends Correlation {
 		Scanner cs = new Scanner(System.in);
 		Table searched = defineSearched();
 		Table keyHolder;
-		int fKPos;
+		Column fKColumnOfKeys;
 		if (searched.equals(table1)) {
 			keyHolder = table2;
-			fKPos = fK2();
+			fKColumnOfKeys = column2;
 		} else {
 			keyHolder = table1;
-			fKPos = fK1();
+			fKColumnOfKeys = column1;
 		}
 		int posPK1 = keyHolder.findPrimaryKeyColumn();
 		Column pKColumnOfKeys = keyHolder.getColumns().get(posPK1);
 		int posPK2 = searched.findPrimaryKeyColumn();
 		Column pKColumnOfSearched = searched.getColumns().get(posPK2);
-		Column fKColumnOfKeys = keyHolder.getColumns().get(fKPos);
 		ArrayList<ArrayList<Object>> foreignsWithKeys = fKColumnOfKeys.getForeignKeys();
 		ArrayList<Object> foreigns = foreigns(pKColumnOfKeys,foreignsWithKeys);
 		if (foreigns.size() != 0) {
