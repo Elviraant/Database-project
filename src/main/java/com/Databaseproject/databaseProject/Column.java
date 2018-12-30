@@ -190,4 +190,14 @@ public class Column implements Serializable{
 		}
 		return toBeReturned;
 	}
+
+	public Integer findPKeyPosition(Object key) {
+		if (isPrimaryKey) {
+			ArrayList <Integer> positions = matchingRows(key);
+			if (!positions.isEmpty()) {
+				return positions.get(0);
+			}
+		}
+		return -1;
+	}
 }

@@ -50,35 +50,26 @@ public class OneToOne extends Correlation {
 	 *Fills foreignKeyColumn with Data
 	 **/
 	public void fillForeignKeyColumn() {
-
-
-		ArrayList <Object> primaryKeyField2 = pKColumn2().getField();
-		Column primaryKeyColumn = pKColumn1();
-
-
+		Column pKColumn = pKColumn1();
 		printPrimaryKeyColumns();
 		for (int i = 0; i < table2.getNumberOfRows(); i++) {
-			Object pKey2 =  primaryKeyField2.get(i);
+			Object pKey2 =  getPKey2(i);
 			boolean continueProcess = true;
 			while (continueProcess) {
-
-				System.out.println("Insert the primary key that's correlated with " + pKey2
-										+ " from table " + table2.getName() + " :");
-				Object key = primaryKeyColumn.getType().getData();
-				int pos = primaryKeyColumn.getField().indexOf(key);
-
+				Object key = printInsertionMessage(pKey2);
+				int pos = pKColumn.findPKeyPosition(key);
 				if (pos != -1) {
 					boolean check = column.checkUniqueness(key);
 					if (check) {
 						column.getField().add(key);
 						continueProcess = false;
 					} else {
-						System.out.println("This record is already correlated with another record from " + table2.getName()
-											+ ". Try again.");
-
+						printAlreadyCorrelatedMessage();
+						Menu.printTryAgainMessage();
 					}
 				} else {
-					System.out.println("This primary key doesn't exist. Try again.");
+					Menu.printNonExistantKeyMessage();
+					Menu.printTryAgainMessage();
 
 				}
 			}

@@ -612,11 +612,10 @@ public class Table implements Serializable {
             ;
             return -1;
         }
-        for (Column c : this.columns) {
+        for ( int i = 0; i < columnCounter; i++) {
+			Column c = getColumns().get(i);
             if (c.getName().equals(name)) {
-                // System.out.println(this.columns.indexOf(c));
-                return columns.indexOf(c);
-
+                return i;
             }
         }
         return -1;

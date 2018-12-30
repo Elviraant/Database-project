@@ -101,5 +101,18 @@ public class Menu implements Serializable{
 		System.out.println("Please choose one of the above options: ");
 		return Database.choice(1,4);
 	}
+
+	public static void printNonExistantKeyMessage() {
+		System.out.println("This primary key doesn't exist.");
+	}
+
+	public static boolean printTryAgainQuestionMessage() {
+			System.out.println("Do you want to try again?");
+			return Database.findDecision();
+	}
+
+	public static void printTryAgainMessage() {
+		System.out.println("Try again.");
+	}
 }
 
