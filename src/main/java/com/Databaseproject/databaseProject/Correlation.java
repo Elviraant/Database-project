@@ -188,4 +188,24 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 	}
 
 
+	public Object getPKey2(int i) {
+		return pKColumn2().getField().get(i);
+	}
+
+	public Object printInsertionMessage(Object pkey) {
+		System.out.println("Insert the primary key that's correlated with " + pkey
+												+ " from table " + table2.getName() + " :");
+		 return pKColumn1().getType().getData();
+
+	}
+
+	public void printAlreadyCorrelatedMessage() {
+		System.out.println("This record is already correlated with another record from " + table2.getName() + "");
+	}
+
+
+
+
+
+
 }

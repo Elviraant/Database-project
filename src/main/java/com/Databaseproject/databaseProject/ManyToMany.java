@@ -47,24 +47,20 @@ public class ManyToMany extends Correlation {
 		Column primaryKeyColumn2 = pKColumn2();
 
 		createTableLists(table1, column1);
-		createTableLists(table1, column2);
+		createTableLists(table2, column2);
 
 		for ( int i = 0; i < table2.getNumberOfRows(); i++) {
 			ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
 			boolean continueProcess = true;
 			int q =0;
-			Object pKey2 = primaryKeyColumn2.getField().get(i);
+			Object pKey2 = getPKey2(i);
 			printPrimaryKeyColumns();
 			while (continueProcess) {
 				boolean repeat = true;
 				q++;
 				while (repeat) {
-
-					System.out.println("Insert the primary key of the #" + q +  " record that is correlated with "
-										+ pKey2 + " from " + table2.getName() + ": ");
-
-					Object key = primaryKeyColumn1.getType().getData();
-					int pos = primaryKeyColumn1.getField().indexOf(key);
+					Object key = printInsertionMessage(pKey2, q);
+					Integer pos = primaryKeyColumn1.findPKeyPosition(key);
 					if (pos != -1) {
 						boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
 						if (check) {
@@ -72,17 +68,15 @@ public class ManyToMany extends Correlation {
 							column1.getForeignKeys().get(pos).add(pKey2);
 							repeat = false;
 						} else {
-							System.out.println("This record is already correlated with another record from " + table2.getName()
-											+ ". Do you want to try again?");
-							repeat = Database.findDecision();
+							printAlreadyCorrelatedMessage();
+							repeat = Menu.printTryAgainQuestionMessage();
 						}
 					} else {
-						System.out.println("This primary key doesn't exist.");
+						Menu.printNonExistantKeyMessage();
 						/*if ( q == 1) {
 							System.out.println("Try again.");
 						} else {*/
-							System.out.println("Do you want to try again?");
-							repeat = Database.findDecision();
+						repeat = Menu.printTryAgainQuestionMessage();
 
 					}
 				}
@@ -202,6 +196,13 @@ public class ManyToMany extends Correlation {
 			}
 		}
 		return true;
+	}
+
+	public Object printInsertionMessage(Object pKey, int i) {
+			System.out.println("Insert the primary key of the #" + i +  " record that is correlated with "
+										+ pKey + " from " + table2.getName() + ": ");
+			return pKColumn1().getType().getData();
+
 	}
 
 }
