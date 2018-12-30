@@ -417,7 +417,7 @@ public class Table implements Serializable {
         Boolean continueProcess = true;
         do {
             if (answer) {
-                int pfield = inputFieldName("to search for element");
+                int pfield = inputFieldName("search for element");
                 if (pfield != -1) {
                     Column col = getColumns().get(pfield);
                     System.out.println("Enter the element you want to search");
@@ -438,8 +438,8 @@ public class Table implements Serializable {
             if (pfield != -1) {
                 Column col = this.getColumns().get(pfield);
                 Object max = Collections.max(col.getField(), null);
-                System.out.println("The maximum value is : " + max);
-                System.out.println("at row : " + (col.getField().indexOf(max) + 1));
+                System.out.print("The maximum value is : ");
+                col.searchElement(max);
             }
             System.out.println("Finding Maximum Data completed successfully");
             System.out.println("Continue with the finding Maximum Data?");
@@ -454,8 +454,8 @@ public class Table implements Serializable {
             if (pfield != -1) {
                 Column col = this.getColumns().get(pfield);
                 Object min = Collections.min(col.getField(), null);
-                System.out.println("The minimum value is : " + min);
-                System.out.println("at row : " + (col.getField().indexOf(min)) + 1);
+                System.out.print("The minimum value is : ");
+              	col.searchElement(min);
             }
             System.out.println("Finding Minimum Data completed successfully");
             System.out.println("Continue with finding Minimum Data?");
@@ -698,16 +698,15 @@ public class Table implements Serializable {
                         answer = false;
                     }
                 } while (answer);
-                if (i <= columnCounter) {
+                if (i != columnCounter-1) {
                     System.out.println("Do you want to continue? (Yes/No)");
                     continueProcess = Database.findDecision();
-                    if (continueProcess) {
-                        i++;
-                    } else {
-                        i = columnCounter + 1;
+                    if (!continueProcess) {
+                        i = columnCounter;
                     }
                 }
-            } while (i < columnCounter);
+               	i++;
+            } while (i <= columnCounter-1);
         } else {
             System.out.println("The row you typed is probably incorrect.");
         }
@@ -843,7 +842,7 @@ public class Table implements Serializable {
                             }
                         }
                     } else {
-                        x.getField().set(row - 1, nValue);
+                        x.getField().set(row, nValue);
                         System.out.println("Change completed successfully.");
                         answer = false;
                     }
