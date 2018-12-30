@@ -370,18 +370,18 @@ public class Table implements Serializable {
         }
     }
 
-    public void sortData() {
-        int choice;
-        boolean continueProcess = true;
-        while (continueProcess) {
-            Menu.assortmentMenu();
-            choice = Database.choice(1, 2);
-            switch (choice) {
-            case 1:
-                sortInAlphabeticalOrder();
-                break;
-            case 2:
-                break;
+  public void sortData() {
+    int choice;
+    boolean continueProcess = true;
+    while (continueProcess) {
+        Menu.assortmentMenu();
+        choice = Database.choice(1, 2);
+        switch (choice) {
+        case 1:
+            sortInAlphabeticalOrder();
+            break;
+        case 2:
+            break;
 
             }
             System.out.println("Assortment completed successfully");
