@@ -66,11 +66,11 @@ public class Menu implements Serializable{
 	}
 
 	public static int correlationOptions() {
-		System.out.println(String.format("%s\n%s\n%s\n%s\n" ,"What kind of corrleation do you want to create between your tables?"
-							,"1. One to one"
-							,"2. One to Many"
-							,"3. Many to Many"
-							,"4. None"));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n","What kind of corrleation do you want to create between your tables?",
+				"1. One to one",
+				"2. One to Many",
+				"3. Many to Many",
+				"4. None"));
 		return Database.choice(1,4);
 	}
 
