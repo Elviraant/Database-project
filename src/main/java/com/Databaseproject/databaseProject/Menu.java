@@ -14,7 +14,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
 					       "6. Search Data", "7. Find Maximum Element", "8. Find Minimum Element", "9. Exit" ));
 	}
 
@@ -83,12 +83,13 @@ public class Menu implements Serializable{
 	}
 
 	public static int manageCorrelationsMenu() {
-		System.out.println(String.format("%s\n%s\n%s\n"
+		System.out.println(String.format("%s\n%s\n%s\n%S\n"
 							,"1. How many correlations have I created?"
 							,"2. View all correlated tables"
-							,"3. View properties"));
+							,"3. View properties"
+							,"4. Exit"));
 		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,3);
+		return Database.choice(1,4);
 	}
 
 	public static int viewPopertiesMenu() {

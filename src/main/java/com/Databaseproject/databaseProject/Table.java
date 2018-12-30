@@ -20,7 +20,7 @@ public class Table implements Serializable {
 
     /**
      * Constructor for Table class
-     * 
+     *
      *  @param columns
      *            arraylist with objects of Column
      * @param columnCounter
@@ -505,38 +505,79 @@ public class Table implements Serializable {
         System.out.println();
     }
 
-    /**
-     * Present specific rows within a range given by the user
-     */
-    public void printRangeOfRows() {
-        if (numberOfRows != 0) {
-            System.out.println("Please insert the range of rows you want to print.");
-            int start = 1;
-            int end = 0;
-            while (start >= end) {
-                System.out.println("Starting row: ");
-                start = Database.choice(1, numberOfRows) - 1;
-                System.out.println("Ending row: ");
-                end = Database.choice(1, numberOfRows);
-                if (start >= end) {
-                    System.out.println("Starting can't be greater than ending row");
-                }
-            }
-            printHeader();
-            for (int i = start; i < end; i++) {
-                presentRow(i);
-            }
-        } else {
-            System.out.println("No records in this table");
-        }
-    }
+	/**
+	*Present specific rows within a range given by the user
+	*/
+	public void printRangeOfRows() {
+		if (numberOfRows != 0) {
+			System.out.println("Please insert the range of rows you want to print.");
+			int start = 1;
+			int end = 0;
+			while (start >= end) {
+				System.out.println("Starting row: ");
+				start = Database.choice(1, numberOfRows)-1;
+				System.out.println("Ending row: ");
+				end = Database.choice(1,numberOfRows);
+				if (start >= end) {
+					System.out.println("Starting can't be greater than ending row");
+				}
+			}
+			printHeader();
+			for (int i = start; i < end; i++) {
+				presentRow(i);
+			}
+		} else {
+			System.out.println("No records in this table");
+		}
+	}
 
-    public void specificRows(ArrayList<Integer> rows) {
-        printHeader();
-        for (Integer row : rows) {
-            presentRow(row);
-        }
-    }
+	public void specificRows(ArrayList<Integer> rows) {
+		printHeader();
+		for (Integer row : rows) {
+			presentRow(row);
+		}
+	}
+
+	 /**
+	  * Gets the names of the attributes by the user and puts them in an ArrayList
+	  *
+	  * @return the ArrayList of the attributes given by the user
+	  */
+	public ArrayList <String> inputSpecificColumns() {
+		ArrayList <String>  attributes = new ArrayList<String>();
+		attributes.add("Record");
+		boolean continueProcess = true;
+		String attribute;
+		int position = -1;
+
+		if (numberOfRows != 0) {
+			while (continueProcess)	{
+				position = inputFieldName("be presented");
+				if ( position != -1) {
+					Column col = columns.get(position);
+					attributes.add(col.getName());
+				}
+					System.out.println("\nDo you want to present another column? Y/N");
+					continueProcess = Database.findDecision();
+
+			}
+		} else  {
+			System.out.println("\nNo records in this table.\n");
+		}
+		return attributes;
+	}
+
+	/**
+	*Prints columns according to a list given by the user
+	*/
+	public void printSpecificColumns() {
+		ArrayList<String> attributes = inputSpecificColumns();
+		if (attributes.size() == 1) {
+			System.out.println("No records in this table.\n");
+		} else {
+			this.presentColumns(attributes);
+		}
+	}
 
     public void printHeaderOfSpecificColumns(ArrayList<String> attributes) {
         int spaces = 0;
@@ -559,50 +600,9 @@ public class Table implements Serializable {
     }
 
     /**
-     * Gets the names of the attributes by the user and puts them in an ArrayList
-     * 
-     * @return the ArrayList of the attributes given by the user
-     */
-    public ArrayList<String> inputSpecificColumns() {
-        ArrayList<String> attributes = new ArrayList<String>();
-        attributes.add("Row");
-        boolean continueProcess = true;
-        String attribute;
-        int position = -1;
-
-        if (numberOfRows != 0) {
-            while (continueProcess) {
-                position = inputFieldName("be presented");
-                if (position != -1) {
-                    Column col = columns.get(position);
-                    attributes.add(col.getName());
-                }
-                System.out.println("\nDo you want to present another column? Y/N");
-                continueProcess = Database.findDecision();
-
-            }
-        } else {
-            System.out.println("\nNo records in this table.\n");
-        }
-        return attributes;
-    }
-
-    /**
-     * Prints columns according to a list given by the user
-     */
-    public void printSpecificColumns() {
-        ArrayList<String> attributes = inputSpecificColumns();
-        if (attributes.size() == 1) {
-            System.out.println("No records in this table.\n");
-        } else {
-            this.presentColumns(attributes);
-        }
-    }
-
-    /**
      * Checks by name, if a Column exists in a Table If the column exists, returns
      * its position at ArrayList columns. If it doesn't exist, returns -1
-     * 
+     *
      * @param name
      *            of this field
      * @returns int position
@@ -624,7 +624,7 @@ public class Table implements Serializable {
 
     /**
      * present columns according to a list of attributes
-     * 
+     *
      * @param attributes
      *            the list of the attributes
      */

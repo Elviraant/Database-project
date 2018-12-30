@@ -173,7 +173,7 @@ public class ManyToMany extends Correlation {
 		Column pKColumnOfSearched = searched.getColumns().get(posPK2);
 		ArrayList<ArrayList<Object>> foreignsWithKeys = fKColumnOfKeys.getForeignKeys();
 		ArrayList<Object> foreigns = foreigns(pKColumnOfKeys,foreignsWithKeys);
-		if (foreigns.size() != 0) {
+		if (foreigns != null ) {
 			ArrayList<Integer> rows = pKColumnOfSearched.matchingRows(foreigns);
 			printRelated(rows, searched);
 		}
@@ -183,11 +183,12 @@ public class ManyToMany extends Correlation {
 		System.out.println("Please insert a primary key of the above table: ");
 		Object element = column.getType().getData();
 		ArrayList<Integer> rows = new ArrayList<Integer>();
-		rows.add(column.matchingRows(element).get(0));
-		if (rows.size() != 0) {
+		ArrayList <Integer> rowWithForeign = column.matchingRows(element);
+		if (rowWithForeign.size() != 0) {
+			rows.add(rowWithForeign.get(0));
 			return foreignKeys.get(rows.get(0));
 		} else {
-			System.out.println("No much found");
+			System.out.println("No correaltion found for this record");
 			return null;
 		}
 	}

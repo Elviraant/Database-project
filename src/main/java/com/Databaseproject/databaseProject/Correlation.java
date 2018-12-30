@@ -67,6 +67,8 @@ public class Correlation implements Serializable {
 					}
 					correlation.viewProperties();
 					break;
+				default:
+					continueProcess = false;
 			}
 		}
 	}
