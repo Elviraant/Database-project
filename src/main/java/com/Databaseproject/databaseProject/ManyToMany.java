@@ -136,6 +136,9 @@ public class ManyToMany extends Correlation {
 				case 3:
 					this.search();
 					break;
+				case 4:
+					continueProcess = false;
+					break;
 			}
 		}
 	}

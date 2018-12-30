@@ -72,13 +72,10 @@ public class OneToMany extends Correlation{
 				case 3:
 					this.search();
 					break;
+				case 4:
+					continueProcess = false;
+					break;
 			}
 		}
 	}
-
-	public int fK() {
-		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
-		return foreignKeyMapping.get(table1);
-	}
-
 }

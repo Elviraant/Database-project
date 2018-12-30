@@ -2,8 +2,9 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class Correlation {
+public class Correlation implements Serializable {
 
 	protected String name;
 	protected Table table1; //entity 1
@@ -95,7 +96,6 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 		} else {
 			table1.printAll();
 		}
-		System.out.println();
 		System.out.println("Insert a primary key of the table: ");
 		return choice;
 	}
