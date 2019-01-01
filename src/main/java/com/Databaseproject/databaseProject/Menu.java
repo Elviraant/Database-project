@@ -14,7 +14,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
 					       "6. Search Data", "7. Find Maximum Element", "8. Find Minimum Element", "9. Exit" ));
 	}
 
@@ -29,15 +29,8 @@ public class Menu implements Serializable{
 	public static void changeMenu() {
 		System.out.println();
 		System.out.println("-----------------");
-
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n",
-		                                 "1. Change name of Field",
-		                                 "2. Change specific value of an element in a list.",
-										 "3. Change data by row",
-										 "4. Change all values of elements with the same value",
-										 "5. Exit" ));
-
-
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Change name of Field", "2. Change specific value of an element in a list.","3. Change data by row",
+										"4. Change all values of elements with the same value", "5. Exit"));
 		System.out.println("Please chose one of the above options: ");
 	}
 
@@ -72,11 +65,11 @@ public class Menu implements Serializable{
 	}
 
 	public static int correlationOptions() {
-		System.out.println(String.format("%s\n%s\n%s\n%s\n" ,"What kind of corrleation do you want to create between your tables?"
-							,"1. One to one"
-							,"2. One to Many"
-							,"3. Many to Many"
-							,"4. None"));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n","What kind of corrleation do you want to create between your tables?",
+				"1. One to one",
+				"2. One to Many",
+				"3. Many to Many",
+				"4. None"));
 		return Database.choice(1,4);
 	}
 
@@ -89,21 +82,36 @@ public class Menu implements Serializable{
 	}
 
 	public static int manageCorrelationsMenu() {
-		System.out.println(String.format("%s\n%s\n%s\n"
+		System.out.println(String.format("%s\n%s\n%s\n%S\n"
 							,"1. How many correlations have I created?"
 							,"2. View all correlated tables"
-							,"3. View properties"));
+							,"3. View properties"
+							,"4. Exit"));
 		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,3);
+		return Database.choice(1,4);
 	}
 
 	public static int viewPopertiesMenu() {
-		System.out.println(String.format("%s\n%s\n%s\n"
+		System.out.println(String.format("%s\n%s\n%s\n%s\n"
 							,"1. Show info"
 							,"2. View all related records"
-							,"3. Search related records"));
+							,"3. Search related records"
+							,"4. Exit"));
 		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,3);
+		return Database.choice(1,4);
+	}
+
+	public static void printNonExistantKeyMessage() {
+		System.out.println("This primary key doesn't exist.");
+	}
+
+	public static boolean printTryAgainQuestionMessage() {
+			System.out.println("Do you want to try again?");
+			return Database.findDecision();
+	}
+
+	public static void printTryAgainMessage() {
+		System.out.println("Try again.");
 	}
 }
 

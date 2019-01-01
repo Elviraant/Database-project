@@ -2,8 +2,9 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class Correlation {
+public class Correlation implements Serializable {
 
 	protected String name;
 	protected Table table1; //entity 1
@@ -66,6 +67,8 @@ public class Correlation {
 					}
 					correlation.viewProperties();
 					break;
+				default:
+					continueProcess = false;
 			}
 		}
 	}
@@ -89,14 +92,12 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 		System.out.println("1. " + table1.getName());
 		System.out.println("2. " + table2.getName());
 		System.out.println("In which table do you want to search for related records? (insert number of choice)");
-		System.out.print(String.format("\n\n"));
 		int choice = Database.choice(1,2);
 		if (choice == 1) {
 			table2.printAll();
 		} else {
 			table1.printAll();
 		}
-		System.out.print(String.format("\n\n"));
 		System.out.println("Insert a primary key of the table: ");
 		return choice;
 	}
@@ -111,10 +112,11 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 			ArrayList<Integer> rowsWanted = new ArrayList<>();
 			ArrayList<Integer> primaryRow = pKColumn2().matchingRows(element);
 			if (primaryRow.size() != 0) {
+				System.out.println("Found in row " + primaryRow.get(0) +"of " + table2.getName() ); //to be deleted
 				ArrayList<Object> foreigns = new ArrayList<Object>();
 				for (Integer row: primaryRow) {
-					System.out.println("added foreign");//will be deleted when checked
 					foreigns.add(fKColumn().getField().get(row));
+					System.out.println("added foreign" + fKColumn().getField().get(row));//will be deleted when checked
 				}
 				for (Object foreign : foreigns) {
 					rowsWanted = pKColumn1().matchingRows(foreign);
@@ -129,9 +131,11 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 			ArrayList<Integer> rows = fKColumn().matchingRows(element);
 			if ( rows.size() != 0)  {
 				for (int i = 0; i < rows.size(); i++) {
-					System.out.println("Found in row: " + (i+1)); //will be deleted when checked
+					System.out.println("Found in row: " + (rows.get(i) + 1)); //will be deleted when checked
 				}
 				printRelated(rows, table2);
+			} else {
+				System.out.println("No matches found");
 			}
 		}
 	}
@@ -165,6 +169,7 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 	public Column fKColumn() {
 		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
 		int pos = foreignKeyMapping.get(table1);
+		System.out.println("foreign found in position " + pos); //to be deleted
 		return table2.getColumns().get(pos - 1);
 	}
 
@@ -181,6 +186,26 @@ public static void printCorrelations(ArrayList<Correlation> correlations) {
 		System.out.println();
 		table2.printPrimaryKeyColumn();
 	}
+
+
+	public Object getPKey2(int i) {
+		return pKColumn2().getField().get(i);
+	}
+
+	public Object printInsertionMessage(Object pkey) {
+		System.out.println("Insert the primary key that's correlated with " + pkey
+												+ " from table " + table2.getName() + " :");
+		 return pKColumn1().getType().getData();
+
+	}
+
+	public void printAlreadyCorrelatedMessage() {
+		System.out.println("This record is already correlated with another record from " + table2.getName() + "");
+	}
+
+
+
+
 
 
 }
