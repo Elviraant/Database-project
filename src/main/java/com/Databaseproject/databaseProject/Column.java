@@ -190,4 +190,26 @@ public class Column implements Serializable{
 		}
 		return toBeReturned;
 	}
+
+		/**
+		*changes the data in order to create a table in ascesing order
+		*/
+		public void sortInAscendingOrder( int j, Object s1, Object s2) {
+			Object temp = s2;
+			this.getField().set(j,s1);
+			this.getField().set(j-1,temp);
+		}
+
+
+		/**
+		*changes the data in order to create a table in descending order
+		*/
+		public void sortInDescendingOrder( int j, Object s1, Object s2) {
+			Object temp= s1;
+			this.getField().set(j-1,s2);
+			this.getField().set(j,temp);
+		}
+
+
+
 }

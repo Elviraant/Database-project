@@ -6,7 +6,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Presentation Options:");
 		System.out.println("---------------------");
-		System.out.println(String.format("%s\n%s\n%s\n", "1. Present all", "2. Present range of rows", "3. Present specific columns"));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n", "1. Present all", "2. Present range of rows", "3. Present specific columns", "4. Exit"));
 		System.out.println("Please chose one of the above options: ");
 	}
 
@@ -30,11 +30,12 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("-----------------");
 
-		System.out.println(String.format("%s\n%s\n%s\n%s\n",
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n",
 		                                 "1. Change name of Field",
 		                                 "2. Change specific value of an element in a list.",
 										 "3. Change data by row",
-										 "4. Change all values of elements with the same value"));
+										 "4. Change all values of elements with the same value",
+										 "5. Exit" ));
 
 
 		System.out.println("Please chose one of the above options: ");
@@ -44,7 +45,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Deletion Options:");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n", "1. Delete Rows", "2. Delete Columns", "3. Delete Elements", "4. Delete All"));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Delete Rows", "2. Delete Columns", "3. Delete Elements", "4. Delete All", "5. Exit"));
 		System.out.println("Please choose one of the above options: ");
 	}
 
@@ -53,7 +54,7 @@ public class Menu implements Serializable{
 			System.out.println();
 			System.out.println("Assortment Options:");
 			System.out.println("-------------------");
-			System.out.println(String.format("%s\n%s\n", "1. Sort in alphabetical order", "2."));
+			System.out.println(String.format("%s\n%s\n", "1. Sort in alphabetical order", "2. Exit"));
 			System.out.println("Please choose one of the above options: ");
 		}
 
@@ -62,7 +63,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Add Options:");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n", "1. Add records", "2. Add Columns"));
+		System.out.println(String.format("%s\n%s\n%s\n", "1. Add records", "2. Add Columns", "3. Exit"));
 		System.out.println("Please choose one of the above options: ");
 	}
 

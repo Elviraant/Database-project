@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.*;
-import java.io.*;
+
 
 
 public class Table implements Serializable {
@@ -17,6 +16,8 @@ public class Table implements Serializable {
 	private String name;
 	private int numberOfRows = 0;
 	private HashMap <Table , Integer> positionOffFk = new HashMap<Table, Integer>();
+
+
 
 
 	/**
@@ -296,7 +297,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.presentationMenu();
-			choice = Database.choice(1,3);
+			choice = Database.choice(1,4);
 			switch (choice)
 			{
 				case 1:
@@ -308,11 +309,16 @@ public class Table implements Serializable {
 				case 3:
 					printSpecificColumns();
 					break;
-				default:
+				case 4:
 					Menu.startingMenu();
+					break;
 			}
+			if ((choice>=1) && (choice<4)) {
 				System.out.println("Continue with the presentation of data?");
 				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
+			}
 			}
 		}
 
@@ -322,7 +328,7 @@ public class Table implements Serializable {
 		boolean decision;
 		do {
 			Menu.changeMenu();
-			choice = Database.choice(1,4);
+			choice = Database.choice(1,5);
 			switch(choice) {
 
 				case(1): changeFieldName();
@@ -340,11 +346,16 @@ public class Table implements Serializable {
 
 				case(4): sameValue();
 						 break;
-
-
+				case(5):
+					Menu.startingMenu();
+					break;
 			}
+			if ((choice>=1) && (choice<5)) {
 			System.out.println("Continue with the changing of data? Yes/No");
 			decision = Database.findDecision();
+			} else {
+				decision = false;
+			}
 		 }  while (decision);
 	}
 
@@ -353,7 +364,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.deletionMenu();
-			choice = Database.choice(1,4);
+			choice = Database.choice(1,5);
 			switch (choice)
 			{
 			case 1:
@@ -368,10 +379,17 @@ public class Table implements Serializable {
 			case 4:
 				deleteAll();
 				break;
+			case 5:
+				Menu.startingMenu();
+				break;
 			}
-			System.out.println("Deletion completed successfully");
-			System.out.println("Continue with the deletion of data?");
-			continueProcess = Database.findDecision();
+			if ((choice>=1) && (choice<5)) {
+				System.out.println("Deletion completed successfully");
+				System.out.println("Continue with the deletion of data?");
+				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
+			}
 		}
 	}
 
@@ -385,15 +403,20 @@ public class Table implements Serializable {
 			switch (choice)
 			{
 				case 1:
-					sortInAlphabeticalOrder();
+					chooseSort();
 					break;
 				case 2:
-					break;
+					Menu.startingMenu();
 
+					break;
 			}
-			System.out.println("Assortment completed successfully");
-			System.out.println("Continue with the assortment of data?");
-			continueProcess = Database.findDecision();
+			if (choice==1) {
+				System.out.println("Assortment completed successfully");
+				System.out.println("Continue with the assortment of data?");
+				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
+			}
 		}
 	}
 
@@ -402,7 +425,7 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		while (continueProcess) {
 			Menu.additionMenu();
-			choice = Database.choice(1,2);
+			choice = Database.choice(1,3);
 			switch (choice)
 			{
 			case 1:
@@ -412,10 +435,18 @@ public class Table implements Serializable {
 				setFieldNames();
 				callFiller();
 				break;
+			case 3:
+				Menu.startingMenu();
+
+				break;
 			}
-			System.out.println("Add completed successfully");
-			System.out.println("Continue with the adding of data?");
-			continueProcess = Database.findDecision();
+			if ((choice==1) || (choice==2)){
+				System.out.println("Add completed successfully");
+				System.out.println("Continue with the adding of data?");
+				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
+			}
 		}
 	}
 
@@ -481,6 +512,8 @@ public class Table implements Serializable {
 		}
 		printHeaderOfSpecificColumns(list);
 	}
+
+
 
 	//Prints one row of the table.
     public void presentRow(int row) {
@@ -851,25 +884,34 @@ public class Table implements Serializable {
 	}
 
 
+	/**
+	* deletes one row
+	*/
+	public void deleteRow(int row) {
+		for (int k=0; k<columnCounter; k++) {
+			Column column = columns.get(k);
+			column.getField().remove(row-1);
+		}
+		numberOfRows--;
+		for (int i = 0; i < numberOfRows; i++) {
+			columns.get(0).getField().set(i,i+1);
+		}
+	}
+
 	/** deletes any row you want(one or more)*/
 	public void deleteSpecificRows() {
 		boolean continueProcess = true;
+		int counter =0;
 		while (continueProcess) {
 			System.out.println("Which row do you want to delete?");
 			int x = Database.choice(1,numberOfRows);
-			for (int k=0; k<columnCounter; k++) {
-				Column column = columns.get(k);
-				column.getField().remove(x-1);
-			}
-			numberOfRows--;
-			for (int i = 0; i < numberOfRows; i++) {
-				columns.get(0).getField().set(i,i+1);
-			}
-			printAll();
+			deleteRow(x-counter);
 			System.out.println("Delete another row?");
 			continueProcess = Database.findDecision();
+			counter++;
 		}
 	}
+
 
 	/**
 	* deletes specific rows, which are within a range given by the user
@@ -880,75 +922,56 @@ public class Table implements Serializable {
 		int endRow;
 		do {
 			System.out.println("Starting row: ");
-			startRow = Database.choice(1, numberOfRows)-1;
+			startRow = Database.choice(1, numberOfRows);
+			System.out.println(startRow);
 			System.out.println("Ending row: ");
 			endRow = Database.choice(1,numberOfRows) ;
+			System.out.println(endRow);
 			if (startRow > endRow) {
 				System.out.println("Starting can't be greater than ending row");
 			}
 		} while ( startRow> endRow);
-
-		for (int i = 0; i < getColumnCounter(); i++) {
-			Column column = columns.get(i);
-			for (int j = startRow; j < endRow ; j++) {
-				column.getField().remove(j);
+			int counter=0;
+			for (int j= startRow; j <= endRow; j++) {
+				deleteRow(j-counter);
+				counter++;
 			}
-		}
-		numberOfRows = numberOfRows - (endRow - startRow);
-		for (int i = 0; i < numberOfRows; i++) {
-
-			columns.get(0).getField().set(i, i + 1);
-		}
-
-
 	}
 
-	public void setDeleteCounter() {
-		setColumnCounter(columnCounter-1);
-			}
-
-
-	public int checkOffLimitsColumns() {
-		int x;
-		do {
-			x = Database.valid();
-			if ((x> columnCounter - 1) || (x<0)) {
-				System.out.println("The number that you gave was off limits.\nPlease try again:");
-			}
-			} while ((x> columnCounter - 1) || (x<0));
-			return x;
-		}
-
-	/**
-	* deletes any columns you want
-	*/
+	/** deletes any column you want(one or more)*/
 	public void deleteColumns() {
 		Scanner cs = new Scanner(System.in);
-		System.out.println("How many columns do you want to delete?");
-		int x = checkOffLimitsColumns();
-		for (int i = 0; i < x; i++) {
-			System.out.print("Please give me the name of the column you want to delete: ");
-			boolean cont = false;
-			while (!cont){
-				String y = cs.next();
-				while (y.equals("Row")) {
-					System.out.println("You can't delete this field. Please try again");
-					y = cs.next();
-				}
-				for (int k=1; k<columnCounter; k++) {
-					Column column = columns.get(k);
-					if (y.equals(column.getName())) {
-						setDeleteCounter();
-						columns.remove(k);
-						cont = true;
+		boolean continueProcess = true;
+		int y = 0;
+		while (continueProcess) {
+			int x =  inputFieldName("delete");
+			if (x != -1) {
+				Column column = columns.get(x);
+				if (column.getPrimaryKey()) {
+					System.out.println("This column is primary key. Cannot be deleted!");
+				} else {
+					columns.remove(x);
+					columnCounter--;
+					if (!primaryKeyColumnExists()) {
+						if (columnCounter == 1) {
+							columns.remove(0);
+							columnCounter=0;
+							System.out.println("You deleted all the columns of the table");
+							continueProcess = false;
+							y=1;
+						}
+					} else {
+						if (columnCounter ==2) {
+							System.out.println("You can't delete another column.");
+							continueProcess = false;
+							y=1;
+						}
 					}
 				}
-				if (columnCounter == 1) {
-					columns.remove(0);
-				}
-				if (!cont) {
-					System.out.println("The name you inserted is not valid. Please try again.");
-				}
+			}
+			if (y==0) {
+				System.out.println("Delete another column?");
+				continueProcess = Database.findDecision();
 			}
 		}
 	}
@@ -959,6 +982,7 @@ public class Table implements Serializable {
 	public void deleteElements(){
 		Scanner cs = new Scanner(System.in);
 		boolean continueProcess = true;
+		boolean continueProcessPrimaryKey = false;
 		while (continueProcess) {
 			int x;
 			do{
@@ -969,8 +993,16 @@ public class Table implements Serializable {
 			Column column = this.getColumns().get(x);
 			System.out.println("Please insert the row in which the element exists: ");
 			int y = Database.choice(1,numberOfRows);
-			column.getField().set(y-1, " ");
-			System.out.println("Do you want to continue? Y/N");
+			if (column.getPrimaryKey()) {
+				System.out.println("This element is a primary key. If you delete it the whole row will be deleted.\nAre you sure you want to continue? Y/N");
+				continueProcessPrimaryKey= Database.findDecision();
+				if (continueProcessPrimaryKey) {
+					deleteRow(y);
+				}
+			} else {
+				column.getField().set(y-1, " ");
+			}
+			System.out.println("Do you want to delete another element? Y/N");
 			continueProcess = Database.findDecision();
 		}
 	}
@@ -987,40 +1019,62 @@ public class Table implements Serializable {
 
 
 	/**
-	* Compares two given datas(Strings)
-	*if the Strings are equal returns 0
-	*if the first given String is greater than the second returns a positive number
-	*if the first given String is less than the second returns a negative number
+	* Compares two given datas(Objects)
+	* Converts them to Strings in order to compare them.
+	* If the Objects are equal, returns 0
+	* If the first given Object is greater than the second, returns a positive number
+	* If the first given Object is less than the second, returns a negative number
 	*/
-	public int compareTo(String str1,String str2) {
-		return str1.compareTo(str2);
+	public int compareTo(Object str1, Object str2) {
+			String st1= String.valueOf(str1);
+			String st2 = String.valueOf(str2);
+			return st1.compareTo(st2);
+	}
+
+	/**
+	* Compares two given datas(Objects)
+	* Converts them to Integers in order to compare them.
+	* If the Objects are equal, returns 0.
+	* If the first given Object is greater than the second, returns 1.
+	* If the first given Object is less than the second, returns -1.
+	*/
+	public int compareIntegers(Object str1, Object str2) {
+			int st1 = (int)str1;
+			int st2 = (int)str2;
+			if (st1 > st2) {
+				return 1;
+			} else if (st1 < st2) {
+				return -1;
+			} else {
+				return 0;
+			}
+	}
+
+	/**
+	* Compares two given datas(Objects)
+	* Converts them to Double in order to compare them.
+	* If the Objects are equal, returns 0.
+	* If the first given Object is greater than the second, returns a positive number.
+	* If the first given Object is less than the second, returns a negative number.
+	*/
+	public int compareDoubles(Object str1, Object str2) {
+			String st1= String.valueOf(str1);
+			String st2 = String.valueOf(str2);
+			st1 = st1.replace(",",".");
+			st2 = st2.replace(",",".");
+			double st11 =  Double.parseDouble(st1);
+			double st22 =  Double.parseDouble(st2);
+			return Double.compare(st11,st22);
 	}
 
 
 	/**
-	*changes the data in order to create a table in ascesing order
+	* Sorts the table based on a column given by the user
+	* The user seletcs in which order the assortment will be made(ascending or descending)
+	* According to the type of the column, the corresponding method is called in order to compare all the datas of the column.
+	* Then it is called another method, which sorts the whole table based on the the previous comparation.
 	*/
-	public void sortInAscendingOrder(int j, Object s1, Object s2,Column column1) {
-		Object temp = s2;
-		column1.getField().set(j,s1);
-		column1.getField().set(j-1,temp);
-	}
-
-
-	/**
-	*changes the data in order to create a table in descending order
-	*/
-	public void sortInDescendingOrder(int j, Object s1, Object s2,Column column1) {
-		Object temp= s1;
-		column1.getField().set(j-1,s2);
-		column1.getField().set(j,temp);
-	}
-
-
-	/**
-	*Sorts the table based on a column given by the user
-	*/
-	public void sortInAlphabeticalOrder() {
+	public void chooseSort() {
 		Scanner cs = new Scanner(System.in);
 		int x;
 		do{
@@ -1032,28 +1086,38 @@ public class Table implements Serializable {
 		int choice;
 		choice = Database.choice(1,2);
 		Column column = this.getColumns().get(x);
-		if (column.getType() instanceof StringType) {
 			for (int i=1; i<numberOfRows; i++) {
 				for (int j=numberOfRows-1; j>=i; j--) {
 					Object str1 = column.getField().get(j-1);
 					Object str2 = column.getField().get(j);
-					String st1= String.valueOf(str1);
-					String st2 = String.valueOf(str2);
-					int result = compareTo(st1,st2);
-						for (int k=1; k<columnCounter; k++) {
-							Column column1 = this.getColumns().get(k);
-							Object s1 = column1.getField().get(j-1);
-							Object s2 = column1.getField().get(j);
-							if (choice ==1) {
-								if (result>0) {
-									sortInAscendingOrder(j,s1,s2,column1);
-								}
-							} else {
-								if (result<0) {
-									sortInDescendingOrder(j, s1,s2,column1);
-								}
-							}
-						}
+					if (column.getType() instanceof StringType) {
+						int result = compareTo(str1,str2);
+						sort(result,j, choice);
+					}
+					if (column.getType() instanceof IntegerType) {
+						int result = compareIntegers(str1,str2);
+						sort(result,j, choice);
+					}
+					if (column.getType() instanceof DoubleType) {
+						int result = compareDoubles(str1,str2);
+						sort(result,j, choice);
+					}
+				}
+			}
+	}
+
+	public void sort(int result, int j, int choice) {
+		for (int k=1; k<columnCounter; k++) {
+			Column column1 = this.getColumns().get(k);
+			Object s1 = column1.getField().get(j-1);
+			Object s2 = column1.getField().get(j);
+			if (choice ==1) {
+				if (result > 0) {
+					column1.sortInAscendingOrder(j,s1,s2);
+				}
+			} else {
+				if (result<0) {
+					column1.sortInDescendingOrder(j, s1,s2);
 				}
 			}
 		}
