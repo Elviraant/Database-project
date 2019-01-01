@@ -291,7 +291,7 @@ public class Table implements Serializable {
         boolean continueProcess = true;
         while (continueProcess) {
             Menu.presentationMenu();
-            choice = Database.choice(1, 3);
+            choice = Database.choice(1, 4);
             switch (choice) {
             case 1:
                 printAll();
@@ -362,7 +362,7 @@ public class Table implements Serializable {
         boolean continueProcess = true;
         while (continueProcess) {
             Menu.deletionMenu();
-            choice = Database.choice(1, 4);
+            choice = Database.choice(1, 5);
             switch (choice) {
             case 1:
                 deleteRows();
@@ -420,7 +420,7 @@ public class Table implements Serializable {
         boolean continueProcess = true;
         while (continueProcess) {
             Menu.additionMenu();
-            choice = Database.choice(1, 2);
+            choice = Database.choice(1, 3);
             switch (choice) {
             case 1:
                 columnFillerByRow();
