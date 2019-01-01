@@ -855,13 +855,17 @@ public class Table implements Serializable {
     public void sameValue() {
         int pfield = inputFieldName("change");
         if (pfield != -1) {
-            Column col = this.getColumns().get(pfield);
-            System.out.println("Insert the new value of all elements");
-            Object newValue = col.getType().getData();
-            for (int i = 0; i < col.getField().size(); i++) {
-                col.getField().set(i, newValue);
-            }
-            printAll();
+			Column col = this.getColumns().get(pfield);
+			if(col.getPrimaryKey()) {
+				System.out.println("This field contains Primary Keys. You are not allowed to set same values.");
+			}else {
+            	System.out.println("Insert the new value of all elements");
+            	Object newValue = col.getType().getData();
+            	for (int i = 0; i < col.getField().size(); i++) {
+            	    col.getField().set(i, newValue);
+           	 }
+            	System.out.println("Change completed successfully !");
+	   		}
         }
     }
 
