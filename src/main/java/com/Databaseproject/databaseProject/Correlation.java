@@ -57,6 +57,10 @@ public class Correlation implements Serializable {
 					printCorrelations(correlations);
 					break;
 				case 3:
+					Correlation.deleteCorrelation(correlations);
+					break;
+				case 4:
+					System.out.println("Choose the correlation you want to view");
 					Correlation correlation = chooseCorrelation(correlations);
 					if (correlation instanceof OneToOne) {
 						correlation = (OneToOne) correlation;
@@ -73,20 +77,39 @@ public class Correlation implements Serializable {
 		}
 	}
 
-public static void printCorrelations(ArrayList<Correlation> correlations) {
-		System.out.println();
-		for (int i = 0; i < correlations.size(); i++) {
-			System.out.println(String.format("%s. %s", (i + 1), correlations.get(i).toString() ));
+	public static void printCorrelations(ArrayList<Correlation> correlations) {
+		if (correlations.size() != 0) {
+			System.out.println();
+			for (int i = 0; i < correlations.size(); i++) {
+				System.out.println(String.format("%s. %s", (i + 1), correlations.get(i).toString() ));
+			}
+			System.out.println(String.format("\n"));
+		} else {
+			System.out.println("You have not created any correlations");
 		}
 	}
 
 	public static Correlation chooseCorrelation(ArrayList<Correlation> correlations) {
 		printCorrelations(correlations);
-		System.out.println("Please choose the correlation you want to view");
-		System.out.print(String.format("\n\n"));
+		System.out.println();
 		int choice = Database.choice(1, correlations.size());
 		return correlations.get(choice - 1);
 	}
+
+	public static void deleteCorrelation(ArrayList<Correlation> correlations) {
+		System.out.println("Please choose the correlation you want to delete");
+		Correlation correlation = chooseCorrelation(correlations);
+		int pos = correlations.indexOf(correlation);
+		correlations.remove(pos);
+		correlation.getTable2().getColumns().remove(correlation.getTable2().findForeignKeyColumn());
+		int counter = correlation.getTable2().getColumnCounter() - 1;
+		correlation.getTable2().setColumnCounter(counter);
+		if (correlation instanceof ManyToMany) {
+			correlation.getTable1().getColumns().remove(correlation.getTable1().findForeignKeyColumn());
+			counter = correlation.getTable1().getColumnCounter() - 1;
+			correlation.getTable1().setColumnCounter(counter);
+		}
+		}
 
 	public int choice() {
 		System.out.println("1. " + table1.getName());

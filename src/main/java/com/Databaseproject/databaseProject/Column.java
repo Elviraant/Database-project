@@ -38,10 +38,9 @@ public class Column implements Serializable{
 		//foreignKey.add(field);
 		this.isForeignKey = isForeignKey;
 		table.getColumns().add(this);
-		if (!(correlation instanceof ManyToMany)) {
-			table.setColumnCounter(table.getColumnCounter() + 1);
+		table.setColumnCounter(table.getColumnCounter() + 1);
 	 	}
-	}
+
 
 	/**public static int getCounter() {
 		return counter;

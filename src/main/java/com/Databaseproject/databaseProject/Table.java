@@ -15,6 +15,7 @@ public class Table implements Serializable {
     private int columnCounter = 0;
     private String name;
     private int numberOfRows = 0;
+    private boolean references = false;
     private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
 	private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
     /**
@@ -84,6 +85,16 @@ public class Table implements Serializable {
 	public void setInvPositionOffFk(Integer value, Table key) {
 	    invPositionOffFk.put(value, key);
     }
+
+    public boolean getReferences() {
+	    return references;
+	}
+
+	public void setReferences(boolean references) {
+	    this.references = references;
+    }
+
+
 
     /**
      * public HashMap<Table, Integer> getPositionOfFK() { return positionOffFk; }
@@ -329,6 +340,45 @@ public class Table implements Serializable {
 
     }
 
+	/** deletes any column you want(one or more)*/
+	public void deleteColumns() {
+		Scanner cs = new Scanner(System.in);
+		boolean continueProcess = true;
+		int y = 0;
+		while (continueProcess) {
+			int x = inputFieldName("delete");
+			if (x != -1) {
+				Column column = columns.get(x);
+				if (column.getPrimaryKey()) {
+					System.out.println("This column is primary key. Cannot be deleted!");
+				} else if (column.getForeignKey()) {
+					System.out.println("This column is foreign key. Cannot be deleted");
+				} else {
+					columns.remove(x);
+					columnCounter--;
+					if (!primaryKeyColumnExists()) {
+						if (columnCounter == 1) {
+							columns.remove(0);
+							columnCounter=0;
+							System.out.println("You deleted all the columns of the table");
+							continueProcess = false;
+							y=1;
+						}
+					} else {
+						if (columnCounter ==2) {
+							System.out.println("You can't delete another column.");
+							continueProcess = false;
+							y=1;
+						}
+					}
+				}
+			}
+			if (y==0) {
+				System.out.println("Delete another column?");
+				continueProcess = Database.findDecision();
+			}
+		}
+	}
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
@@ -364,6 +414,45 @@ public class Table implements Serializable {
             }
         }
     }
+
+
+    public void deleteData() {
+        int choice;
+        boolean continueProcess = true;
+        while (continueProcess) {
+            Menu.deletionMenu();
+            choice = Database.choice(1, 5);
+            switch (choice) {
+            case 1:
+            	if (! references) {
+            	    deleteRows();
+            	    System.out.println("Deletion completed successfully");
+				} else {
+					System.out.println("This table references another table of your base");
+				}
+                break;
+            case 2:
+                deleteColumns();
+                break;
+            case 3:
+                deleteElements();
+                break;
+            case 4:
+                deleteAll();
+                break;
+            case 5:
+				Menu.startingMenu();
+				break;
+            }
+			if ((choice>=1) && (choice<5)) {
+				System.out.println("Continue with the deletion of data?");
+				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
+			}
+        }
+    }
+
 
     public void presentData() {
         int choice;
@@ -433,40 +522,6 @@ public class Table implements Serializable {
 				decision = false;
 			}
         } while (decision);
-    }
-
-
-    public void deleteData() {
-        int choice;
-        boolean continueProcess = true;
-        while (continueProcess) {
-            Menu.deletionMenu();
-            choice = Database.choice(1, 5);
-            switch (choice) {
-            case 1:
-                deleteRows();
-                break;
-            case 2:
-                deleteColumns();
-                break;
-            case 3:
-                deleteElements();
-                break;
-            case 4:
-                deleteAll();
-                break;
-            case 5:
-				Menu.startingMenu();
-				break;
-            }
-			if ((choice>=1) && (choice<5)) {
-				System.out.println("Deletion completed successfully");
-				System.out.println("Continue with the deletion of data?");
-				continueProcess = Database.findDecision();
-			} else {
-				continueProcess = false;
-			}
-        }
     }
 
   	public void sortData() {
@@ -597,8 +652,10 @@ public class Table implements Serializable {
     public void printHeader() {
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < columnCounter; i++) {
-            Column column = columns.get(i);
-            list.add(column.getName());
+           	Column column = columns.get(i);
+           	if (column.getForeignKeys().size() == 0) {
+            	list.add(column.getName());
+			}
         }
         printHeaderOfSpecificColumns(list);
     }
@@ -608,11 +665,13 @@ public class Table implements Serializable {
     public void presentRow(int row) {
         for (int i = 0; i < columnCounter; i++) {
             Column column = columns.get(i);
-            if (i == 0) {
-                System.out.print(String.format("|%-6s|", columns.get(0).getField().get(row).toString()));
-                System.out.print("     ");
-            } else {
-                column.printElement(row);
+            if (column.getForeignKeys().size() == 0) {
+            	if (i == 0) {
+              	  System.out.print(String.format("|%-6s|", columns.get(0).getField().get(row).toString()));
+              	  System.out.print("     ");
+              	  } else {
+                  column.printElement(row);
+			  }
             }
         }
         System.out.println();
@@ -983,18 +1042,18 @@ public class Table implements Serializable {
     }
 
     public void deleteRows() {
-        System.out.println(String.format("%s\n%s\n", "1. Delete Specific Rows", "2. Delete specific range of rows"));
-        int choice;
-        choice = Database.choice(1, 2);
-        switch (choice) {
-        case 1:
-            deleteSpecificRows();
-            break;
-        case 2:
-            deleteSpecificRangeofRows();
-            break;
-        }
-    }
+        	System.out.println(String.format("%s\n%s\n", "1. Delete Specific Rows", "2. Delete specific range of rows"));
+        	int choice;
+        	choice = Database.choice(1, 2);
+        	switch (choice) {
+        	case 1:
+        	    deleteSpecificRows();
+        	    break;
+        	case 2:
+        	    deleteSpecificRangeofRows();
+        	    break;
+			}
+         }
 
 	/**
 	* deletes one row
@@ -1049,44 +1108,6 @@ public class Table implements Serializable {
 			}
 	}
 
-	/** deletes any column you want(one or more)*/
-	public void deleteColumns() {
-		Scanner cs = new Scanner(System.in);
-		boolean continueProcess = true;
-		int y = 0;
-		while (continueProcess) {
-			int x =  inputFieldName("delete");
-			if (x != -1) {
-				Column column = columns.get(x);
-				if (column.getPrimaryKey()) {
-					System.out.println("This column is primary key. Cannot be deleted!");
-				} else {
-					columns.remove(x);
-					columnCounter--;
-					if (!primaryKeyColumnExists()) {
-						if (columnCounter == 1) {
-							columns.remove(0);
-							columnCounter=0;
-							System.out.println("You deleted all the columns of the table");
-							continueProcess = false;
-							y=1;
-						}
-					} else {
-						if (columnCounter ==2) {
-							System.out.println("You can't delete another column.");
-							continueProcess = false;
-							y=1;
-						}
-					}
-				}
-			}
-			if (y==0) {
-				System.out.println("Delete another column?");
-				continueProcess = Database.findDecision();
-			}
-		}
-	}
-
 	/**
 	* deletes any element you want
 	*/
@@ -1105,13 +1126,18 @@ public class Table implements Serializable {
 			System.out.println("Please insert the row in which the element exists: ");
 			int y = Database.choice(1,numberOfRows);
 			if (column.getPrimaryKey()) {
-				System.out.println("This element is a primary key. If you delete it the whole row will be deleted.\nAre you sure you want to continue? Y/N");
-				continueProcessPrimaryKey= Database.findDecision();
-				if (continueProcessPrimaryKey) {
-					deleteRow(y);
+				if (!references) {
+					System.out.println("This element is a primary key. If you delete it the whole row will be deleted.\nAre you sure you want to continue? Y/N");
+					continueProcessPrimaryKey= Database.findDecision();
+					if (continueProcessPrimaryKey) {
+						deleteRow(y);
+					}
+				} else {
+					Menu.deletionFailed(this);
 				}
 			} else {
 				column.getField().set(y-1, " ");
+				System.out.println("Deletion completed successfully");
 			}
 			System.out.println("Do you want to delete another element? Y/N");
 			continueProcess = Database.findDecision();
@@ -1120,12 +1146,17 @@ public class Table implements Serializable {
 
     /* deletes a whole table */
     public void deleteAll() {
-        for (int i = columnCounter - 1; i >= 0; i--) {
-            columns.remove(i);
+		if (!getReferences()) {
+        	for (int i = columnCounter - 1; i >= 0; i--) {
+        	    columns.remove(i);
 
-        }
-        columnCounter = 0;
-        numberOfRows = 0;
+        	}
+        	columnCounter = 0;
+        	numberOfRows = 0;
+        	System.out.println("Deletion completed successfully");
+		} else {
+			Menu.deletionFailed(this);
+		}
     }
 
    /**

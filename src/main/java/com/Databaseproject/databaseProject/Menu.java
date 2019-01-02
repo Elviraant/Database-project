@@ -80,13 +80,14 @@ public class Menu implements Serializable{
 	}
 
 	public static int manageCorrelationsMenu() {
-		System.out.println(String.format("%s\n%s\n%s\n%S\n"
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n"
 							,"1. How many correlations have I created?"
 							,"2. View all correlated tables"
-							,"3. View properties"
-							,"4. Exit"));
+							,"3. Delete correlation"
+							,"4. View properties"
+							,"5. Exit"));
 		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,4);
+		return Database.choice(1,5);
 	}
 
 	public static int viewPopertiesMenu() {
@@ -119,6 +120,12 @@ public class Menu implements Serializable{
 		System.out.println(String.format("%s%s", "2. " , table2.getName()));
 		System.out.println("Please choose one of the above options: ");
 		return Database.choice(1,2);
+	}
+
+	public static void deletionFailed(Table table) {
+		System.out.println("Deletion failed");
+		System.out.println("Table " + table.getName() + " references another table of the base.");
+		System.out.println();
 	}
 }
 

@@ -16,10 +16,11 @@ public class OneToMany extends Correlation{
 
 		super(name, table1, table2);
 		column = new Column(table2, true, this);
-		column.createFkColumnName(table2);
+		column.createFkColumnName(table1);
+		table1.setReferences(true);
 		posF = table2.getColumnCounter();
 		table2.setPositionOffFk(table1, posF);
-
+		table2.setInvPositionOffFk(posF, table1);
 	}
 
 

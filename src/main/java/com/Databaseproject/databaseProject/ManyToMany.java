@@ -20,6 +20,9 @@ public class ManyToMany extends Correlation {
 		this.column1.createFkColumnName(table1);
 		posF1 = table1.getColumnCounter();
 		table2.setPositionOffFk(table1, posF1);
+		table2.setInvPositionOffFk(posF1, table1);
+		table1.setReferences(true);
+		table2.setReferences(true);
 		this.column2 = new Column(table1, true, this);
 		this.column2.createFkColumnName(table2);
 		posF2 = table2.getColumnCounter();
@@ -109,9 +112,6 @@ public class ManyToMany extends Correlation {
 				column.getForeignKeys().add(new ArrayList <Object>());
 			}
 	}
-
-
-
 
 	@Override
 	public void viewProperties() {
