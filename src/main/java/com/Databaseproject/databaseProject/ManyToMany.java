@@ -55,29 +55,28 @@ public class ManyToMany extends Correlation {
 		int q =0;
 		Object pKey2 = getPKey2(i);
 		printPrimaryKeyColumns();
-			while (continueProcess) {
-					boolean repeat = true;
-					q++;
-					while (repeat) {
-						Object key = printInsertionMessage(pKey2, q);
-						Integer pos = primaryKeyColumn1.findPKeyPosition(key);
-						if (pos != -1) {
-							boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
-							if (check) {
-								foreignKeys2.add(key);
-								column1.getForeignKeys().get(pos).add(pKey2);
-								repeat = false;
-							} else {
-								printAlreadyCorrelatedMessage();
-								repeat = Menu.printTryAgainQuestionMessage();
-							}
+		while (continueProcess) {
+				boolean repeat = true;
+				q++;
+				while (repeat) {
+					Object key = printInsertionMessage(pKey2, q);
+					Integer pos = primaryKeyColumn1.findPKeyPosition(key);
+					if (pos != -1) {
+						boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
+						if (check) {
+							foreignKeys2.add(key);
+							column1.getForeignKeys().get(pos).add(pKey2);
+							repeat = false;
 						} else {
-							Menu.printNonExistantKeyMessage();
+							printAlreadyCorrelatedMessage();
+							repeat = Menu.printTryAgainQuestionMessage();
+						}
+					} else {
+						Menu.printNonExistantKeyMessage();
 							/*if ( q == 1) {
 								System.out.println("Try again.");
 							} else {*/
 							repeat = Menu.printTryAgainQuestionMessage();
-
 						}
 					}
 					System.out.println("Are there any other correlated records of " + pKey2 + ": ");
@@ -209,4 +208,8 @@ public class ManyToMany extends Correlation {
 			return pKColumn1().getType().getData();
 
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8e216793f42c95835a9f0f9f07e6185065cec63a
 }
