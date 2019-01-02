@@ -16,7 +16,7 @@ public class Table implements Serializable {
     private String name;
     private int numberOfRows = 0;
     private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
-
+	private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
     /**
      * Constructor for Table class
      *
@@ -75,6 +75,14 @@ public class Table implements Serializable {
 
     public void setPositionOffFk(Table key, Integer value) {
         positionOffFk.put(key, value);
+    }
+
+    public HashMap<Integer, Table> getInvPositionOffFk() {
+	    return invPositionOffFk;
+	}
+
+	public void setInvPositionOffFk(Integer value, Table key) {
+	    invPositionOffFk.put(value, key);
     }
 
     /**
@@ -194,21 +202,45 @@ public class Table implements Serializable {
 
     public void addRow() {
         System.out.println("#" + (numberOfRows + 1) + " Row: ");
-        for (Column column : this.getColumns()) {
+        for (int i = 0; i < columnCounter; i++) {
+			Column column = getColumns().get(i);
             if (this.getColumns().get(0).equals(column)) {
                 column.getField().add(numberOfRows + 1);
             } else {
                 System.out.println("Give " + column.getName());
                 Object data = column.getType().getData();
-                if (column.getPrimaryKey()) {
+                if (column.getPrimaryKey()) { //if is primary key
                     column.fillPrimaryKeyField(data);
+				} else if (column.getForeignKey()) { //is foreign key
+					Column prKeyColumn = matchingKeys(i);
+					if (column.getPrimaryKey()) { //one to one correlation
+					//method to check uniqueness of data in one to one
+					//add data in field
+					} else if (column.getForeignKeys().size() != 0) { //many to many correlation
+					//method to check uniqueness of data in many to many
+					//add data in arraylist of foreign keys
+					} else { //one to many correlation
+					//same with one to one without checking uniqueness of data in field
+					}
                 } else {
-                    column.getField().add(data);
+                    column.getField().add(data); //neither foreign, nor primary
                 }
             }
         }
 
     }
+
+    public Column matchingKeys(int position) {
+		Column prKey = null;
+		for (int key : invPositionOffFk.keySet()) {
+			if (key == position) {
+				Table table = invPositionOffFk.get(key);
+				int pkpos = table.findPrimaryKeyColumn();
+				prKey = table.getColumns().get(pkpos);
+			}
+		}
+		return prKey;
+	}
 
 
     /**
