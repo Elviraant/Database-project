@@ -104,10 +104,12 @@ public class Correlation implements Serializable {
 		correlation.getTable2().getColumns().remove(correlation.getTable2().findForeignKeyColumn());
 		int counter = correlation.getTable2().getColumnCounter() - 1;
 		correlation.getTable2().setColumnCounter(counter);
+		correlation.getTable1().setReferences(false);
 		if (correlation instanceof ManyToMany) {
 			correlation.getTable1().getColumns().remove(correlation.getTable1().findForeignKeyColumn());
 			counter = correlation.getTable1().getColumnCounter() - 1;
 			correlation.getTable1().setColumnCounter(counter);
+			correlation.getTable2().setReferences(false);
 		}
 		}
 
