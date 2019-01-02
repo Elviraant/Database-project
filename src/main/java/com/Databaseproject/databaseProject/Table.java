@@ -120,6 +120,7 @@ public class Table implements Serializable {
 
         System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
 		String nameOfField = nameAColumn();
+		nameOfField = uniqueFieldName(nameOfField);
 		 while (!nameOfField.equals("EXIT")) {
 			Scanner sc = new Scanner(System.in);
 			setFieldType(nameOfField);
@@ -210,23 +211,44 @@ public class Table implements Serializable {
         System.out.println("Do you want to set a field as primary key? ");
         boolean continueProcess;
         continueProcess = Database.findDecision();
-        if (continueProcess) {
-            continueProcess = true;
-            while (continueProcess) {
-                System.out.print("Please, insert the name of the primary key field: ");
-                String primaryKeyName = cs.next();
-                int exists = this.containsName(primaryKeyName);
-                if (exists != -1) {
-                    this.getColumns().get(exists).setPrimaryKey(true);
-                    continueProcess = false;
-                } else {
-                    System.out.print(primaryKeyName + ". No such field at this entity.");
-                    System.out.print("Do you want to try again? ");
-                    continueProcess = Database.findDecision();
-                }
+        while (continueProcess) {
+    	    System.out.print("Please, insert the name of the primary key field: ");
+            String primaryKeyName = cs.next();
+            int exists = this.containsName(primaryKeyName);
+
+            if (exists != -1) {
+				if(checkOwnType(primaryKeyName)) {
+					continueProcess = true;
+					System.out.println("Own type Column can not be Primary Key. Please try again. ");
+				} else {
+					this.getColumns().get(exists).setPrimaryKey(true);
+					continueProcess = false;
+				}
+            } else {
+                System.out.print(primaryKeyName + ". No such field at this entity.");
+                System.out.print("Do you want to try again? ");
+                continueProcess = Database.findDecision();
             }
-        }
+		}
+
     }
+
+	/*
+	 * Checks by name, if Column object's type is EnumeratedType
+	 * @param name name of Column object
+	 * @return boolean true if this Column object's type is EnumeratedType; false otherwise
+	 */
+    public boolean checkOwnType(String name) {
+		boolean ownType = false;
+		for(Column column : columns) {
+			if (column.getName().equals(name)) {
+				if(column.getType() instanceof EnumeratedType) {
+					ownType = true;
+				}
+			}
+		}
+		return ownType;
+	}
 
     /**
      * ask how to fill the fields and call method columnFillerByRow or
@@ -259,7 +281,7 @@ public class Table implements Serializable {
     }
 
     public void addRow() {
-        System.out.println("#" + (numberOfRows + 1) + " Row: ");
+        System.out.println("#" + (numberOfRows + 1) + " Record: ");
         for (int i = 0; i < columnCounter; i++) {
 			Column column = getColumns().get(i);
             if (this.getColumns().get(0).equals(column)) {
@@ -306,17 +328,18 @@ public class Table implements Serializable {
      */
     public void columnFillerByColumn() {
 
-        if (numberOfRows == 0) {
+		if (numberOfRows == 0) {
             System.out.println("How many records would you like to fill for " + this.getName());
             numberOfRows = Database.valid();
         }
+
         for (Column column : columns) {
             if (column.getField().isEmpty()) {
                 if (column.getPrimaryKey()) {
                     System.out.println("	" + column.getName());
                     System.out.println("-----------------");
                     for (int j = 0; j < numberOfRows; j++) {
-                        System.out.print("#" + (j + 1) + " Row: ");
+                        System.out.print("#" + (j + 1) + " Record: ");
                         Object data = column.getType().getData();
                         column.fillPrimaryKeyField(data);
                     }
@@ -329,7 +352,7 @@ public class Table implements Serializable {
                     System.out.println("	" + column.getName());
                     System.out.println("-----------------");
                     for (int j = 0; j < numberOfRows; j++) {
-                        System.out.print("#" + (j + 1) + " Row: ");
+                        System.out.print("#" + (j + 1) + " Record: ");
                         Object data = column.getType().getData();
                         column.getField().add(data);
                     }
@@ -557,11 +580,17 @@ public class Table implements Serializable {
             choice = Database.choice(1, 3);
             switch (choice) {
             case 1:
+            	System.out.println("Until now, these are your records: ");
+            	System.out.println();
+            	printAll();
                 columnFillerByRow();
                 break;
             case 2:
-                setFieldNames();
-                callFiller();
+             	System.out.print("Until now, you have these columns: ");
+             	System.out.println();
+            	printHeader();
+            	setFieldNames();
+				columnFillerByColumn();
                 break;
             case 3:
             	Menu.startingMenu();
@@ -682,16 +711,16 @@ public class Table implements Serializable {
 	*/
 	public void printRangeOfRows() {
 		if (numberOfRows != 0) {
-			System.out.println("Please insert the range of rows you want to print.");
+			System.out.println("Please insert the range of records you want to print.");
 			int start = 1;
 			int end = 0;
 			while (start >= end) {
-				System.out.println("Starting row: ");
+				System.out.println("Starting record: ");
 				start = Database.choice(1, numberOfRows)-1;
-				System.out.println("Ending row: ");
+				System.out.println("Ending record: ");
 				end = Database.choice(1,numberOfRows);
 				if (start >= end) {
-					System.out.println("Starting can't be greater than ending row");
+					System.out.println("Starting can't be greater than ending record");
 				}
 			}
 			printHeader();
@@ -781,10 +810,9 @@ public class Table implements Serializable {
      */
     public int containsName(String name) {
         if (name.equals("Record")) {
-            ;
             return -1;
         }
-        for ( int i = 0; i < columnCounter; i++) {
+        for (int i = 0; i < columnCounter; i++) {
 			Column c = getColumns().get(i);
             if (c.getName().equals(name)) {
                 return i;
@@ -836,13 +864,13 @@ public class Table implements Serializable {
     }
 
     public void changeDataByRow() {
-        System.out.println("Which row do you want to change?");
+        System.out.println("Which record do you want to change?");
         printAll();
         int row = Database.choice(1, numberOfRows) - 1;
         if (row != -1) {
             Boolean continueProcess = true;
             int i = 1;
-            System.out.println("#" + (row + 1) + " Row: ");
+            System.out.println("#" + (row + 1) + " Record: ");
             do {
                 Column x = columns.get(i);
                 System.out.println("#" + (i) + " Field: ");
@@ -879,7 +907,7 @@ public class Table implements Serializable {
                	i++;
             } while (i <= columnCounter-1);
         } else {
-            System.out.println("The row you typed is probably incorrect.");
+            System.out.println("The record you typed is probably incorrect.");
         }
     }
 
@@ -990,7 +1018,7 @@ public class Table implements Serializable {
     public void changeValue() {
         int pfield = inputFieldName("change");
         if (pfield != -1) {
-            System.out.println("Which row do you want to change?");
+            System.out.println("Which record do you want to change?");
             printAll();
             int row = Database.choice(1, numberOfRows) - 1;
             if (row != -1) {
@@ -1019,7 +1047,7 @@ public class Table implements Serializable {
                     }
                 } while (answer);
             } else {
-                System.out.println("The row you typed is probably incorrect.");
+                System.out.println("The record you typed is probably incorrect.");
             }
         }
     }
@@ -1042,18 +1070,18 @@ public class Table implements Serializable {
     }
 
     public void deleteRows() {
-        	System.out.println(String.format("%s\n%s\n", "1. Delete Specific Rows", "2. Delete specific range of rows"));
-        	int choice;
-        	choice = Database.choice(1, 2);
-        	switch (choice) {
-        	case 1:
-        	    deleteSpecificRows();
-        	    break;
-        	case 2:
-        	    deleteSpecificRangeofRows();
-        	    break;
-			}
-         }
+        System.out.println(String.format("%s\n%s\n", "1. Delete Specific Records", "2. Delete specific range of records"));
+        int choice;
+        choice = Database.choice(1, 2);
+        switch (choice) {
+        case 1:
+            deleteSpecificRows();
+            break;
+        case 2:
+            deleteSpecificRangeofRows();
+            break;
+        }
+    }
 
 	/**
 	* deletes one row
@@ -1074,10 +1102,10 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		int counter =0;
 		while (continueProcess) {
-			System.out.println("Which row do you want to delete?");
+			System.out.println("Which record do you want to delete?");
 			int x = Database.choice(1,numberOfRows);
 			deleteRow(x-counter);
-			System.out.println("Delete another row?");
+			System.out.println("Delete another record?");
 			continueProcess = Database.findDecision();
 			counter++;
 		}
@@ -1087,18 +1115,18 @@ public class Table implements Serializable {
 	* deletes specific rows, which are within a range given by the user
 	*/
 	public void deleteSpecificRangeofRows(){
-		System.out.println("Please insert the range of rows you want to delete.");
+		System.out.println("Please insert the range of records you want to delete.");
 		int startRow;
 		int endRow;
 		do {
-			System.out.println("Starting row: ");
+			System.out.println("Starting record: ");
 			startRow = Database.choice(1, numberOfRows);
 			System.out.println(startRow);
-			System.out.println("Ending row: ");
+			System.out.println("Ending record: ");
 			endRow = Database.choice(1,numberOfRows) ;
 			System.out.println(endRow);
 			if (startRow > endRow) {
-				System.out.println("Starting can't be greater than ending row");
+				System.out.println("Starting can't be greater than ending record");
 			}
 		} while ( startRow> endRow);
 			int counter=0;

@@ -1,233 +1,235 @@
 //package com.databaseProject.Databaseproject;
-import java.util.ArrayList;
 import java.io.Serializable;
-
-public class Column implements Serializable{
-	private String name;
-	private FieldType type;
-	private boolean isPrimaryKey;
-	private boolean isForeignKey;
-	private ArrayList<Object> field;
-	private ArrayList<ArrayList<Object>> foreignKeys = new ArrayList<ArrayList<Object>>();;
-
-	/**
-	 * First Constructor for Column class
-	 * @param name 	name of this field
-	 * @param type 	type of this field
-	 * @param table database's entity of this field
-	 */
-	public Column(String name, FieldType type, Table table) {
-		this.name = name;
-		this.type = type;
-		field = new ArrayList<Object>();
-		table.getColumns().add(this);
-		table.setColumnCounter(table.getColumnCounter() + 1);
-	}
-
-	/**
-	 * Second Constructor for Column class
-	 * Used by Correlation for the foreign keys
-	 * @param name 	name of this field
-	 * @param table database's entity of this field
-	 * @param isForeignKey sets true is this Column is a foreign key
-	 */
-
-	public Column(Table table, boolean isForeignKey, Correlation correlation) {
-		//this.name = name;
-		field = new ArrayList<Object>();
-		//foreignKey.add(field);
-		this.isForeignKey = isForeignKey;
-		table.getColumns().add(this);
-		table.setColumnCounter(table.getColumnCounter() + 1);
-	 	}
+import java.util.ArrayList;
 
 
-	/**public static int getCounter() {
-		return counter;
-	} **/
+public class Column implements Serializable {
+  private String name;
+  private FieldType type;
+  private boolean isPrimaryKey;
+  private boolean isForeignKey;
+  private ArrayList<Object> field;
+  private ArrayList<ArrayList<Object>> foreignKeys = new ArrayList<ArrayList<Object>>();
 
-	public String getName() {
-		return name;
-	}
+  /**
+   * First Constructor for Column class.
+   * @param name name of this field.
+   * @param type type of this field.
+   * @param table database's entity of this field.
+   */
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public Column(String name, FieldType type, Table table) { /*checkstyle checked*/
+    this.name = name;
+    this.type = type;
+    field = new ArrayList<Object>();
+    table.getColumns().add(this);
+    table.setColumnCounter(table.getColumnCounter() + 1);
+  }
 
-	public boolean getPrimaryKey() {
-		return isPrimaryKey;
-	}
-
-	public void setPrimaryKey(boolean isPrimaryKey) {
-		this.isPrimaryKey = isPrimaryKey;
-	}
-
-	public void setForeignKey(boolean isForeignKey) {
-		this.isForeignKey = isForeignKey;
-	}
-
-	public boolean getForeignKey() {
-		return isForeignKey;
-
-	}
-
-	public ArrayList<Object> getField() {
-		return field;
-	}
-
-	public FieldType getType() {
-		return type;
-	}
-
-	public void setFieldType(FieldType type) {
-		this.type = type;
-	}
-
-	public ArrayList<ArrayList<Object>> getForeignKeys() {
-		return foreignKeys;
-	}
+   /*CHECKSTYLE MESSAGE :UNUSED @param tag for name*/
+  /**
+   * Second Constructor for Column class.
+   * Used by Correlation for the foreign keys.
+   * @param name name of this field.
+   * @param table database's entity of this field.
+   * @param isForeignKey sets true is this Column is a foreign key.
+   */
+  public Column(Table table, boolean isForeignKey, Correlation correlation) {
+    //this.name = name;
+    field = new ArrayList<Object>();
+    //foreignKey.add(field);
+    this.isForeignKey = isForeignKey;
+    table.getColumns().add(this);
+    table.setColumnCounter(table.getColumnCounter() + 1);
+    }
 
 
-	public void printElement(int row) {
-		String data = String.format("|%-15s|", field.get(row).toString());
-		System.out.print(data);
-		System.out.print("     ");
+  /**public static int getCounter() {
+    return counter;
+  } **/
 
-	}
+  public String getName() { /*checkstyle checked*/
+    return name;
+  }
 
-   /*
-    * Creates the right FieldType object, based on a choice
-    * This is a static mrthod
-    * @param choice
-    * @return FieldType object, that is created
-    */
-	public static FieldType findType(int choice) {
-		FieldType type;
-		switch (choice) {
-			case 1: {type = new IntegerType();}
-			break;
-			case 2: {type = new DoubleType();}
-			break;
-			case 3: {type = new StringType();}
-			break;
-			default: {type = new StringType();}
-		}
-		return type;
-	}
+  public void setName(String name) { /*checkstyle checked*/
+    this.name = name;
+  }
 
-	/**
-	 * Returns void
-	 * Fills the Primary Key Field
-	 * @param data user's insertion
-	 */
-	public void fillPrimaryKeyField(Object data) {
+  public boolean getPrimaryKey() { /*checkstyle checked*/
+    return isPrimaryKey;
+  }
 
-		boolean unique = this.checkUniqueness(data);
-		while (!unique) {
-			System.out.print("This data already exists. Try again: ");
-			data = this.getType().getData();
-			unique = this.checkUniqueness(data);
-		}
-		this.getField().add(data);
-	}
+  public void setPrimaryKey(boolean isPrimaryKey) { /*checkstyle checked*/
+    this.isPrimaryKey = isPrimaryKey;
+  }
 
-	/**
-	 * Returns true if the data is unique
-	 * Use for Primary Key Field
-	 * @param data user's insertion
-	 */
-	public boolean checkUniqueness(Object data) {
+  public void setForeignKey(boolean isForeignKey) { /*checkstyle checked*/
+    this.isForeignKey = isForeignKey;
+  }
 
-		boolean unique = true;
-		for (Object f : field) {
-			if (f.equals(data)) {
-				unique = false;
-			}
-		}
-		return unique;
+  public boolean getForeignKey() { /*checkstyle checked*/
+    return isForeignKey;
+  }
 
-	}
+  public ArrayList<Object> getField() { /*checkstyle checked*/
+    return field;
+  }
 
-	/*
-	 * Create name for a foreign key Column object,
-	 * by using String.concat(String) method to combine the phrase "FK_from_",
-	 * with the Table object's name that foreign key Column object is coming from
-	 * Then, set the new name as this Column object's name
-	 * @param Table object, that the foreign key Column object is coming from
-	 */
-	public void createFkColumnName(Table table) {
+  public FieldType getType() { /*checkstyle checked*/
+    return type;
+  }
 
-		String name =("Fk_from_").concat(table.getName());
-		setName(name);
-	}
+  public void setFieldType(FieldType type) { /*checkstyle checked*/
+    this.type = type;
+  }
+
+  public ArrayList<ArrayList<Object>> getForeignKeys() { /*checkstyle checked*/
+    return foreignKeys;
+  }
 
 
-	public void searchElement(Object element) {
-		ArrayList<Integer> rows = matchingRows(element);
-		if (rows.size() != 0) {
-			System.out.println(element);
-			System.out.print("found in row(s):");
-			for (Integer row : rows) {
-				System.out.println(row+1);
-			}
-		} else {
-			System.out.print(element);
-			System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
-			Boolean answer = Database.findDecision();
-			if(answer) {
-				Menu.searchingMenu();
-			}
-		}
-	}
+  public void printElement(int row) { /*checkstyle checked*/
+    String data = String.format("|%-15s|", field.get(row).toString());
+    System.out.print(data);
+    System.out.print("     ");
+  }
 
-	public ArrayList<Integer> matchingRows(Object element) {
-		ArrayList<Integer> rows = new ArrayList<Integer>();
-		for (int i = 0; i < getField().size(); i++) {
-			if (element.equals(getField().get(i))) {
-				rows.add(i);
-			}
-		}
-		return rows;
-	}
+  /*
+   * Creates the right FieldType object, based on a choice
+   * This is a static mrthod
+   * @param choice
+   * @return FieldType object, that is created
+   */
 
-	public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) {
-		ArrayList<Integer> rows = new ArrayList<Integer>();
-		ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
-		for (Object foreign : foreigns) {
-			rows = matchingRows(foreign);
-			if (rows.size() != 0) {
-				toBeReturned.add(rows.get(0));
-			}
-		}
-		return toBeReturned;
-	}
+  public static FieldType findType(int choice) {
+    FieldType type;
+    switch (choice) {
+      case 1: { type = new IntegerType(); }
+        break;
+      case 2: { type = new DoubleType(); }
+        break;
+      case 3: {type = new StringType();}
+        break;
+      default: {type = new StringType();}
+    }
+    return type;
+  }
 
-	/**
-	*changes the data in order to create a table in ascesing order
-	*/
-	public void sortInAscendingOrder( int j, Object s1, Object s2) {
-		Object temp = s2;
-		this.getField().set(j,s1);
-		this.getField().set(j-1,temp);
-	}
+  /**
+   * Returns void.
+   * Fills the Primary Key Field.
+   * @param data user's insertion.
+   */
+
+  public void fillPrimaryKeyField(Object data) { /*checkstyle checked*/
+    boolean unique = this.checkUniqueness(data);
+    while (!unique) {
+      System.out.print("This data already exists. Try again: ");
+      data = this.getType().getData();
+      unique = this.checkUniqueness(data);
+    }
+    this.getField().add(data);
+  }
+
+  /**
+   * Returns true if the data is unique.
+   * Use for Primary Key Field.
+   * @param data user's insertion.
+   */
+
+  public boolean checkUniqueness(Object data) { /*checkstyle checked*/
+    boolean unique = true;
+    for (Object f : field) {
+      if (f.equals(data)) {
+        unique = false;
+      }
+    }
+    return unique;
+  }
+
+  /*
+   * Create name for a foreign key Column object,
+   * by using String.concat(String) method to combine the phrase "FK_from_",
+   * with the Table object's name that foreign key Column object is coming from
+   * Then, set the new name as this Column object's name
+   * @param Table object, that the foreign key Column object is coming from
+   */
+
+  public void createFkColumnName(Table table) { /*checkstyle checked*/
+    String name = ("Fk_from_").concat(table.getName());
+    setName(name);
+  }
 
 
-	/**
-	*changes the data in order to create a table in descending order
-	*/
-	public void sortInDescendingOrder( int j, Object s1, Object s2) {
-		Object temp= s1;
-		this.getField().set(j-1,s2);
-		this.getField().set(j,temp);
-	}
+  public void searchElement(Object element) { /*checkstyle checked*/
+    ArrayList<Integer> rows = matchingRows(element);
+    if (rows.size() != 0) {
+      System.out.println(element);
+      System.out.print("found in row(s):");
+      for (Integer row : rows) {
+        System.out.println(row + 1);
+      }
+    } else {
+      System.out.print(element);
+      System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
+      Boolean answer = Database.findDecision();
+      if (answer) {
+        Menu.searchingMenu();
+      }
+    }
+  }
 
-	public Integer findPKeyPosition(Object key) {
-		if (isPrimaryKey) {
-			ArrayList <Integer> positions = matchingRows(key);
-			if (!positions.isEmpty()) {
-				return positions.get(0);
-			}
-		}
-		return -1;
-	}
+  public ArrayList<Integer> matchingRows(Object element) { /*checkstyle checked*/
+    ArrayList<Integer> rows = new ArrayList<Integer>();
+    for (int i = 0; i < getField().size(); i++) {
+      if (element.equals(getField().get(i))) {
+        rows.add(i);
+      }
+    }
+    return rows;
+  }
+
+  public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) { /*checkstyle checked*/
+    ArrayList<Integer> rows = new ArrayList<Integer>();
+    ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
+    for (Object foreign : foreigns) {
+      rows = matchingRows(foreign);
+      if (rows.size() != 0) {
+        toBeReturned.add(rows.get(0));
+      }
+    }
+    return toBeReturned;
+  }
+
+  /**
+  *changes the data in order to create a table in ascesing order.
+  */
+
+  public void sortInAscendingOrder(int j, Object s1, Object s2) { /*checkstyle checked*/
+    Object temp = s2;
+    this.getField().set(j,s1);
+    this.getField().set(j - 1,temp);
+  }
+
+  /**
+  *changes the data in order to create a table in descending order.
+  */
+
+  public void sortInDescendingOrder(int j, Object s1, Object s2) {  /*checkstyle checked*/
+    Object temp = s1;
+    this.getField().set(j - 1,s2);
+    this.getField().set(j,temp);
+  }
+
+  public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
+    if (isPrimaryKey) {
+      ArrayList<Integer> positions = matchingRows(key);
+      if (!positions.isEmpty()) {
+        return positions.get(0);
+      }
+    }
+    return -1;
+  }
+
 }
