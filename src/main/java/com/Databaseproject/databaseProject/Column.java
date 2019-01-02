@@ -96,7 +96,12 @@ public class Column implements Serializable{
 
 	}
 
-
+   /*
+    * Creates the right FieldType object, based on a choice
+    * This is a static mrthod
+    * @param choice
+    * @return FieldType object, that is created
+    */
 	public static FieldType findType(int choice) {
 		FieldType type;
 		switch (choice) {
@@ -118,13 +123,13 @@ public class Column implements Serializable{
 	 */
 	public void fillPrimaryKeyField(Object data) {
 
-			boolean unique = this.checkUniqueness(data);
-			while (!unique) {
-				System.out.print("This data alredy exists. Try again: ");
-				data = this.getType().getData();
-				unique = this.checkUniqueness(data);
-			}
-			this.getField().add(data);
+		boolean unique = this.checkUniqueness(data);
+		while (!unique) {
+			System.out.print("This data already exists. Try again: ");
+			data = this.getType().getData();
+			unique = this.checkUniqueness(data);
+		}
+		this.getField().add(data);
 	}
 
 	/**
@@ -144,12 +149,19 @@ public class Column implements Serializable{
 
 	}
 
+	/*
+	 * Create name for a foreign key Column object,
+	 * by using String.concat(String) method to combine the phrase "FK_from_",
+	 * with the Table object's name that foreign key Column object is coming from
+	 * Then, set the new name as this Column object's name
+	 * @param Table object, that the foreign key Column object is coming from
+	 */
 	public void createFkColumnName(Table table) {
 
 		String name =("Fk_from_").concat(table.getName());
 		setName(name);
-
 	}
+
 
 	public void searchElement(Object element) {
 		ArrayList<Integer> rows = matchingRows(element);

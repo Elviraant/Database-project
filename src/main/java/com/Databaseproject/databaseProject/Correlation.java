@@ -7,8 +7,8 @@ import java.io.Serializable;
 public class Correlation implements Serializable {
 
 	protected String name;
-	protected Table table1; //entity 1
-	protected Table table2; //entity 2
+	protected Table table1; //entity/table 1
+	protected Table table2; //entity/table 2
 
 	/**
 	*Constructor for Correlation class

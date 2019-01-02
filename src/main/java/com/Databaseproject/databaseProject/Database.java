@@ -58,6 +58,22 @@ public class Database implements Serializable {
 		return correlations;
 	}
 
+	/**
+	 * Checks, if a table's name, in a database, is unique
+	 * @param name name of the table
+	 * @return boolean true, if the name is unique, false otherwise
+	 */
+	public boolean uniqueTableName(String name) {
+
+		boolean exists = true;
+		for(Table t : tables) {
+			if((t.getName()).equals(name)) {
+				exists = false;
+			}
+		}
+		return exists;
+	}
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException{
 		Database d1 = Database.startBase();
 		d1.manageTables();
@@ -123,10 +139,19 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Method, that create a new table in this Database
+	 * Method calls uniqueTableName(String name) method, and checks the uniqueness of user's insertion
+	 * @returns Table database's new table/entity
+	 */
 	public Table createNewTable() {
 		Scanner cs = new Scanner(System.in);
 		System.out.println("Name of table:");
 		String name = cs.next();
+		while(!uniqueTableName(name)) {
+			System.out.print("This name already exists. Please try with another: ");
+			name = cs.next();
+		}
 		return new Table(name, this);
 	}
 
@@ -334,82 +359,140 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * A.Defines a Correlation by checking the following
+	 * 1st Table objects in the Database, must be more than one
+	 * 2nd Table objects must be different
+	 * 3rd Table objects don't participate again in a same Correlation
+	 * 4th Table objects must have a primary Key List
+	 * B.User insert the name of the Correlation
+	 * Returns nothing
+	 */
 	public void defineCorrelation() {
 		if ((getTableCounter() != 1)) {
-			System.out.println("Please choose the entities you want to relate"); //check for Pk column
-			System.out.print("First table: ");
-			Table table1 = chooseTable();
-			table1 = chooseRightTableForCorrelation(table1);
-			System.out.print("Second table: ");
-			Table table2 = chooseTable();
-			table2 = chooseRightTableForCorrelation(table2);
-			do {											//diffrent tables
-				if (table2.equals(table1)) {
-					System.out.println("Error: Same table chosen");
-					System.out.println("Please try again");
-					table2 = chooseTable();
+			Table table1;
+			Table table2;
+			do {
+				System.out.println("Please choose the entities you want to relate");
+				System.out.print("First table: ");
+				table1 = chooseTable();
+				System.out.print("Second table: ");
+				table2 = chooseTable();
+				table1 = setUpTableForCorrelation(table1);
+				table2 = setUpTableForCorrelation(table2);
+
+				if(checkingCorrelation(table1, table2)) {
+					System.out.println("Correlation with tables/entities " + table1.getName() + " and " + table2.getName() + " already exists.");
 				}
-			} while (table2.equals(table1));
+		 	} while(checkingCorrelation(table1, table2));
+
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
 			String name = sc.next();
-			int option = Menu.correlationOptions();
-			System.out.println(option);
-			switch (option) {
-				case (1):OneToOne c1 = new OneToOne(name, table1, table2);
-						 correlations.add(c1);
-						 c1.fillForeignKeyColumn();
-						  break;
-				case (2): OneToMany c2 = new OneToMany(name, table1, table2);
-						  correlations.add(c2);
-						  c2.fillForeignKeyColumn();
-						  break;
-				case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
-						  correlations.add(c3);
-						  c3.fillForeignKeyColumn();
-						  break;
-			}
 
+			createCorrelation(name, table1, table2);
 			table2.printHeader();
-	 	} else {
+		} else {
 			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");
 		}
 	}
 
-	public Table chooseRightTableForCorrelation(Table table) {
+	/**
+	 * If a Table has not primary key Column, this method will provide to user an option.
+	 * Add and full a Primary Key Column
+	 * @return Table same Table, if a pk Column already exists, OR same Table with one more Column
+	 */
+	public Table setUpTableForCorrelation(Table table) {
 			while(!table.primaryKeyColumnExists()) {
-				System.out.println("This table doesn't have a primary key Column.");
-				int choice = Menu.menuForNoPkColumn();
-				switch (choice)
-				{
-					case 1:
-						table = chooseTable();
-						//return true;
-						break;
-					case 2:
-						table = chooseTable();
-						//return false;
-						break;
-					default:
-						//return false;
-						break;
-				}
-
+				System.out.print("Table " + table.getName() + " doesn't have a primary key Column.");
+				System.out.println("It's time to add one: ");
+				table.addPrimaryKeyColumn();
 			}
 			return table;
 	}
 
-	public boolean checkingCorrelation(Table table1,Table table2) {
-		boolean exists;
+	/**
+	 * Checks, if a correlation already exists
+	 * @param table1 first table/entity in correlation
+	 * @param table2 second table/entity in correlation
+	 * @return boolean This returns true if this correlation already exists
+	 */
+	public boolean checkingCorrelation(Table table1, Table table2) {
+		boolean exists = false;
 		for(Correlation c : correlations) {
 			if((c.getTable1().equals(table1) && c.getTable2().equals(table2))
 				|| (c.getTable1().equals(table2) && c.getTable2().equals(table1))) {
 				exists = true;
 			}
 		}
-		return true; //not ready yet
+		return exists;
 	}
 
+	/**
+	 * Define which table will have the foreign key Column
+	 * @param table1 first table/entity in correlation
+	 * @param table2 second table/entity in correlation
+	 * @return Table table who will have the foreign key Column
+	 */
+	public Table defineTable2(Table table1, Table table2) {
+
+		int choice = Menu.tablesInCorrelationMenu(table1, table2);
+		if (choice == 1) {
+			return table1;
+		} else {
+			return table2;
+		}
+	}
+
+	/**
+	 * Checks, if the user correlate same tables
+	 * Returns Table object
+	 * @param table1 first table/entity in correlation
+	 * @param table2 second table/entity in correlation
+	 */
+	public Table checkDiffrentTables(Table table1, Table table2) {
+			do {
+				if (table2.equals(table1)) {
+					System.out.println("Error: Same table chosen");
+					System.out.println("Please try again");
+					table2 = chooseTable();
+				}
+			} while (table2.equals(table1));
+			return table2;
+	}
+
+	/**
+	 * User chooses from a menu the type of correlation, that suits him
+	 * @param name name of correlation
+	 * @param table1 first table/entity of this correlation
+	 * @param table1 second table/entity of this correlation
+	 */
+	public void createCorrelation(String name, Table table1, Table table2) {
+		int option = Menu.correlationOptions();
+		System.out.println(option);
+		if(option == 1 || option == 2) {
+			if(!defineTable2(table1, table2).equals(table2)) { //method
+				Table temp = table2;
+				table2 = table1;
+				table1 = temp;
+			}
+		}
+		switch (option) {
+			case (1): OneToOne c1 = new OneToOne(name,table1, table2);
+					  correlations.add(c1);
+					  c1.fillForeignKeyColumn();
+					  break;
+			case (2): OneToMany c2 = new OneToMany(name, table1, table2);
+					  correlations.add(c2);
+					  c2.fillForeignKeyColumn();
+					  break;
+			case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
+					  correlations.add(c3);
+					  c3.fillForeignKeyColumn();
+					  break;
+			}
+	}
 
 }
+
 

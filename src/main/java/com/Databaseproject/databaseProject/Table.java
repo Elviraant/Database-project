@@ -92,52 +92,99 @@ public class Table implements Serializable {
         setFieldNames();
     }
 
+	/*
+	 * Set the Column's names until the user insert EXIT
+	 * Method setFieldNames() calls setFieldType(String) to create a Column object
+	 * Returns nothing
+	 */
     public void setFieldNames() {
-        Scanner cs = new Scanner(System.in);
-        System.out.println("Set the names of the fields that you want to create\nEnter EXIT to stop");
-        // int counter = 1;
-        // columnCounter = 1;
-        System.out.print("#" + columnCounter + " Field Name: ");
-        String nameOfField = cs.next();
-        System.out.println();
 
-        while (!nameOfField.equals("EXIT")) {
-
-            System.out.println("Please choose one of the following data types:");
-            System.out.println();
-            System.out.println("1. Integer\n2. Double\n3. Text\n4. Own Type");
-
-            int choice = Database.choice(1, 4);
-            if (choice == 1 || choice == 2 || choice == 3) {
-                FieldType type = Column.findType(choice);
-                new Column(nameOfField, type, this);
-            } else if (choice == 4) {
-                EnumeratedType type = new EnumeratedType();
-                type.defineEnumeration();
-                new Column(nameOfField, type, this);
-            }
-            // counter++;
-            System.out.println();
-            System.out.println("Please insert name of the next field");
-            System.out.print("#" + columnCounter + " Field Name: ");
-
-            int check = -2;
-            while (check != -1) {
-                nameOfField = cs.next();
-                check = this.containsName(nameOfField);
-                if (check != -1) {
-                    System.out.println("That name already exists. Please try with another: ");
-                }
-            }
-
-        }
+        System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
+		String nameOfField = nameAColumn();
+		 while (!nameOfField.equals("EXIT")) {
+			Scanner sc = new Scanner(System.in);
+			setFieldType(nameOfField);
+			nameOfField = nameAColumn();
+			nameOfField = uniqueFieldName(nameOfField);
+		}
         System.out.println();
     }
+
+	/*
+	 * User decide the type for Column FieldType type and create a Column object
+	 * Method calls the fieldTypesMenu() and if choice is 1, 2 or 3 create the Column object
+	 * If choice is number 4, the Column object is created, but first method calls defineEnumeration() method
+	 * Returns nothing
+	 * @param nameOfField Column object's name
+	 */
+    public void setFieldType(String nameOfField) {
+
+		System.out.println("Please choose one of the following data types:");
+		System.out.println();
+		int choice = Menu.fieldTypesMenu();
+
+		if (choice == 1 || choice == 2 || choice == 3) {
+		    FieldType type = Column.findType(choice);
+		    new Column(nameOfField, type, this);
+		} else if (choice == 4) {
+		    EnumeratedType type = new EnumeratedType();
+		    type.defineEnumeration();
+		    new Column(nameOfField, type, this);
+        }
+	}
+
+	/*
+	 * Set one Column object's name
+	 * @return String Column object's name
+	 */
+	public String nameAColumn() {
+		Scanner sc = new Scanner(System.in);
+        System.out.print("#" + columnCounter + " Field Name: ");
+        String nameOfField = sc.next();
+        System.out.println();
+        return nameOfField;
+	}
+
+   /*
+   	* Checks, if the Column object's name is unique in this Table
+   	* If it is not, user will insert again a name until it is unique in this Table
+   	* @param nameOfField name for checking
+   	* @return String tested name
+   	*/
+	public String uniqueFieldName(String nameOfField) {
+		Scanner sc = new Scanner(System.in);
+		int check = this.containsName(nameOfField);
+		while (check != -1) {
+			System.out.println("That name already exists. Please try with another: ");
+			nameOfField = sc.next();
+			check = this.containsName(nameOfField);
+		}
+		return nameOfField;
+	}
+
+   /*
+    * Adds a Column object, that is primary key, in a Table object
+    * Calls nameAColumn() method to have a Column name
+    * Calls uniqueFieldName(String) to check if this name is unique
+    * Calls setFieldType(String) to create the right Column object
+    * Sets Column objects as a primary key -column object is the last element in ArrayList columns at this moment-
+    * Calls columnFillerByColumn() to fill the new Column object
+    * @returns Table same Table with a Primary key Column object
+    */
+	public Table addPrimaryKeyColumn() {
+		String name = nameAColumn();
+		uniqueFieldName(name);
+		setFieldType(name);
+		columns.get((columnCounter - 1)).setPrimaryKey(true);
+		columnFillerByColumn();
+		return this;
+	}
 
 
     /*
      * Defines, which Column is the primary Key field Checks, if the name of a field
      * exists at this Table If it exists, sets the boolean instance variable true
+     * Returns nothing
      */
     public void definePrimaryKey() {
         Scanner cs = new Scanner(System.in);

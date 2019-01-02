@@ -2,6 +2,12 @@
 import java.io.Serializable;
 public class Menu implements Serializable{
 
+	public static int fieldTypesMenu() {
+
+		System.out.println("1. Integer\n2. Double\n3. Text\n4. Own Type");
+		System.out.println("Please chose one of the above options: ");
+		return Database.choice(1, 4);
+	}
 	public static void presentationMenu() {
 		System.out.println();
 		System.out.println("Presentation Options:");
@@ -73,14 +79,6 @@ public class Menu implements Serializable{
 		return Database.choice(1,4);
 	}
 
-	public static int menuForNoPkColumn() {
-		System.out.println(String.format("%s\n%s\n"
-							,"1. Add a Primary Key Column"
-							,"2. Choose another table"));
-		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,2);
-	}
-
 	public static int manageCorrelationsMenu() {
 		System.out.println(String.format("%s\n%s\n%s\n%S\n"
 							,"1. How many correlations have I created?"
@@ -112,6 +110,15 @@ public class Menu implements Serializable{
 
 	public static void printTryAgainMessage() {
 		System.out.println("Try again.");
+	}
+
+	public static int tablesInCorrelationMenu(Table table1, Table table2) {
+
+		System.out.println("Choose the table, that in your Correlation has the foreign key column: ");
+		System.out.println(String.format("%s%s", "1. " , table1.getName()));
+		System.out.println(String.format("%s%s", "2. " , table2.getName()));
+		System.out.println("Please choose one of the above options: ");
+		return Database.choice(1,2);
 	}
 }
 
