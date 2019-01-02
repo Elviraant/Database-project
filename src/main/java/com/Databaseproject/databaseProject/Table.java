@@ -363,45 +363,6 @@ public class Table implements Serializable {
 
     }
 
-	/** deletes any column you want(one or more)*/
-	public void deleteColumns() {
-		Scanner cs = new Scanner(System.in);
-		boolean continueProcess = true;
-		int y = 0;
-		while (continueProcess) {
-			int x = inputFieldName("delete");
-			if (x != -1) {
-				Column column = columns.get(x);
-				if (column.getPrimaryKey()) {
-					System.out.println("This column is primary key. Cannot be deleted!");
-				} else if (column.getForeignKey()) {
-					System.out.println("This column is foreign key. Cannot be deleted");
-				} else {
-					columns.remove(x);
-					columnCounter--;
-					if (!primaryKeyColumnExists()) {
-						if (columnCounter == 1) {
-							columns.remove(0);
-							columnCounter=0;
-							System.out.println("You deleted all the columns of the table");
-							continueProcess = false;
-							y=1;
-						}
-					} else {
-						if (columnCounter ==2) {
-							System.out.println("You can't delete another column.");
-							continueProcess = false;
-							y=1;
-						}
-					}
-				}
-			}
-			if (y==0) {
-				System.out.println("Delete another column?");
-				continueProcess = Database.findDecision();
-			}
-		}
-	}
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
@@ -1134,6 +1095,47 @@ public class Table implements Serializable {
 				deleteRow(j-counter);
 				counter++;
 			}
+	}
+
+	/** deletes any column you want(one or more)*/
+	public void deleteColumns() {
+		Scanner cs = new Scanner(System.in);
+		boolean continueProcess = true;
+		int y = 0;
+		while (continueProcess) {
+			int x =  inputFieldName("delete");
+			if (x != -1) {
+				Column column = columns.get(x);
+				if (column.getPrimaryKey()) {
+					System.out.println("This column is primary key. Cannot be deleted!");
+				} else if (column.getForeignKey()) {
+					System.out.println("This column is reference from another table and can't be deleted");
+					System.out.println("To delete this column please delete the correlation between the tables");
+				} else {
+					columns.remove(x);
+					columnCounter--;
+					if (!primaryKeyColumnExists()) {
+						if (columnCounter == 1) {
+							columns.remove(0);
+							columnCounter=0;
+							System.out.println("You deleted all the columns of the table");
+							continueProcess = false;
+							y=1;
+						}
+					} else {
+						if (columnCounter ==2) {
+							System.out.println("You can't delete another column.");
+							continueProcess = false;
+							y=1;
+						}
+					}
+				}
+			}
+			if (y==0) {
+				System.out.println("Delete another column?");
+				continueProcess = Database.findDecision();
+			}
+		}
 	}
 
 	/**
