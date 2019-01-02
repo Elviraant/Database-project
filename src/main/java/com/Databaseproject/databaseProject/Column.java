@@ -106,7 +106,7 @@ public class Column implements Serializable {
   public static FieldType findType(int choice) {
     FieldType type;
     switch (choice) {
-      case 1: { type = new IntegerType(); } 
+      case 1: { type = new IntegerType(); }
         break;
       case 2: { type = new DoubleType(); }
         break;
@@ -232,4 +232,5 @@ public class Column implements Serializable {
     }
     return -1;
   }
+
 }
