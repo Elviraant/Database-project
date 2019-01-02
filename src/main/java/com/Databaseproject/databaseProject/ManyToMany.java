@@ -110,6 +110,9 @@ public class ManyToMany extends Correlation {
 			}
 	}
 
+
+
+
 	@Override
 	public void viewProperties() {
 		boolean continueProcess = true;
@@ -208,8 +211,4 @@ public class ManyToMany extends Correlation {
 			return pKColumn1().getType().getData();
 
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e216793f42c95835a9f0f9f07e6185065cec63a
 }
