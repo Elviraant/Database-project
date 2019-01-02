@@ -378,6 +378,7 @@ public class Database implements Serializable {
 				table1 = chooseTable();
 				System.out.print("Second table: ");
 				table2 = chooseTable();
+				table2 = checkDiffrentTables(table1, table2);
 				table1 = setUpTableForCorrelation(table1);
 				table2 = setUpTableForCorrelation(table2);
 
