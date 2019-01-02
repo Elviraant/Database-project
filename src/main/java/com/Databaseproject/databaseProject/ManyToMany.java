@@ -43,77 +43,72 @@ public class ManyToMany extends Correlation {
 
 	public void fillForeignKeyColumn() {
 
-		Column primaryKeyColumn1 = pKColumn1();
-		Column primaryKeyColumn2 = pKColumn2();
+	Column primaryKeyColumn1 = pKColumn1();
+	Column primaryKeyColumn2 = pKColumn2();
 
-		createTableLists(table1, column1);
-		createTableLists(table1, column2);
+	createTableLists(table1, column1);
+	createTableLists(table2, column2);
 
-		for ( int i = 0; i < table2.getNumberOfRows(); i++) {
-			ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
-			boolean continueProcess = true;
-			int q =0;
-			Object pKey2 = primaryKeyColumn2.getField().get(i);
-			printPrimaryKeyColumns();
+	for ( int i = 0; i < table2.getNumberOfRows(); i++) {
+		ArrayList <Object> foreignKeys2 = new ArrayList<Object>();
+		boolean continueProcess = true;
+		int q =0;
+		Object pKey2 = getPKey2(i);
+		printPrimaryKeyColumns();
 			while (continueProcess) {
-				boolean repeat = true;
-				q++;
-				while (repeat) {
-
-					System.out.println("Insert the primary key of the #" + q +  " record that is correlated with "
-										+ pKey2 + " from " + table2.getName() + ": ");
-
-					Object key = primaryKeyColumn1.getType().getData();
-					int pos = primaryKeyColumn1.getField().indexOf(key);
-					if (pos != -1) {
-						boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
-						if (check) {
-							foreignKeys2.add(key);
-							column1.getForeignKeys().get(pos).add(pKey2);
-							repeat = false;
+					boolean repeat = true;
+					q++;
+					while (repeat) {
+						Object key = printInsertionMessage(pKey2, q);
+						Integer pos = primaryKeyColumn1.findPKeyPosition(key);
+						if (pos != -1) {
+							boolean check = checkForeignKeysUniqueness(foreignKeys2, key);
+							if (check) {
+								foreignKeys2.add(key);
+								column1.getForeignKeys().get(pos).add(pKey2);
+								repeat = false;
+							} else {
+								printAlreadyCorrelatedMessage();
+								repeat = Menu.printTryAgainQuestionMessage();
+							}
 						} else {
-							System.out.println("This record is already correlated with another record from " + table2.getName()
-											+ ". Do you want to try again?");
-							repeat = Database.findDecision();
-						}
-					} else {
-						System.out.println("This primary key doesn't exist.");
-						/*if ( q == 1) {
-							System.out.println("Try again.");
-						} else {*/
-							System.out.println("Do you want to try again?");
-							repeat = Database.findDecision();
+							Menu.printNonExistantKeyMessage();
+							/*if ( q == 1) {
+								System.out.println("Try again.");
+							} else {*/
+							repeat = Menu.printTryAgainQuestionMessage();
 
+						}
 					}
-				}
 					System.out.println("Are there any other correlated records of " + pKey2 + ": ");
 					continueProcess = Database.findDecision();
-				}
+					}
 
-				if (!foreignKeys2.isEmpty()) {
-					column2.getForeignKeys().set( i , foreignKeys2);
-			}
-			System.out.println("" + column1.getName() + "");
-			for ( ArrayList <Object> c: column1.getForeignKeys() ) {
-				for ( Object a: c) {
-					System.out.print( "" + a + "   |");
+					if (!foreignKeys2.isEmpty()) {
+						column2.getForeignKeys().set( i , foreignKeys2);
 				}
-				System.out.println();
-			}
-			System.out.println("" + column2.getName() + "");
-			for ( ArrayList <Object> c: column2.getForeignKeys() ) {
-				for ( Object a: c) {
-					System.out.print( "" + a + "   |");
+				System.out.println("" + column1.getName() + "");
+				for ( ArrayList <Object> c: column1.getForeignKeys() ) {
+					for ( Object a: c) {
+						System.out.print( "" + a + "   |");
+					}
+					System.out.println();
 				}
-				System.out.println();
+				System.out.println("" + column2.getName() + "");
+				for ( ArrayList <Object> c: column2.getForeignKeys() ) {
+					for ( Object a: c) {
+						System.out.print( "" + a + "   |");
+					}
+					System.out.println();
+				}
 			}
-		}
 
-}
+	}
+
 	public void createTableLists(Table table, Column column) {
-		for (int i = 0; i < table.getNumberOfRows(); i++) {
-			column.getForeignKeys().add(new ArrayList <Object>());
-		}
+			for (int i = 0; i < table.getNumberOfRows(); i++) {
+				column.getForeignKeys().add(new ArrayList <Object>());
+			}
 	}
 
 	@Override
@@ -129,7 +124,7 @@ public class ManyToMany extends Correlation {
 					System.out.println("This is a many-to-many correlation");
 					System.out.println();
 					System.out.println("Multiple records of one table are linked to multiple tables of the other");
-					System.out.println(String.format("\n\n"));
+					System.out.println();
 					break;
 				case 2:
 					break;
@@ -173,9 +168,11 @@ public class ManyToMany extends Correlation {
 		Column pKColumnOfSearched = searched.getColumns().get(posPK2);
 		ArrayList<ArrayList<Object>> foreignsWithKeys = fKColumnOfKeys.getForeignKeys();
 		ArrayList<Object> foreigns = foreigns(pKColumnOfKeys,foreignsWithKeys);
-		if (foreigns != null ) {
+		if (foreigns != null) {
 			ArrayList<Integer> rows = pKColumnOfSearched.matchingRows(foreigns);
 			printRelated(rows, searched);
+		} else {
+			System.out.println("Match not found");
 		}
 	}
 
@@ -183,15 +180,17 @@ public class ManyToMany extends Correlation {
 		System.out.println("Please insert a primary key of the above table: ");
 		Object element = column.getType().getData();
 		ArrayList<Integer> rows = new ArrayList<Integer>();
+
 		ArrayList <Integer> rowWithForeign = column.matchingRows(element);
 		if (rowWithForeign.size() != 0) {
 			rows.add(rowWithForeign.get(0));
 			return foreignKeys.get(rows.get(0));
 		} else {
-			System.out.println("No correaltion found for this record");
+			System.out.println("No correlated records found");
 			return null;
 		}
 	}
+
 
 	public boolean checkForeignKeysUniqueness(ArrayList <Object> foreignKeys, Object element) {
 		if (!foreignKeys.isEmpty()) {
@@ -204,4 +203,10 @@ public class ManyToMany extends Correlation {
 		return true;
 	}
 
+	public Object printInsertionMessage(Object pKey, int i) {
+			System.out.println("Insert the primary key of the #" + i +  " record that is correlated with "
+										+ pKey + " from " + table2.getName() + ": ");
+			return pKColumn1().getType().getData();
+
+	}
 }
