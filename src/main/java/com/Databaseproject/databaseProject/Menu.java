@@ -127,5 +127,15 @@ public class Menu implements Serializable{
 		System.out.println("Table " + table.getName() + " references another table of the base.");
 		System.out.println();
 	}
+
+
+	public static void printColumnReferredMessage(String function) {
+		System.out.println("This column is referred by another table and can't " + function);
+
+	}
+
+	public static void printColumnRefersMessage(String function) {
+		System.out.println("This column refers to another table and can't " + function);
+	}
 }
 

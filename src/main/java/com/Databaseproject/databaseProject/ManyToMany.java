@@ -76,9 +76,6 @@ public class ManyToMany extends Correlation {
 						}
 					} else {
 						Menu.printNonExistantKeyMessage();
-							/*if ( q == 1) {
-								System.out.println("Try again.");
-							} else {*/
 							repeat = Menu.printTryAgainQuestionMessage();
 						}
 					}
@@ -194,7 +191,7 @@ public class ManyToMany extends Correlation {
 	}
 
 
-	public boolean checkForeignKeysUniqueness(ArrayList <Object> foreignKeys, Object element) {
+	public static  boolean checkForeignKeysUniqueness(ArrayList <Object> foreignKeys, Object element) {
 		if (!foreignKeys.isEmpty()) {
 			for ( Object key: foreignKeys) {
 				if ( key == element) {

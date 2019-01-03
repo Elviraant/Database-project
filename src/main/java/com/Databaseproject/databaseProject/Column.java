@@ -88,8 +88,12 @@ public class Column implements Serializable {
     return foreignKeys;
   }
 
+ /*
+   *Prints an element of the field accoording to the row given.
+   *@param row
+   */
 
-  public void printElement(int row) { /*checkstyle checked*/
+   public void printElement(int row) { /*checkstyle checked*/
     String data = String.format("|%-15s|", field.get(row).toString());
     System.out.print(data);
     System.out.print("     ");
@@ -231,5 +235,6 @@ public class Column implements Serializable {
     }
     return -1;
   }
+
 
 }

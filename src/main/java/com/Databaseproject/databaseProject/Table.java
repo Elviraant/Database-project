@@ -270,13 +270,17 @@ public class Table implements Serializable {
      * Fill in with Data, Fills by row
      */
     public void columnFillerByRow() {
-        boolean continueProcess = true;
-        while (continueProcess) {
-            addRow();
-            numberOfRows++;
-            System.out.println("Do you want to continue? Y/N");
-            continueProcess = Database.findDecision();
-        }
+		if (foreignKeyColumnExists()) {
+			System.out.println("You cannot add records in tables with foreign keys");
+		} else {
+        	boolean continueProcess = true;
+        	while (continueProcess) {
+        	    addRow();
+        	    numberOfRows++;
+        	    System.out.println("Do you want to continue? Y/N");
+        	    continueProcess = Database.findDecision();
+        	}
+		}
         // numberOfRows+= insertions;
     }
 
@@ -288,27 +292,20 @@ public class Table implements Serializable {
                 column.getField().add(numberOfRows + 1);
             } else {
                 System.out.println("Give " + column.getName());
-                Object data = column.getType().getData();
-                if (column.getPrimaryKey()) { //if is primary key
-                    column.fillPrimaryKeyField(data);
-				} else if (column.getForeignKey()) { //is foreign key
-					Column prKeyColumn = matchingKeys(i);
-					if (column.getPrimaryKey()) { //one to one correlation
-					//method to check uniqueness of data in one to one
-					//add data in field
-					} else if (column.getForeignKeys().size() != 0) { //many to many correlation
-					//method to check uniqueness of data in many to many
-					//add data in arraylist of foreign keys
-					} else { //one to many correlation
-					//same with one to one without checking uniqueness of data in field
-					}
-                } else {
-                    column.getField().add(data); //neither foreign, nor primary
+
+                	Object data = column.getType().getData();
+				if (column.getPrimaryKey()) { //if is primary key
+                	 column.fillPrimaryKeyField(data);
                 }
-            }
+				else {
+                    column.getField().add(data);
+                    //neither foreign, nor primary
+                }
+			}
+
         }
 
-    }
+}
 
     public Column matchingKeys(int position) {
 		Column prKey = null;
@@ -837,27 +834,35 @@ public class Table implements Serializable {
                 System.out.println("#" + (i) + " Field: ");
                 System.out.println("Give the new value of " + x.getName());
                 Boolean answer = false;
-                do {
-                    Object nValue = x.getType().getData();
-                    if (x.getPrimaryKey()) {
-                        if (x.checkUniqueness(nValue)) {
-                            x.getField().set(row, nValue);
-                            System.out.println("Change completed successfully");
-                            answer = false;
-                        } else {
-                            System.out.println(
-                                    "This value of primary key already exists.Do you want to try again?(Yes/No)");
-                            answer = Database.findDecision();
-                            if (answer) {
-                                System.out.println("Enter new value again :");
-                            }
-                        }
-                    } else {
-                        x.getField().set(row, nValue);
-                        System.out.println("Change completed successfully.");
-                        answer = false;
-                    }
-                } while (answer);
+                if (x.getForeignKey()) {
+					Menu.printColumnRefersMessage("change its element");
+				} else if (x.getPrimaryKey() && references) {
+					Menu.printColumnReferredMessage("change its element");
+				} else {
+                	do {
+                	    Object nValue = x.getType().getData();
+                	    if (x.getPrimaryKey()) {
+
+                	        	if (x.checkUniqueness(nValue)) {
+                	        	    x.getField().set(row, nValue);
+                	        	    System.out.println("Change completed successfully");
+                	        	    answer = false;
+                	        	} else {
+                	        	    System.out.println(
+                	        	            "This value of primary key already exists.Do you want to try again?(Yes/No)");
+                	        	    answer = Database.findDecision();
+                	        	    if (answer) {
+                	        	        System.out.println("Enter new value again :");
+               		        	    }
+                	        	}
+
+                	    } else {
+                	        x.getField().set(row, nValue);
+                	        System.out.println("Change completed successfully.");
+                	        answer = false;
+                	    }
+               		 } while (answer);
+				}
                 if (i != columnCounter-1) {
                     System.out.println("Do you want to continue? (Yes/No)");
                     continueProcess = Database.findDecision();
@@ -878,20 +883,24 @@ public class Table implements Serializable {
         Boolean answer = true;
         if (pos != -1) {
             Column col = this.getColumns().get(pos);
-            while (answer) {
-                System.out.println("Give the new name of the field");
-                String newName = name.getData();
-                int k = this.containsName(newName);
-                if (k == -1) {
-                    col.setName(newName);
-                    answer = false;
-                    System.out.println("Change completed successfully");
-                } else {
-                    System.out.println("This name is already in use.");
-                    System.out.println("Do you want to try again?");
-                    answer = Database.findDecision();
-                }
-            }
+            if (col.getForeignKey()) {
+				Menu.printColumnRefersMessage("change its name");
+			} else  {
+        	    while (answer) {
+        	        System.out.println("Give the new name of the field");
+        	        String newName = name.getData();
+        	        int k = this.containsName(newName);
+        	        if (k == -1) {
+        	            col.setName(newName);
+       		            answer = false;
+        	            System.out.println("Change completed successfully");
+        	        } else {
+        	            System.out.println("This name is already in use.");
+        	            System.out.println("Do you want to try again?");
+        	            answer = Database.findDecision();
+        	        }
+            	}
+			}
         }
     }
 
@@ -926,6 +935,15 @@ public class Table implements Serializable {
         }
         return -1;
     }
+
+    public boolean foreignKeyColumnExists() {
+		for (Column c : columns) {
+		   if (c.getForeignKey()) {
+		      return true;
+            }
+	 	}
+		return false;
+	}
 
     public boolean primaryKeyColumnExists() {
         boolean exists = false;
@@ -984,33 +1002,40 @@ public class Table implements Serializable {
             int row = Database.choice(1, numberOfRows) - 1;
             if (row != -1) {
                 Column x = columns.get(pfield);
-                System.out.println("Enter the new value of element you want to change :");
-                Boolean answer = false;
-                do {
-                    Object nValue = x.getType().getData();
-                    if (x.getPrimaryKey()) {
-                        if (x.checkUniqueness(nValue)) {
-                            x.getField().set(row, nValue);
-                            System.out.println("Change completed successfully");
-                            answer = false;
-                        } else {
-                            System.out.println(
-                                    "This value of primary key already exists. Do you want to try again?(Yes/No)");
-                            answer = Database.findDecision();
-                            if (answer) {
-                                System.out.println("Enter new value again :");
-                            }
-                        }
-                    } else {
-                        x.getField().set(row, nValue);
-                        System.out.println("Change completed successfully.");
-                        answer = false;
-                    }
-                } while (answer);
-            } else {
-                System.out.println("The record you typed is probably incorrect.");
-            }
-        }
+                if (x.getForeignKey()) {
+					Menu.printColumnRefersMessage("be changed");
+				} else if (x.getPrimaryKey() && references) {
+					Menu.printColumnReferredMessage("be changed");
+				} else {
+                	System.out.println("Enter the new value of element you want to change :");
+                	Boolean answer = false;
+                	do {
+                	    Object nValue = x.getType().getData();
+                	    if (x.getPrimaryKey()) {
+                	        	if (x.checkUniqueness(nValue)) {
+                	        	    x.getField().set(row, nValue);
+                	        	    System.out.println("Change completed successfully");
+                	        	    answer = false;
+                	        	} else {
+                	        	    System.out.println(
+                	        	            "This value of primary key already exists. Do you want to try again?(Yes/No)");
+                	        	    answer = Database.findDecision();
+                	        	    if (answer) {
+                	        	        System.out.println("Enter new value again :");
+                	        	    }
+                	        	}
+
+                	   	} else {
+                	    	    x.getField().set(row, nValue);
+                	    	    System.out.println("Change completed successfully.");
+                	    	    answer = false;
+                	    }
+                	} while (answer);
+					}
+            	} else {
+            	    System.out.println("The record you typed is probably incorrect.");
+            	}
+        	}
     }
 
     public void sameValue() {
@@ -1019,7 +1044,9 @@ public class Table implements Serializable {
 			Column col = this.getColumns().get(pfield);
 			if(col.getPrimaryKey()) {
 				System.out.println("This field contains Primary Keys. You are not allowed to set same values.");
-			}else {
+			}else if (col.getForeignKey()) {
+				Menu.printColumnRefersMessage("be set with same values");
+			} else {
             	System.out.println("Insert the new value of all elements");
             	Object newValue = col.getType().getData();
             	for (int i = 0; i < col.getField().size(); i++) {
@@ -1096,6 +1123,8 @@ public class Table implements Serializable {
 				counter++;
 			}
 	}
+
+
 
 	/** deletes any column you want(one or more)*/
 	public void deleteColumns() {
@@ -1303,4 +1332,6 @@ public class Table implements Serializable {
             presentColumns(print);
         }
     }
+
+
 }
