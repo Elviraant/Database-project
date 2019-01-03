@@ -271,7 +271,7 @@ public class Table implements Serializable {
      */
     public void columnFillerByRow() {
 		if (foreignKeyColumnExists()) {
-			System.out.println("You cannot add records in tables with foreign keys");
+			System.out.println("This tables refers to another table and you can't add data");
 		} else {
         	boolean continueProcess = true;
         	while (continueProcess) {
@@ -890,13 +890,13 @@ public class Table implements Serializable {
             do {
                 Column col = columns.get(i);
                 System.out.println("#" + (i) + " Field: ");
-                System.out.println("Give the new value of " + col.getName());
                 Boolean answer = false;
                 if (col.getForeignKey()) {
 					Menu.printColumnRefersMessage("change its element");
 				} else if (col.getPrimaryKey() && references) {
 					Menu.printColumnReferredMessage("change its element");
 				} else {
+                	System.out.println("Give the new value of " + col.getName());
                 	do {
                 	    Object nValue = col.getType().getData();
                 	    if (col.getPrimaryKey()) {
@@ -1174,7 +1174,7 @@ public class Table implements Serializable {
 				if (column.getPrimaryKey()) {
 					System.out.println("This column is primary key. Cannot be deleted!");
 				} else if (column.getForeignKey()) {
-					System.out.println("This column is reference from another table and can't be deleted");
+					Menu.printColumnRefersMessage("be deleted");
 					System.out.println("To delete this column please delete the correlation between the tables");
 				} else {
 					columns.remove(x);
@@ -1345,21 +1345,26 @@ public class Table implements Serializable {
    	public void sort(int result, int j, int choice) {
    		for (int k=1; k<columnCounter; k++) {
    			Column column1 = this.getColumns().get(k);
-   			Object s1 = column1.getField().get(j-1);
-   			Object s2 = column1.getField().get(j);
-   			if (choice ==1) {
-   				if (result > 0) {
-   					column1.sortInAscendingOrder(j,s1,s2);
+   			if (column1.getForeignKeys().isEmpty()) {
+   				Object s1 = column1.getField().get(j-1);
+   				Object s2 = column1.getField().get(j);
+   				if (choice ==1) {
+   					if (result > 0) {
+   						column1.sortInAscendingOrder(j,s1,s2);
+   					}
+   				} else {
+   					if (result<0) {
+   						column1.sortInDescendingOrder(j, s1,s2);
+   					}
    				}
-   			} else {
-   				if (result<0) {
-   					column1.sortInDescendingOrder(j, s1,s2);
-   				}
-   			}
+			} else {
+				column1.sortForeignKeysColumn(result, j, choice);
+			}
+
    		}
 	}
 
-    public void printPrimaryKeyColumn() {
+	 public void printPrimaryKeyColumn() {
         if (primaryKeyColumnExists()) {
             System.out.println("Table: " + name + "");
             int pos = findPrimaryKeyColumn();

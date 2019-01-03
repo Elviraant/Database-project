@@ -222,9 +222,9 @@ public class Column implements Serializable {
   */
 
   public void sortInAscendingOrder(int j, Object s1, Object s2) { /*checkstyle checked*/
-    Object temp = s2;
-    this.getField().set(j,s1);
-    this.getField().set(j - 1,temp);
+		Object temp = s2;
+    	this.getField().set(j,s1);
+    	this.getField().set(j - 1,temp);
   }
 
   /**
@@ -237,15 +237,43 @@ public class Column implements Serializable {
     this.getField().set(j,temp);
   }
 
-  public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
-    if (isPrimaryKey) {
-      ArrayList<Integer> positions = matchingRows(key);
-      if (!positions.isEmpty()) {
-        return positions.get(0);
-      }
-    }
-    return -1;
+   public void sortInAscendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
+  		ArrayList <Object> temp = s2;
+      	this.getForeignKeys().set(j,s1);
+      	this.getForeignKeys().set(j - 1,temp);
   }
+
+   public void sortInDescendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
+      ArrayList <Object> temp = s1;
+      this.getForeignKeys().set(j - 1,s2);
+      this.getForeignKeys().set(j,temp);
+  }
+
+  public void sortForeignKeysColumn(int result, int j, int choice) {
+	  ArrayList <Object> s1 = getForeignKeys().get(j-1);
+	  ArrayList <Object> s2 = getForeignKeys().get(j);
+	  	if (choice ==1) {
+	  		if (result > 0) {
+	  			sortInAscendingOrder(j,s1,s2);
+	  		}
+		} else {
+	  		if (result<0) {
+	  			sortInDescendingOrder(j, s1,s2);
+	  		}
+   		}
+	}
+
+   public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
+     if (isPrimaryKey) {
+       ArrayList<Integer> positions = matchingRows(key);
+       if (!positions.isEmpty()) {
+         return positions.get(0);
+       }
+     }
+     return -1;
+  }
+
+
 
 
 }
