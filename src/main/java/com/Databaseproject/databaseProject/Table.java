@@ -366,36 +366,59 @@ public class Table implements Serializable {
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.startingMenu();
-            int choice = Database.choice(1, 9);
-            switch (choice) {
-            case 1:
-                presentData();
-                break;
-            case 2:
-                changeData();
-                break;
-            case 3:
-                deleteData();
-                break;
-            case 4:
-                sortData();
-                break;
-            case 5:
-                addData();
-                break;
-            case 6:
-                searchData();
-                break;
-            case 7:
-                findMaxData();
-                break;
-            case 8:
-                findMinData();
-                break;
-            default:
-                continueProcess = false;
-            }
+			if (numberOfRows > 0) {
+        	    int choice = Menu.startingMenu();
+        	    switch (choice) {
+        	    case 1:
+        	        presentData();
+        	        break;
+        	    case 2:
+        	        changeData();
+        	        break;
+        	    case 3:
+        	        deleteData();
+        	        break;
+        	    case 4:
+        	    	moreOptions();
+        	    	break;
+        	    default:
+        	    	continueProcess = false;
+				}
+			} else {
+				continueProcess = false;
+				System.out.println("This table is empty");
+			}
+		}
+	}
+
+    public void moreOptions() {
+        boolean continueProcess = true;
+        while (continueProcess) {
+			if (numberOfRows > 0) {
+            	int choice = Menu.moreOptionsMenu();
+            	switch (choice) {
+				case 1:
+            	    sortData();
+            	    break;
+            	case 2:
+            	    addData();
+            	    break;
+            	case 3:
+            	    searchData();
+            	    break;
+            	case 4:
+            	    findMaxData();
+            	    break;
+            	case 5:
+            	    findMinData();
+            	    break;
+            	default:
+            	    continueProcess = false;
+				}
+            } else {
+				continueProcess = false;
+				System.out.println("This table is empty.");
+			}
         }
     }
 
@@ -404,35 +427,44 @@ public class Table implements Serializable {
         int choice;
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.deletionMenu();
-            choice = Database.choice(1, 5);
-            switch (choice) {
-            case 1:
-            	if (! references) {
-            	    deleteRows();
-            	    System.out.println("Deletion completed successfully");
+			if (numberOfRows > 0) {
+            	Menu.deletionMenu();
+            	choice = Database.choice(1, 5);
+            	switch (choice) {
+            	case 1:
+            		printAll();
+            		if (! references) {
+            		    deleteRows();
+            		    System.out.println("Deletion completed successfully");
+					} else {
+						System.out.println("This table references another table of your base");
+					}
+            	    break;
+            	case 2:
+            		printAll();
+            	    deleteColumns();
+            	    break;
+            	case 3:
+            		printAll();
+            	    deleteElements();
+            	    break;
+            	case 4:
+            		printAll();
+            	    deleteAll();
+            	    break;
+            	case 5:
+					Menu.startingMenu();
+					break;
+            	}
+            	if ((choice>=1) && (choice<5)) {
+					System.out.println("Continue with the deletion of data?");
+					continueProcess = Database.findDecision();
 				} else {
-					System.out.println("This table references another table of your base");
+					continueProcess = false;
 				}
-                break;
-            case 2:
-                deleteColumns();
-                break;
-            case 3:
-                deleteElements();
-                break;
-            case 4:
-                deleteAll();
-                break;
-            case 5:
-				Menu.startingMenu();
-				break;
-            }
-			if ((choice>=1) && (choice<5)) {
-				System.out.println("Continue with the deletion of data?");
-				continueProcess = Database.findDecision();
 			} else {
 				continueProcess = false;
+				System.out.println("This table is empty.");
 			}
         }
     }
@@ -442,27 +474,32 @@ public class Table implements Serializable {
         int choice;
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.presentationMenu();
-            choice = Database.choice(1, 4);
-            switch (choice) {
-            case 1:
-                printAll();
-                break;
-            case 2:
-                printRangeOfRows();
-                break;
-            case 3:
-                printSpecificColumns();
-                break;
-			case 4:
-				Menu.startingMenu();
-				break;
-            }
-			if ((choice>=1) && (choice<4)) {
-				System.out.println("Continue with the presentation of data?");
-				continueProcess = Database.findDecision();
+			if (numberOfRows > 0) {
+            	Menu.presentationMenu();
+            	choice = Database.choice(1, 4);
+            	switch (choice) {
+            	case 1:
+            	    printAll();
+            	    break;
+            	case 2:
+            	    printRangeOfRows();
+            	    break;
+            	case 3:
+            	    printSpecificColumns();
+            	    break;
+				case 4:
+					Menu.startingMenu();
+					break;
+            	}
+				if ((choice>=1) && (choice<4)) {
+					System.out.println("Continue with the presentation of data?");
+					continueProcess = Database.findDecision();
+				} else {
+					continueProcess = false;
+				}
 			} else {
 				continueProcess = false;
+				System.out.println("This table is empty");
 			}
         }
     }
@@ -489,10 +526,12 @@ public class Table implements Serializable {
              */
 
             case (3):
+            	printAll();
                 changeDataByRow();
                 break;
 
             case (4):
+            	printAll();
                 sameValue();
                 break;
             case (5):
@@ -517,6 +556,7 @@ public class Table implements Serializable {
 			switch (choice)
 			{
 				case 1:
+					printAll();
 					chooseSort();
 					break;
 				case 2:

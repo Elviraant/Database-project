@@ -79,11 +79,10 @@ public class Correlation implements Serializable {
 
 	public static void printCorrelations(ArrayList<Correlation> correlations) {
 		if (correlations.size() != 0) {
-			System.out.println();
 			for (int i = 0; i < correlations.size(); i++) {
 				System.out.println(String.format("%s. %s", (i + 1), correlations.get(i).toString() ));
 			}
-			System.out.println(String.format("\n"));
+			System.out.println();
 		} else {
 			System.out.println("You have not created any correlations");
 		}
@@ -101,12 +100,12 @@ public class Correlation implements Serializable {
 		Correlation correlation = chooseCorrelation(correlations);
 		int pos = correlations.indexOf(correlation);
 		correlations.remove(pos);
-		correlation.getTable2().getColumns().remove(correlation.getTable2().findForeignKeyColumn());
+		correlation.getTable2().getColumns().remove(correlation.fK());
 		int counter = correlation.getTable2().getColumnCounter() - 1;
 		correlation.getTable2().setColumnCounter(counter);
 		correlation.getTable1().setReferences(false);
 		if (correlation instanceof ManyToMany) {
-			correlation.getTable1().getColumns().remove(correlation.getTable1().findForeignKeyColumn());
+			correlation.getTable1().getColumns().remove(((ManyToMany)correlation).fK1());
 			counter = correlation.getTable1().getColumnCounter() - 1;
 			correlation.getTable1().setColumnCounter(counter);
 			correlation.getTable2().setReferences(false);
@@ -133,15 +132,15 @@ public class Correlation implements Serializable {
 		if (choice == 1) {
 			Column fColumn = fKColumn();
 			fColumn.setFieldType(pKColumn1().getType());
-			Object element = getKey(fKColumn());
+			Object element = getKey(pKColumn2());
 			ArrayList<Integer> rowsWanted = new ArrayList<>();
 			ArrayList<Integer> primaryRow = pKColumn2().matchingRows(element);
 			if (primaryRow.size() != 0) {
-				System.out.println("Found in row " + primaryRow.get(0) +"of " + table2.getName() ); //to be deleted
+				System.out.println("Found in row " + primaryRow.get(0) +" of " + table2.getName() ); //to be deleted
 				ArrayList<Object> foreigns = new ArrayList<Object>();
 				for (Integer row: primaryRow) {
-					foreigns.add(fKColumn().getField().get(row));
-					System.out.println("added foreign" + fKColumn().getField().get(row));//will be deleted when checked
+					foreigns.add(fColumn.getField().get(row));
+					System.out.println("added foreign " + fKColumn().getField().get(row));//will be deleted when checked
 				}
 				for (Object foreign : foreigns) {
 					rowsWanted = pKColumn1().matchingRows(foreign);
@@ -149,7 +148,7 @@ public class Correlation implements Serializable {
 				printRelated(rowsWanted,table1);
 			} else {
 				System.out.println("No match found");
-				System.out.print(String.format("\n\n"));
+				System.out.println();
 			}
 		} else {
 			Object element = getKey(pKColumn1());
@@ -172,6 +171,7 @@ public class Correlation implements Serializable {
 		} else {
 			System.out.println("Related records with given primary key: ");
 			System.out.print(String.format("\n"));
+			System.out.println("TABLE: " + table.getName());
 			table.specificRows(rows);
 		}
 	}
@@ -182,20 +182,22 @@ public class Correlation implements Serializable {
 	}
 
 	public int prKey1() {
-		System.out.println("Primary key of column one is in position " + table1.findPrimaryKeyColumn()); //to be deleted
 		return table1.findPrimaryKeyColumn();
 	}
 
 	public int prKey2() {
-		System.out.println("Primary key of column one is in position " + table1.findPrimaryKeyColumn()); //to be deleted
 		return table2.findPrimaryKeyColumn();
 	}
 
 	public Column fKColumn() {
+		int pos = fK();
+		return table2.getColumns().get(pos);
+	}
+
+	public int fK() {
 		HashMap<Table, Integer> foreignKeyMapping = table2.getPositionOffFk();
 		int pos = foreignKeyMapping.get(table1);
-		System.out.println("foreign found in position " + pos); //to be deleted
-		return table2.getColumns().get(pos - 1);
+		return pos-1;
 	}
 
 	public Column pKColumn1() {
