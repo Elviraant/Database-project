@@ -16,12 +16,21 @@ public class Menu implements Serializable{
 		System.out.println("Please chose one of the above options: ");
 	}
 
-	public static void startingMenu() {
+	public static int startingMenu() {
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. Sort Data", "5. Add Data",
-					       "6. Search Data", "7. Find Maximum Element", "8. Find Minimum Element", "9. Exit" ));
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. More Options", "5. Exit"));
+		return Database.choice(1,5);
+	}
+
+	public static int moreOptionsMenu() {
+		System.out.println();
+		System.out.println("More options ");
+		System.out.println("------------");
+		System.out.println(String.format("%s\n%s\n%s\n%s\n%s\n%s\n", "1. Sort Data", "2. Add Data",
+					       "3. Search Data", "4. Find Maximum Element", "5. Find Minimum Element", "6. Exit" ));
+		return Database.choice(1,6);
 	}
 
 	public static void multipleTablesMenu() {

@@ -12,6 +12,15 @@ public class ManyToMany extends Correlation {
 	private int posF1;
 	private int posF2;
 
+	@Override
+	public int fK() {
+		return posF1 - 1;
+	}
+
+	public int fK1() {
+		return posF2 - 1;
+	}
+
 
 	public ManyToMany(String name, Table table1, Table table2) {
 

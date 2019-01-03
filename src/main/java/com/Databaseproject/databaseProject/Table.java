@@ -363,36 +363,59 @@ public class Table implements Serializable {
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.startingMenu();
-            int choice = Database.choice(1, 9);
-            switch (choice) {
-            case 1:
-                presentData();
-                break;
-            case 2:
-                changeData();
-                break;
-            case 3:
-                deleteData();
-                break;
-            case 4:
-                sortData();
-                break;
-            case 5:
-                addData();
-                break;
-            case 6:
-                searchData();
-                break;
-            case 7:
-                findMaxData();
-                break;
-            case 8:
-                findMinData();
-                break;
-            default:
-                continueProcess = false;
-            }
+			if (numberOfRows > 0) {
+        	    int choice = Menu.startingMenu();
+        	    switch (choice) {
+        	    case 1:
+        	        presentData();
+        	        break;
+        	    case 2:
+        	        changeData();
+        	        break;
+        	    case 3:
+        	        deleteData();
+        	        break;
+        	    case 4:
+        	    	moreOptions();
+        	    	break;
+        	    default:
+        	    	continueProcess = false;
+				}
+			} else {
+				continueProcess = false;
+				System.out.println("This table is empty");
+			}
+		}
+	}
+
+    public void moreOptions() {
+        boolean continueProcess = true;
+        while (continueProcess) {
+			if (numberOfRows > 0) {
+            	int choice = Menu.moreOptionsMenu();
+            	switch (choice) {
+				case 1:
+            	    sortData();
+            	    break;
+            	case 2:
+            	    addData();
+            	    break;
+            	case 3:
+            	    searchData();
+            	    break;
+            	case 4:
+            	    findMaxData();
+            	    break;
+            	case 5:
+            	    findMinData();
+            	    break;
+            	default:
+            	    continueProcess = false;
+				}
+            } else {
+				continueProcess = false;
+				System.out.println("This table is empty.");
+			}
         }
     }
 
@@ -401,35 +424,44 @@ public class Table implements Serializable {
         int choice;
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.deletionMenu();
-            choice = Database.choice(1, 5);
-            switch (choice) {
-            case 1:
-            	if (! references) {
-            	    deleteRows();
-            	    System.out.println("Deletion completed successfully");
+			if (numberOfRows > 0) {
+            	Menu.deletionMenu();
+            	choice = Database.choice(1, 5);
+            	switch (choice) {
+            	case 1:
+            		printAll();
+            		if (! references) {
+            		    deleteRows();
+            		    System.out.println("Deletion completed successfully");
+					} else {
+						System.out.println("This table references another table of your base");
+					}
+            	    break;
+            	case 2:
+            		printAll();
+            	    deleteColumns();
+            	    break;
+            	case 3:
+            		printAll();
+            	    deleteElements();
+            	    break;
+            	case 4:
+            		printAll();
+            	    deleteAll();
+            	    break;
+            	case 5:
+					Menu.startingMenu();
+					break;
+            	}
+            	if ((choice>=1) && (choice<5)) {
+					System.out.println("Continue with the deletion of data?");
+					continueProcess = Database.findDecision();
 				} else {
-					System.out.println("This table references another table of your base");
+					continueProcess = false;
 				}
-                break;
-            case 2:
-                deleteColumns();
-                break;
-            case 3:
-                deleteElements();
-                break;
-            case 4:
-                deleteAll();
-                break;
-            case 5:
-				Menu.startingMenu();
-				break;
-            }
-			if ((choice>=1) && (choice<5)) {
-				System.out.println("Continue with the deletion of data?");
-				continueProcess = Database.findDecision();
 			} else {
 				continueProcess = false;
+				System.out.println("This table is empty.");
 			}
         }
     }
@@ -439,33 +471,42 @@ public class Table implements Serializable {
         int choice;
         boolean continueProcess = true;
         while (continueProcess) {
-            Menu.presentationMenu();
-            choice = Database.choice(1, 4);
-            switch (choice) {
-            case 1:
-                printAll();
-                break;
-            case 2:
-                printRangeOfRows();
-                break;
-            case 3:
-                printSpecificColumns();
-                break;
-			case 4:
-				Menu.startingMenu();
-				break;
-            }
-			if ((choice>=1) && (choice<4)) {
-				System.out.println("Continue with the presentation of data?");
-				continueProcess = Database.findDecision();
+			if (numberOfRows > 0) {
+            	Menu.presentationMenu();
+            	choice = Database.choice(1, 4);
+            	switch (choice) {
+            	case 1:
+            	    printAll();
+            	    break;
+            	case 2:
+            	    printRangeOfRows();
+            	    break;
+            	case 3:
+            	    printSpecificColumns();
+            	    break;
+				case 4:
+					Menu.startingMenu();
+					break;
+            	}
+				if ((choice>=1) && (choice<4)) {
+					System.out.println("Continue with the presentation of data?");
+					continueProcess = Database.findDecision();
+				} else {
+					continueProcess = false;
+				}
 			} else {
 				continueProcess = false;
+				System.out.println("This table is empty");
 			}
         }
     }
 
-
-    public void changeData() {
+	/* *checks if input is valid.
+	   *if it is, calls the suitable method.
+	   *When process done, asks user if he wants to continue.
+	   *if it is not, the process is repeated until input is valid.
+	*/
+	public void changeData() {
         int choice;
         boolean decision;
         do {
@@ -481,15 +522,13 @@ public class Table implements Serializable {
                 changeValue();
                 break;
 
-            /*
-             * case(3): changeDataByColumn(); break;
-             */
-
             case (3):
+            	printAll();
                 changeDataByRow();
                 break;
 
             case (4):
+            	printAll();
                 sameValue();
                 break;
             case (5):
@@ -514,6 +553,7 @@ public class Table implements Serializable {
 			switch (choice)
 			{
 				case 1:
+					printAll();
 					chooseSort();
 					break;
 				case 2:
@@ -564,13 +604,16 @@ public class Table implements Serializable {
         }
     }
 
-
+	/* *search for element given by the user.
+	   *if it exists, prints all the positions where it is found.
+	   *else prints suitable message.
+	*/
     public void searchData() {
         Menu.searchingMenu();
         Boolean answer = Database.findDecision();
         Boolean continueProcess = true;
         do {
-            if (answer) {
+        	if (answer) {
                 int pfield = inputFieldName("search for element");
                 if (pfield != -1) {
                     Column col = getColumns().get(pfield);
@@ -585,6 +628,9 @@ public class Table implements Serializable {
         } while (continueProcess);
     }
 
+	/* *find maximum value of an element in a specific field given by user.
+	   *prints all the positions that maximum value is found.
+	*/
     public void findMaxData() {
         Boolean continueProcess = true;
         do {
@@ -601,6 +647,9 @@ public class Table implements Serializable {
         } while (continueProcess);
     }
 
+	/* *find minimum value of an element in a specific field given by user.
+	   *prints all the positions that minimum value is found.
+	*/
     public void findMinData() {
         Boolean continueProcess = true;
         do {
@@ -802,9 +851,14 @@ public class Table implements Serializable {
         }
     }
 
-    // Input name of field to change and check for existance.
-
-    public int inputFieldName(String function) {
+  /*  *Input name of field by user.
+      *Checks for existance.
+      *If exists, method returns field's position in Table.
+      *If it does not exist, prints suitable message.
+      *If user wants to try again, process of input name of field is repeated.
+      *@param String variable : states the process to be done in field.
+   */
+   public int inputFieldName(String function) {
         System.out.println("Give the name of the field you want to " + function + ".");
         StringType name = new StringType();
         String nameofField = name.getData();
@@ -821,6 +875,10 @@ public class Table implements Serializable {
         return ex;
     }
 
+	/* *Change values of elements by row.
+	   *Process stops, if user types suitable string('no').
+	   *or if there are no other columns to be processed.
+	 */
     public void changeDataByRow() {
         System.out.println("Which record do you want to change?");
         printAll();
@@ -828,23 +886,23 @@ public class Table implements Serializable {
         if (row != -1) {
             Boolean continueProcess = true;
             int i = 1;
-            System.out.println("#" + (row + 1) + " Record: ");
+            System.out.println("#" + (row + 1) + " Record: ");      //checks if record input is valid and keeps position of element.
             do {
-                Column x = columns.get(i);
+                Column col = columns.get(i);
                 System.out.println("#" + (i) + " Field: ");
-                System.out.println("Give the new value of " + x.getName());
+                System.out.println("Give the new value of " + col.getName());
                 Boolean answer = false;
-                if (x.getForeignKey()) {
+                if (col.getForeignKey()) {
 					Menu.printColumnRefersMessage("change its element");
-				} else if (x.getPrimaryKey() && references) {
+				} else if (col.getPrimaryKey() && references) {
 					Menu.printColumnReferredMessage("change its element");
 				} else {
                 	do {
-                	    Object nValue = x.getType().getData();
-                	    if (x.getPrimaryKey()) {
+                	    Object nValue = col.getType().getData();
+                	    if (col.getPrimaryKey()) {
 
-                	        	if (x.checkUniqueness(nValue)) {
-                	        	    x.getField().set(row, nValue);
+                	        	if (col.checkUniqueness(nValue)) {
+                	        	    col.getField().set(row, nValue);
                 	        	    System.out.println("Change completed successfully");
                 	        	    answer = false;
                 	        	} else {
@@ -857,7 +915,7 @@ public class Table implements Serializable {
                 	        	}
 
                 	    } else {
-                	        x.getField().set(row, nValue);
+                	        col.getField().set(row, nValue);
                 	        System.out.println("Change completed successfully.");
                 	        answer = false;
                 	    }
@@ -877,6 +935,15 @@ public class Table implements Serializable {
         }
     }
 
+
+	/* *change name of field given by user.
+	   *checks if the given field exists in Table.
+	   *if it does not, prints suitable message.
+	   *Process is repeated until user types existing field name
+        or until types "no".
+	   *if name of field is valid, checks if the new name is unique.
+	   *if name is not unique, prints suitable message and asks user to try again.
+	*/
     public void changeFieldName() {
         StringType name = new StringType();
         int pos = this.inputFieldName("change");
@@ -904,11 +971,10 @@ public class Table implements Serializable {
         }
     }
 
-    /*
-     * search if there is a PrimaryKey Column. Then calls method primaryKeyColumn.
-     * attribute: position of field to be changed.
-     */
-
+   /*  *search if there is a Field with primary keys.
+   	   *if exists, returns field's position in Table.
+   	   *else returns -1.
+	*/
     public int findPrimaryKeyColumn() {
         int j = 0;
         int exprimarykey = -1;
@@ -955,45 +1021,12 @@ public class Table implements Serializable {
         return exists;
     }
 
-    /*
-     * if a column with primary keys exists, keeps the position in table and calls
-     * informUser. Else make a new list in table with increased number that it will
-     * be a primary key list and calls informUser()* attributes: position of of
-     * primarykey list position of field to be changed
-     */
 
-    /*
-     * public int primaryKeyColumn(int exprimaryKey) { if(exprimaryKey == -1) {
-     * exprimaryKey =createIncreasedNumber(); } return informUser(exprimaryKey); }
-     */
-
-    /*
-     * if a column with primary keys exists, keeps the position in table and calls
-     * informUser. Else make a new list in table with increased number that it will
-     * be a primary key list and calls informUser()
-     */
-
-    public int informUser(int ex) {
-        Column col = columns.get(ex);
-        System.out.println("This is your Database :");
-        this.printAll();
-        // Inform him which list is primary key.
-        System.out.print("This is the list with the primary keys of your elements ");
-        System.out.println(col.getName());
-        System.out.println("Type the primary key of element you want to change");
-        Object searchKey = col.getType().getData();
-        if (!col.getField().contains(searchKey)) {
-            System.out.println("The primary key you typed doesn't exist.");
-            System.out.println("Do you want to try again?");
-            // System.out.println("Answer Yes or No");
-            Boolean answer = Database.findDecision();
-            if (answer) {
-                return informUser(ex);
-            }
-        }
-        return col.getField().indexOf(searchKey); // position of primary key in list.
-    }
-
+	/* *if name of field is valid, change specific value of an element in given field.
+	   *asks user to input which record(row) is the element that wants to change.
+	   *if record is valid, asks user to type new value.
+	   *if new value is valid, change is done.
+	 */
     public void changeValue() {
         int pfield = inputFieldName("change");
         if (pfield != -1) {
@@ -1038,8 +1071,11 @@ public class Table implements Serializable {
         	}
     }
 
-    public void sameValue() {
-        int pfield = inputFieldName("change");
+	/* *if name of field is valid,replace all values of elements of field with same value.
+	   *if field contains primary keys, method does not allow this process to be done.
+	*/
+	public void sameValue() {
+		int pfield = inputFieldName("change");
         if (pfield != -1) {
 			Column col = this.getColumns().get(pfield);
 			if(col.getPrimaryKey()) {
@@ -1053,8 +1089,8 @@ public class Table implements Serializable {
             	    col.getField().set(i, newValue);
            	 	}
             	System.out.println("Change completed successfully !");
-	   		}
-        }
+	   	}
+	   	}
     }
 
     public void deleteRows() {
