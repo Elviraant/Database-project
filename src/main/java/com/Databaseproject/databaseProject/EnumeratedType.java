@@ -83,4 +83,12 @@ public class EnumeratedType extends FieldType implements Serializable{
 		return isCorrect;
 	}
 
+	/**
+	 * Returns the type of the object and allowed Strings ArrayList
+	 * @return String
+	 */
+	public String toString() {
+		return "Type: Enumerated Type " + allowedStrings;
+	}
+
 }

@@ -17,4 +17,12 @@ public class StringType extends FieldType implements Serializable{
 		return cs.nextLine();
 	}
 
+	/**
+	 * Returns the type of the object
+	 * @return String
+	 */
+	public String toString() {
+		return "Type: Text";
+	}
+
 }

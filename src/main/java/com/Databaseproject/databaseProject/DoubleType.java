@@ -28,4 +28,12 @@ public class DoubleType extends FieldType implements Serializable {
 		return data;
 
 	}
+
+	/**
+	 * Returns the type of the object
+	 * @return String
+	 */
+	public String toString() {
+		return "Type: Double";
+	}
 }

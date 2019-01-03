@@ -19,4 +19,6 @@ abstract class FieldType implements Serializable{
    	 * must implement these method
  	 */
 	abstract Object getData();
+
 }
+

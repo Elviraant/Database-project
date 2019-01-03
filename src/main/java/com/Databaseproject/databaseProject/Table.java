@@ -111,7 +111,7 @@ public class Table implements Serializable {
         setFieldNames();
     }
 
-	/*
+	/**
 	 * Set the Column's names until the user insert EXIT
 	 * Method setFieldNames() calls setFieldType(String) to create a Column object
 	 * Returns nothing
@@ -121,8 +121,12 @@ public class Table implements Serializable {
         System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
 		String nameOfField = nameAColumn();
 		nameOfField = uniqueFieldName(nameOfField);
+		while((nameOfField.equals("EXIT")) && (columnCounter < 2)) {
+			Menu.printDeletePath();
+			nameOfField = nameAColumn();
+			nameOfField = uniqueFieldName(nameOfField);
+		}
 		 while (!nameOfField.equals("EXIT")) {
-			Scanner sc = new Scanner(System.in);
 			setFieldType(nameOfField);
 			nameOfField = nameAColumn();
 			nameOfField = uniqueFieldName(nameOfField);
@@ -130,7 +134,7 @@ public class Table implements Serializable {
         System.out.println();
     }
 
-	/*
+	/**
 	 * User decide the type for Column FieldType type and create a Column object
 	 * Method calls the fieldTypesMenu() and if choice is 1, 2 or 3 create the Column object
 	 * If choice is number 4, the Column object is created, but first method calls defineEnumeration() method
@@ -148,12 +152,12 @@ public class Table implements Serializable {
 		    new Column(nameOfField, type, this);
 		} else if (choice == 4) {
 		    EnumeratedType type = new EnumeratedType();
-		    type.defineEnumeration();
+		    type.defineEnumeration(nameOfField);
 		    new Column(nameOfField, type, this);
         }
 	}
 
-	/*
+	/**
 	 * Set one Column object's name
 	 * @return String Column object's name
 	 */
@@ -219,7 +223,7 @@ public class Table implements Serializable {
             if (exists != -1) {
 				if(checkOwnType(primaryKeyName)) {
 					continueProcess = true;
-					System.out.println("Own type Column can not be Primary Key. Please try again. ");
+					System.out.println("Enumerated type Column can not be Primary Key. Please try again. ");
 				} else {
 					this.getColumns().get(exists).setPrimaryKey(true);
 					continueProcess = false;

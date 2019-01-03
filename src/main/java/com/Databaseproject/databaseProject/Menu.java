@@ -4,9 +4,15 @@ public class Menu implements Serializable{
 
 	public static int fieldTypesMenu() {
 
-		System.out.println("1. Integer\n2. Double\n3. Text\n4. Own Type");
+		System.out.println("1. Integer\n2. Double\n3. Text\n4. Enumerated Type");
 		System.out.println("Please chose one of the above options: ");
 		return Database.choice(1, 4);
+	}
+
+	public static void printDeletePath() {
+		System.out.print(String.format("%s\n%s\n%s\n","You have to create -at least- one field/column ",
+						"If you don't want to create this table, follow this path: ",
+						"Manage Tables -> Delete Data -> Delete All"));
 	}
 	public static void presentationMenu() {
 		System.out.println();
