@@ -1,14 +1,18 @@
 //package com.databaseProject.Databaseproject;
 import java.io.Serializable;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
+/**
+ *  Represents an Integer Type of Database extend Field Type
+ */
 public class IntegerType extends FieldType implements Serializable {
 
-
-  public boolean correctValue(String a) {
-    return true;
-  }
-
+/**
+ * Reads an Integer from keyboard
+ * Catch InputMismatchException e and reads again
+ * @return Integer Integer, that has been read
+ */
   public Integer getData() {
     Scanner cs = new Scanner(System.in);
     int data = 0;
@@ -16,7 +20,7 @@ public class IntegerType extends FieldType implements Serializable {
       try {
         data = cs.nextInt();
         break;
-      } catch (Exception e) {
+      } catch (InputMismatchException e) {
         System.out.println("You should insert an Integer");
         cs.next();
       }
