@@ -129,6 +129,7 @@ public class Database implements Serializable {
 					break;
 				case 4:
 					if (tableCounter == 0) {
+
 						System.out.println("No tables in your database");
 					} else {
 						defineCorrelation();

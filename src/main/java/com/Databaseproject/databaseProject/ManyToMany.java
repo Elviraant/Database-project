@@ -25,15 +25,15 @@ public class ManyToMany extends Correlation {
 	public ManyToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		this.column1 = new Column(table2, true, this);
-		this.column1.createFkColumnName(table1);
+		this.column1 = new Column(table1, true, this);
+		this.column1.createFkColumnName(table2);
 		posF1 = table1.getColumnCounter();
 		table2.setPositionOffFk(table1, posF1);
 		table2.setInvPositionOffFk(posF1, table1);
 		table1.setReferences(true);
 		table2.setReferences(true);
-		this.column2 = new Column(table1, true, this);
-		this.column2.createFkColumnName(table2);
+		this.column2 = new Column(table2, true, this);
+		this.column2.createFkColumnName(table1);
 		posF2 = table2.getColumnCounter();
 	}
 
