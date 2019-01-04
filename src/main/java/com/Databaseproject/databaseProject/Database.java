@@ -461,13 +461,13 @@ public class Database implements Serializable {
 		 for(Table t1 : tables) {
 			 for(Table t2 : tables) {
 				 if(!t1.equals(t2)) {
-					 if(checkingCorrelation(t1, t2)) {
+					 if(!checkingCorrelation(t1, t2)) {
 						 counter++;
 					 }
 				 }
 			 }
 		 }
-		 if ((counter / 2) == correlations.size() && counter!= 0) {
+		 if (counter == 0) {
 			 return false;
 		 } else {
 			 return true;
