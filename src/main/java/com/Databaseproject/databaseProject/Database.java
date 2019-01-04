@@ -237,6 +237,7 @@ public class Database implements Serializable {
 				hasError = false;
 			} catch (Exception e) {
 				System.out.println("Please choose a valid option");
+				System.out.println("Number expected");
 				cs.reset();
 			}
 		}
@@ -265,7 +266,9 @@ public class Database implements Serializable {
 		return (!(Database.findDecision()));
 	}
 
-	//works only with right path
+	/**
+	*Saves database in file with the name of the base
+	*/
 	public void writeObject() throws IOException {
 		Scanner cs = new Scanner(System.in);
 		String filename = this.getName();
@@ -294,7 +297,10 @@ public class Database implements Serializable {
 			System.err.println("Unable to open file " + filename + ": " + e.getMessage());
 		}
 	}
-	//Works only with right path
+
+	/**
+	*Retrieves the databases which exist
+	*/
 	public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
 		Database d1 = new Database("");
 		String filename = nameOfBase;
@@ -316,7 +322,11 @@ public class Database implements Serializable {
 		return d1;
 	}
 
-
+	/**
+	*Prints available bases that user has created
+	*@returns
+			 the name of the chosen base
+	*/
 	public static String chooseBase() {
 		ArrayList<String> saved = new ArrayList<String>();
 		try {

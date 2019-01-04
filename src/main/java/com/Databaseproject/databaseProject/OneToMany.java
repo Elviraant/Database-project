@@ -57,6 +57,7 @@ public class OneToMany extends Correlation{
 			switch (choice)
 			{
 				case 1:
+					System.out.println();
 					System.out.println(this.toString());
 					System.out.println("This is an one-to-many relationship");
 					System.out.println("The table where one record can be linked to multiple records of the other is: "
@@ -66,11 +67,9 @@ public class OneToMany extends Correlation{
 					+ table2.getName());
 					System.out.println();
 				case 2:
+					search();
 					break;
 				case 3:
-					this.search();
-					break;
-				case 4:
 					continueProcess = false;
 					break;
 			}

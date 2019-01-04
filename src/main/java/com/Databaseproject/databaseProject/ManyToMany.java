@@ -128,6 +128,7 @@ public class ManyToMany extends Correlation {
 			switch (choice)
 			{
 				case 1:
+					System.out.println();
 					System.out.println(this.toString());
 					System.out.println("This is a many-to-many correlation");
 					System.out.println();
@@ -135,17 +136,20 @@ public class ManyToMany extends Correlation {
 					System.out.println();
 					break;
 				case 2:
-					break;
-				case 3:
 					this.search();
 					break;
-				case 4:
+				case 3:
 					continueProcess = false;
 					break;
 			}
 		}
 	}
 
+	/**
+	*asks user to define the table in which he wants to search for related records
+	*@returns
+			chosen table
+	*/
 	public Table defineSearched() {
 		int choice = choice();
 		Table searched;
@@ -156,7 +160,9 @@ public class ManyToMany extends Correlation {
 		}
 		return searched;
 	}
-
+	/**
+	*applied only to many-to-many searching
+	*/
 	@Override
 	public void search() {
 		Scanner cs = new Scanner(System.in);
@@ -184,11 +190,19 @@ public class ManyToMany extends Correlation {
 		}
 	}
 
+	/**
+	*finds the arraylist which matches a specific primary key in a many-to-many relationship
+	*@param column
+					the column with primary keys
+	*@param foreignKeys
+					the list which contains the lists of respective foreigns
+	*@returns
+			matching list of foreigns related to a record
+	*/
 	public ArrayList<Object> foreigns(Column column, ArrayList<ArrayList<Object>> foreignKeys) {
 		System.out.println("Please insert a primary key of the above table: ");
 		Object element = column.getType().getData();
 		ArrayList<Integer> rows = new ArrayList<Integer>();
-
 		ArrayList <Integer> rowWithForeign = column.matchingRows(element);
 		if (rowWithForeign.size() != 0) {
 			rows.add(rowWithForeign.get(0));

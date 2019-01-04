@@ -205,6 +205,9 @@ public class Column implements Serializable {
     return rows;
   }
 
+  /**
+  *returns a list of rows if any element of an arraylist matches a certain key of the table
+  */
   public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) { /*checkstyle checked*/
     ArrayList<Integer> rows = new ArrayList<Integer>();
     ArrayList<Integer> toBeReturned = new ArrayList<Integer>();

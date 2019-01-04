@@ -25,11 +25,12 @@ public class OneToOne extends Correlation {
 	public void viewProperties() {
 		boolean continueProcess = true;
  		while (continueProcess) {
-			System.out.print(String.format("\n\n"));
+			System.out.println();
 			int choice = Menu.viewPopertiesMenu();
 			switch (choice)
 			{
 				case 1:
+					System.out.println();
 					System.out.println(this.toString());
 					System.out.println("This is an One-To-One correlation");
 					System.out.println();
@@ -37,11 +38,9 @@ public class OneToOne extends Correlation {
 					System.out.println();
 					break;
 				case 2:
+					search();
 					break;
 				case 3:
-					this.search();
-					break;
-				case 4:
 					continueProcess = false;
 					break;
 			}

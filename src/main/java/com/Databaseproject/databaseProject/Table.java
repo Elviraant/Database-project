@@ -1,4 +1,3 @@
-
 /**
 Represents a table of our database.
 */
@@ -703,7 +702,13 @@ public class Table implements Serializable {
     }
 
 
-    // Prints one row of the table.
+    /**
+    *Prints only one row of the table
+    *Checks if a column is foreign key in a many-to-many relationship
+    *If it is, the column is not printed
+    *@param row
+    			position in the arraylist if fields
+    */
     public void presentRow(int row) {
         for (int i = 0; i < columnCounter; i++) {
             Column column = columns.get(i);
@@ -745,6 +750,11 @@ public class Table implements Serializable {
 		}
 	}
 
+	/**
+	*Prints specific rows of the table
+	*@param rows
+				given by the user or the programmer
+	*/
 	public void specificRows(ArrayList<Integer> rows) {
 		printHeader();
 		for (Integer row : rows) {
@@ -792,7 +802,11 @@ public class Table implements Serializable {
 			this.presentColumns(attributes);
 		}
 	}
-
+	/**
+	*Prints specific names of attributes as header to a table
+	*@param attributes
+						the list of field names given by the user or the programmer
+	*/
     public void printHeaderOfSpecificColumns(ArrayList<String> attributes) {
         int spaces = 0;
         String title = "";

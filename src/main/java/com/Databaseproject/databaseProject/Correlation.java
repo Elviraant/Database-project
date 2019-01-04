@@ -1,3 +1,8 @@
+/**
+*Represents a correlation of a base
+*Correlation exists between two tables of a base
+*Correltion can be one-to-one, one-to-many, many-to-many
+*/
 //package com.databaseProject.Databaseproject;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -38,6 +43,9 @@ public class Correlation implements Serializable {
 		return table1.getName() + " " + name + " " + table2.getName();
 	}
 
+	/**
+	*Overriden in subclasses
+	*/
 	public void viewProperties() {
 	}
 
@@ -55,6 +63,7 @@ public class Correlation implements Serializable {
 					break;
 				case 2:
 					printCorrelations(correlations);
+					System.out.println();
 					break;
 				case 3:
 					Correlation.deleteCorrelation(correlations);
@@ -82,11 +91,11 @@ public class Correlation implements Serializable {
 			for (int i = 0; i < correlations.size(); i++) {
 				System.out.println(String.format("%s. %s", (i + 1), correlations.get(i).toString() ));
 			}
-			System.out.println();
 		} else {
 			System.out.println("You have not created any correlations");
 		}
 	}
+
 
 	public static Correlation chooseCorrelation(ArrayList<Correlation> correlations) {
 		printCorrelations(correlations);
@@ -95,6 +104,14 @@ public class Correlation implements Serializable {
 		return correlations.get(choice - 1);
 	}
 
+	/**
+	*Deletes a correlation of the base
+	*Deletes foreign key columns
+	*table1 doesn't refer to another table anymore
+	*Sets counter in right position
+	*@param correlations
+						the list of the correlations in the base
+	*/
 	public static void deleteCorrelation(ArrayList<Correlation> correlations) {
 		System.out.println("Please choose the correlation you want to delete");
 		Correlation correlation = chooseCorrelation(correlations);
@@ -112,6 +129,12 @@ public class Correlation implements Serializable {
 		}
 		}
 
+	/**
+	*asks user which is the table that he wants to search for related records
+	*according to the choice prints the other table which contains the primary keys
+	*returns
+			number of chosen table
+	*/
 	public int choice() {
 		System.out.println("1. " + table1.getName());
 		System.out.println("2. " + table2.getName());
@@ -126,6 +149,13 @@ public class Correlation implements Serializable {
 		return choice;
 	}
 
+	/**
+	*searching applied to one-to-one and one-to-many relationships
+	*if user searches in table with foreigns, finds row with primary, and compares the respective foreign with
+	*primary keys of the other table
+	*if user searches in table without foreigns compares the key with foreign fields of the other tables
+	*and prints the respective row
+	*/
 	public void search() {
 		Scanner cs = new Scanner(System.in);
 		int choice = choice();
@@ -153,24 +183,24 @@ public class Correlation implements Serializable {
 		} else {
 			Object element = getKey(pKColumn1());
 			ArrayList<Integer> rows = fKColumn().matchingRows(element);
-			if ( rows.size() != 0)  {
-				for (int i = 0; i < rows.size(); i++) {
-					System.out.println("Found in row: " + (rows.get(i) + 1)); //will be deleted when checked
-				}
-				printRelated(rows, table2);
-			} else {
-				System.out.println("No matches found");
-			}
+			printRelated(rows, table2);
 		}
 	}
 
+	/**
+	*prints the related rows of a record in a correlation
+	*@param rows
+				related records
+	*param table
+				related table
+	*/
 	public void printRelated(ArrayList<Integer> rows, Table table) {
 		if (rows.size() == 0) {
 			System.out.println("No matching records found");
-			System.out.print(String.format("\n"));
+			System.out.println();
 		} else {
 			System.out.println("Related records with given primary key: ");
-			System.out.print(String.format("\n"));
+			System.out.println();
 			System.out.println("TABLE: " + table.getName());
 			table.specificRows(rows);
 		}

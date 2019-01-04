@@ -106,13 +106,12 @@ public class Menu implements Serializable{
 	}
 
 	public static int viewPopertiesMenu() {
-		System.out.println(String.format("%s\n%s\n%s\n%s\n"
+		System.out.println(String.format("%s\n%s\n%s\n"
 							,"1. Show info"
-							,"2. View all related records"
-							,"3. Search related records"
-							,"4. Exit"));
+							,"2. Search related records"
+							,"3. Exit"));
 		System.out.println("Please choose one of the above options: ");
-		return Database.choice(1,4);
+		return Database.choice(1,3);
 	}
 
 	public static void printNonExistantKeyMessage() {
