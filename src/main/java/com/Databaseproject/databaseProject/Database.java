@@ -533,7 +533,7 @@ public class Database implements Serializable {
 					  correlations.add(c2);
 					  c2.fillForeignKeyColumn();
 					  break;
-			case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
+			default: ManyToMany c3 = new ManyToMany(name, table1, table2);
 					  correlations.add(c3);
 					  c3.fillForeignKeyColumn();
 					  break;

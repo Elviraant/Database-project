@@ -806,12 +806,12 @@ public class Table implements Serializable {
 					Column col = columns.get(position);
 					attributes.add(col.getName());
 				}
-					System.out.println("\nDo you want to present another column? Y/N");
+					System.out.println("%nDo you want to present another column? Y/N");
 					continueProcess = Database.findDecision();
 
 			}
 		} else  {
-			System.out.println("\nNo records in this table.\n");
+			System.out.println("%nNo records in this table.%n");
 		}
 		return attributes;
 	}
@@ -822,7 +822,7 @@ public class Table implements Serializable {
 	public void printSpecificColumns() {
 		ArrayList<String> attributes = inputSpecificColumns();
 		if (attributes.size() == 1) {
-			System.out.println("No records in this table.\n");
+			System.out.println("No records in this table.%n");
 		} else {
 			this.presentColumns(attributes);
 		}
@@ -1141,7 +1141,7 @@ public class Table implements Serializable {
 
     public void deleteRows() {
 		if (numberOfRows!=0){
-        System.out.println(String.format("%s\n%s\n", "1. Delete Specific Records", "2. Delete specific range of records"));
+        System.out.println(String.format("%s%n%s%n", "1. Delete Specific Records", "2. Delete specific range of records"));
         int choice;
         choice = Database.choice(1, 2);
         switch (choice) {
