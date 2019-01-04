@@ -14,5 +14,6 @@ abstract class FieldType implements Serializable{
 
   abstract boolean correctValue(String a);
 
+
   abstract Object getData();
 }

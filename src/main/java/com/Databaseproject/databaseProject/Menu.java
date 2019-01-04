@@ -62,7 +62,7 @@ public class Menu implements Serializable{
 			System.out.println();
 			System.out.println("Assortment Options:");
 			System.out.println("-------------------");
-			System.out.println(String.format("%s\n%s\n", "1. Sort in alphabetical order", "2. Exit"));
+			System.out.println(String.format("%s\n%s\n", "1. Sort", "2. Exit"));
 			System.out.println("Please choose one of the above options: ");
 		}
 

@@ -432,10 +432,11 @@ public class Table implements Serializable {
             	choice = Database.choice(1, 5);
             	switch (choice) {
             	case 1:
-            		printAll();
             		if (! references) {
             		    deleteRows();
+            		 	if (numberOfRows>0) {
             		    System.out.println("Deletion completed successfully");
+						}
 					} else {
 						System.out.println("This table references another table of your base");
 					}
@@ -453,18 +454,19 @@ public class Table implements Serializable {
             	    deleteAll();
             	    break;
             	case 5:
-					Menu.startingMenu();
+					manageData();
 					break;
             	}
             	if ((choice>=1) && (choice<5)) {
+					if (numberOfRows>0) {
 					System.out.println("Continue with the deletion of data?");
 					continueProcess = Database.findDecision();
+					}
 				} else {
 					continueProcess = false;
 				}
 			} else {
 				continueProcess = false;
-				System.out.println("This table is empty.");
 			}
         }
     }
@@ -488,7 +490,7 @@ public class Table implements Serializable {
             	    printSpecificColumns();
             	    break;
 				case 4:
-					Menu.startingMenu();
+					manageData();
 					break;
             	}
 				if ((choice>=1) && (choice<4)) {
@@ -535,7 +537,7 @@ public class Table implements Serializable {
                 sameValue();
                 break;
             case (5):
-                Menu.startingMenu();
+                manageData();
 				break;
             }
 			if ((choice>=1) && (choice<5)) {
@@ -560,7 +562,7 @@ public class Table implements Serializable {
 					chooseSort();
 					break;
 				case 2:
-					Menu.startingMenu();
+					manageData();
 					break;
 			}
 			if (choice==1) {
@@ -594,7 +596,7 @@ public class Table implements Serializable {
 				columnFillerByColumn();
                 break;
             case 3:
-            	Menu.startingMenu();
+            	manageData();
             	break;
             }
             if ((choice==1) || (choice==2)){
@@ -1066,6 +1068,7 @@ public class Table implements Serializable {
     }
 
     public void deleteRows() {
+		if (numberOfRows!=0){
         System.out.println(String.format("%s\n%s\n", "1. Delete Specific Records", "2. Delete specific range of records"));
         int choice;
         choice = Database.choice(1, 2);
@@ -1077,6 +1080,9 @@ public class Table implements Serializable {
             deleteSpecificRangeofRows();
             break;
         }
+		} else {
+			System.out.println("No records to delete.");
+		}
     }
 
 	/**
@@ -1098,12 +1104,17 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		int counter =0;
 		while (continueProcess) {
+			printAll();
 			System.out.println("Which record do you want to delete?");
 			int x = Database.choice(1,numberOfRows);
-			deleteRow(x-counter);
-			System.out.println("Delete another record?");
-			continueProcess = Database.findDecision();
-			counter++;
+			deleteRow(x);
+			if (numberOfRows!=0){
+				System.out.println("Delete another record?");
+				continueProcess = Database.findDecision();
+			} else {
+				System.out.println("Deletion completed successfully.\nYou can't delete another record");
+				continueProcess= false;
+			}
 		}
 	}
 
@@ -1138,6 +1149,10 @@ public class Table implements Serializable {
 		boolean continueProcess = true;
 		int y = 0;
 		while (continueProcess) {
+			if ((columnCounter==2) && (primaryKeyColumnExists())) {
+				System.out.println("No columns to delete.");
+				y=1;
+			} else {
 			int x =  inputFieldName("delete");
 			if (x != -1) {
 				Column column = columns.get(x);
@@ -1159,16 +1174,19 @@ public class Table implements Serializable {
 						}
 					} else {
 						if (columnCounter ==2) {
-							System.out.println("You can't delete another column.");
+							System.out.println("Deletion completed successfully.\nYou can't delete another column.");
 							continueProcess = false;
 							y=1;
 						}
 					}
 				}
 			}
+		}
 			if (y==0) {
 				System.out.println("Delete another column?");
 				continueProcess = Database.findDecision();
+			} else {
+				continueProcess = false;
 			}
 		}
 	}
@@ -1231,7 +1249,7 @@ public class Table implements Serializable {
    	* If the first given Object is greater than the second, returns a positive number
    	* If the first given Object is less than the second, returns a negative number
    	*/
-   	public int compareTo(Object str1, Object str2) {
+   	public int compareStrings(Object str1, Object str2) {
    			String st1= String.valueOf(str1);
    			String st2 = String.valueOf(str2);
    			return st1.compareTo(st2);
@@ -1297,7 +1315,7 @@ public class Table implements Serializable {
    					Object str1 = column.getField().get(j-1);
    					Object str2 = column.getField().get(j);
    					if (column.getType() instanceof StringType) {
-   						int result = compareTo(str1,str2);
+   						int result = compareStrings(str1,str2);
    						sort(result,j, choice);
    					}
    					if (column.getType() instanceof IntegerType) {
