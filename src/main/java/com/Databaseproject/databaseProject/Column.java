@@ -172,21 +172,18 @@ public class Column implements Serializable {
   *@param Object Type variable, to be searched in field.
  */
   public void searchElement(Object element) { /*checkstyle checked*/
-    ArrayList<Integer> rows = matchingRows(element);
-    if (rows.size() != 0) {
-      System.out.println(element);
-      System.out.print("found in record(s):");
-      for (Integer row : rows) {
-        System.out.println(row + 1);
+      ArrayList<Integer> rows = matchingRows(element);
+      if (rows.size() != 0) {
+        System.out.println(element);
+        System.out.print("found in record(s):");
+        for (Integer row : rows) {
+  		 System.out.print(+row+1+". " );
+         }
+      } else {
+        System.out.print(element);
+        System.out.println("doesn't exist in this field.");
       }
-    } else {
-      System.out.print(element);
-      System.out.println("doesn't exist in this field /nDo you want to try again?(Yes/No)");
-      Boolean answer = Database.findDecision();
-      if (answer) {
-        Menu.searchingMenu();
-      }
-    }
+     System.out.println();
   }
 
   /*

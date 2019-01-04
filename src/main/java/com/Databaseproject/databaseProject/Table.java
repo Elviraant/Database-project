@@ -453,7 +453,7 @@ public class Table implements Serializable {
             		printAll();
             	    deleteAll();
             	    break;
-            	case 5:
+            	default:
 					manageData();
 					break;
             	}
@@ -489,7 +489,7 @@ public class Table implements Serializable {
             	case 3:
             	    printSpecificColumns();
             	    break;
-				case 4:
+				default:
 					manageData();
 					break;
             	}
@@ -536,7 +536,7 @@ public class Table implements Serializable {
             	printAll();
                 sameValue();
                 break;
-            case (5):
+            default:
                 manageData();
 				break;
             }
@@ -561,7 +561,7 @@ public class Table implements Serializable {
 					printAll();
 					chooseSort();
 					break;
-				case 2:
+				default:
 					manageData();
 					break;
 			}
@@ -595,7 +595,7 @@ public class Table implements Serializable {
             	setFieldNames();
 				columnFillerByColumn();
                 break;
-            case 3:
+            default:
             	manageData();
             	break;
             }
@@ -613,63 +613,88 @@ public class Table implements Serializable {
 	   *if it exists, prints all the positions where it is found.
 	   *else prints suitable message.
 	*/
-    public void searchData() {
-        Menu.searchingMenu();
-        Boolean answer = Database.findDecision();
+	public void searchData() {
+    	Menu.searchingMenu();
+    	Boolean answer = Database.findDecision();
         Boolean continueProcess = true;
-        do {
-        	if (answer) {
-                int pfield = inputFieldName("search for element");
-                if (pfield != -1) {
-                    Column col = getColumns().get(pfield);
-                    System.out.println("Enter the element you want to search");
-                    Object element = col.getType().getData();
-                    col.searchElement(element);
-                }
-            }
-            System.out.println("Search Data completed successfully");
+        	do {
+               if (answer) {
+                   int pfield = inputFieldName("search for element");
+                   if (pfield != -1) {
+                       Column col = getColumns().get(pfield);
+                       System.out.println("Enter the element you want to search");
+                       Object element = col.getType().getData();
+                       ArrayList<Integer> list = col.matchingRows(element);
+                       if ( list.size() != 0 ) {
+                       	col.searchElement(element);
+                   		for (int i = 0; i < list.size(); i++) {
+   							presentRow(list.get(i));
+   						}
+   					}else {
+   						col.searchElement(element);
+   					}
+   				 }
+   			}
+   		 System.out.println("Search Data completed successfully");
             System.out.println("Continue with the searching of data?");
             continueProcess = Database.findDecision();
         } while (continueProcess);
-    }
+   }
 
 	/* *find maximum value of an element in a specific field given by user.
 	   *prints all the positions that maximum value is found.
 	*/
-    public void findMaxData() {
-        Boolean continueProcess = true;
-        do {
-            int pfield = inputFieldName("find the maximum value");
-            if (pfield != -1) {
-                Column col = this.getColumns().get(pfield);
-                Object max = Collections.max(col.getField(), null);
-                System.out.print("The maximum value is : ");
-                col.searchElement(max);
-            }
-            System.out.println("Finding Maximum Data completed successfully");
-            System.out.println("Continue with the finding Maximum Data?");
-            continueProcess = Database.findDecision();
-        } while (continueProcess);
+     public void findMaxData() {
+	 	Boolean continueProcess = true;
+	    	do {
+	        	int pfield = inputFieldName("find the maximum value");
+	            if (pfield != -1) {
+	                Column col = this.getColumns().get(pfield);
+	                Object max = Collections.max(col.getField(), null);
+	                System.out.print("The maximum value is : ");
+	                ArrayList<Integer> list = col.matchingRows(max);
+					if ( list.size() != 0 ) {
+						col.searchElement(max);
+					    for (int i = 0; i < list.size(); i++) {
+							presentRow(list.get(i));
+						}
+					}else {
+						col.searchElement(max);
+						}
+	            }
+	            System.out.println("Finding Maximum Data completed successfully");
+	            System.out.println("Continue with the finding Maximum Data?");
+	            continueProcess = Database.findDecision();
+	        } while (continueProcess);
     }
 
 	/* *find minimum value of an element in a specific field given by user.
 	   *prints all the positions that minimum value is found.
 	*/
     public void findMinData() {
-        Boolean continueProcess = true;
-        do {
-            int pfield = inputFieldName("find the minimum value");
-            if (pfield != -1) {
-                Column col = this.getColumns().get(pfield);
-                Object min = Collections.min(col.getField(), null);
-                System.out.print("The minimum value is : ");
-              	col.searchElement(min);
-            }
-            System.out.println("Finding Minimum Data completed successfully");
-            System.out.println("Continue with finding Minimum Data?");
-            continueProcess = Database.findDecision();
-        } while (continueProcess);
-    }
+		Boolean continueProcess = true;
+		    do {
+	           int pfield = inputFieldName("find the minimum value");
+	    	   if (pfield != -1) {
+	                Column col = this.getColumns().get(pfield);
+	                Object min = Collections.min(col.getField(), null);
+	                System.out.print("The minimum value is : ");
+					ArrayList<Integer> list = col.matchingRows(min);
+					 if ( list.size() != 0 ) {
+					  	col.searchElement(min);
+					    for (int i = 0; i < list.size(); i++) {
+							presentRow(list.get(i));
+						}
+					}else {
+						col.searchElement(min);
+					}
+	            }
+	            System.out.println("Finding Minimum Data completed successfully");
+	            System.out.println("Continue with finding Minimum Data?");
+	            continueProcess = Database.findDecision();
+	        } while (continueProcess);
+	    }
+
 
     /**
      * prints all table insertions and the titles of the attributes
@@ -879,6 +904,7 @@ public class Table implements Serializable {
       *@param String variable : states the process to be done in field.
    */
    public int inputFieldName(String function) {
+	    printHeader();
         System.out.println("Give the name of the field you want to " + function + ".");
         StringType name = new StringType();
         String nameofField = name.getData();
