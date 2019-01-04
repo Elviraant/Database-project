@@ -1,7 +1,7 @@
 
 /**
-Represents our Database
-*/
+ *Represents a Database
+ */
 //package com.databaseProject.Databaseproject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,6 +27,10 @@ public class Database implements Serializable {
 	private String name;
 	private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
+	/**
+	 * Creates a Database with the specified name
+	 * @param name name of Database
+	 */
 	public Database(String name) {
 		this.name = name;
 	}
@@ -64,7 +68,7 @@ public class Database implements Serializable {
 	 * @param name name of the table
 	 * @return boolean true, if the name is unique, false otherwise
 	 */
-	public boolean uniqueTableName(String name) {
+	public boolean uniqueTableName(String name) {				//JUNIT TESTED
 
 		boolean exists = true;
 		for(Table t : tables) {
@@ -129,6 +133,7 @@ public class Database implements Serializable {
 					break;
 				case 4:
 					if (tableCounter == 0) {
+
 						System.out.println("No tables in your database");
 					} else {
 						defineCorrelation();
@@ -160,7 +165,6 @@ public class Database implements Serializable {
 	public Table chooseTable() {
 		Table table = tables.get(0);
 		if (tableCounter > 1) {
-			Scanner cs = new Scanner(System.in);
 			System.out.println("Choose one of your tables: ");
 			for (int i = 0; i < tableCounter; i++) {
 				table = tables.get(i);
@@ -169,7 +173,7 @@ public class Database implements Serializable {
 			System.out.println("Insert the number of your choice: ");
 			int choice = Database.choice(1, tableCounter);
 			table = tables.get(choice - 1);
-		} else if (tableCounter == 1) table = tables.get(0);
+		}else if (tableCounter == 1) table = tables.get(0);
 		return table;
 	}
 
@@ -366,34 +370,41 @@ public class Database implements Serializable {
 	 * 2nd Table objects must be different
 	 * 3rd Table objects don't participate again in a same Correlation
 	 * 4th Table objects must have a primary Key List
+	 * 5th Database has enough tables for a new Correlation
 	 * B.User insert the name of the Correlation
 	 * Returns nothing
 	 */
 	public void defineCorrelation() {
-		if ((getTableCounter() != 1)) {
-			Table table1;
-			Table table2;
-			do {
-				System.out.println("Please choose the entities you want to relate");
-				System.out.print("First table: ");
-				table1 = chooseTable();
-				System.out.print("Second table: ");
-				table2 = chooseTable();
-				table2 = checkDiffrentTables(table1, table2);
-				table1 = setUpTableForCorrelation(table1);
-				table2 = setUpTableForCorrelation(table2);
+		if ((getTableCounter() != 1)) {			//1st
+			while(checkAvailabilityForCorrelation()) { //5th
+				Table table1;
+				Table table2;
+				do {
+					System.out.println("Please choose the entities you want to relate");
+					System.out.print("First table: ");
+					table1 = chooseTable();
+					System.out.print("Second table: ");
+					table2 = chooseTable();
+					table2 = checkDiffrentTables(table1, table2); //2nd
+					table1 = setUpTableForCorrelation(table1);	//4th
+					table2 = setUpTableForCorrelation(table2);	//4th
 
-				if(checkingCorrelation(table1, table2)) {
-					System.out.println("Correlation with tables/entities " + table1.getName() + " and " + table2.getName() + " already exists.");
-				}
-		 	} while(checkingCorrelation(table1, table2));
+					if(checkingCorrelation(table1, table2)) {
+						System.out.println("Correlation with tables/entities " + table1.getName() + " and " + table2.getName() + " already exists.");
+					}
+				} while(checkingCorrelation(table1, table2)); //3rd
 
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
-			String name = sc.next();
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
+				String name = sc.next();
 
-			createCorrelation(name, table1, table2);
-			table2.printHeader();
+				createCorrelation(name, table1, table2);
+				table2.printHeader();
+			}
+			if(checkAvailabilityForCorrelation() == false) {
+				System.out.println("Your Database ran out of tables for a new Correlation." +
+									"You have to create more!");
+			}
 		} else {
 			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");
 		}
@@ -419,7 +430,7 @@ public class Database implements Serializable {
 	 * @param table2 second table/entity in correlation
 	 * @return boolean This returns true if this correlation already exists
 	 */
-	public boolean checkingCorrelation(Table table1, Table table2) {
+	public boolean checkingCorrelation(Table table1, Table table2) { //JUNIT TESTED
 		boolean exists = false;
 		for(Correlation c : correlations) {
 			if((c.getTable1().equals(table1) && c.getTable2().equals(table2))
@@ -428,6 +439,30 @@ public class Database implements Serializable {
 			}
 		}
 		return exists;
+	}
+
+	/**
+	 * Checks, if a new Correlation is available or Database ran out of tables,
+	 * that make a new Correlation
+	 * @return boolean true if a new Correlation is possible, false otherwise
+	 */
+	public boolean checkAvailabilityForCorrelation() {
+		 int counter = 0;
+		 for(Table t1 : tables) {
+			 for(Table t2 : tables) {
+				 if(!t1.equals(t2)) {
+					 if(checkingCorrelation(t1, t2)) {
+						 counter++;
+					 }
+				 }
+			 }
+		 }
+		 if ((counter / 2) == correlations.size() && counter!= 0) {
+			 return false;
+		 } else {
+			 return true;
+		 }
+
 	}
 
 	/**
@@ -452,7 +487,7 @@ public class Database implements Serializable {
 	 * @param table1 first table/entity in correlation
 	 * @param table2 second table/entity in correlation
 	 */
-	public Table checkDiffrentTables(Table table1, Table table2) {
+	public Table checkDiffrentTables(Table table1, Table table2) { //JUNIT TESTED
 			do {
 				if (table2.equals(table1)) {
 					System.out.println("Error: Same table chosen");
@@ -473,7 +508,7 @@ public class Database implements Serializable {
 		int option = Menu.correlationOptions();
 		System.out.println(option);
 		if(option == 1 || option == 2) {
-			if(!defineTable2(table1, table2).equals(table2)) { //method
+			if(!defineTable2(table1, table2).equals(table2)) {
 				Table temp = table2;
 				table2 = table1;
 				table1 = temp;
