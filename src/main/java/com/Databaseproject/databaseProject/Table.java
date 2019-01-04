@@ -550,13 +550,13 @@ public class Table implements Serializable {
     }
 
   	public void sortData() {
-		int choice;
+		int choice=0;
 		boolean continueProcess = true;
 		while (continueProcess) {
-			Menu.assortmentMenu();
-			choice = Database.choice(1, 2);
-			switch (choice)
-			{
+			if (numberOfRows>1) {
+				Menu.assortmentMenu();
+				choice = Database.choice(1, 2);
+				switch (choice) {
 				case 1:
 					printAll();
 					chooseSort();
@@ -564,12 +564,14 @@ public class Table implements Serializable {
 				default:
 					manageData();
 					break;
+				}
 			}
 			if (choice==1) {
 				System.out.println("Assortment completed successfully");
 				System.out.println("Continue with the assortment of data?");
 				continueProcess = Database.findDecision();
 			} else {
+				System.out.println("Not enough records");
 				continueProcess = false;
 			}
 		}
@@ -1151,7 +1153,10 @@ public class Table implements Serializable {
         case 2:
             deleteSpecificRangeofRows();
             break;
-        }
+        default:
+        	deleteData();
+        	break;
+		}
 		} else {
 			System.out.println("No records to delete.");
 		}
@@ -1217,7 +1222,6 @@ public class Table implements Serializable {
 
 	/** deletes any column you want(one or more)*/
 	public void deleteColumns() {
-		Scanner cs = new Scanner(System.in);
 		boolean continueProcess = true;
 		int y = 0;
 		while (continueProcess) {
@@ -1367,8 +1371,8 @@ public class Table implements Serializable {
    	/**
    	* Sorts the table based on a column given by the user
    	* The user seletcs in which order the assortment will be made(ascending or descending)
-   	* According to the type of the column, the corresponding method is called in order to compare all the datas of the column.
-   	* Then it is called another method, which sorts the whole table based on the the previous comparation.
+   	* According to the type of the column, the corresponding method(compareStrings()/compareIntegers()/compareDoubles()) is called in order to compare all the datas of the column.
+   	* Then it is called another method(sort()), which sorts the whole table based on the the previous comparation.
    	*/
    	public void chooseSort() {
    		Scanner cs = new Scanner(System.in);
@@ -1400,6 +1404,7 @@ public class Table implements Serializable {
    					}
    				}
    			}
+   			printAll();
    	}
 
    	public void sort(int result, int j, int choice) {
