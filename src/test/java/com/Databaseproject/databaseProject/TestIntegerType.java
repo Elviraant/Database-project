@@ -15,8 +15,8 @@ public class TestIntegerType {
 	}
 
 
-	@Test(expected = InputMismatchException.class)
-	public void testGetData() {
+	@Test
+	public void testGetData() throws InputMismatchException {
 		String input = "NOT AN INTEGER";
 		InputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
