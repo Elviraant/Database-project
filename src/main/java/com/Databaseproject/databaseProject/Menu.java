@@ -4,7 +4,7 @@ public class Menu implements Serializable{
 
 	public static int fieldTypesMenu() {
 
-		System.out.println(String.format("%s%n%s%n%s%n%s%n", "1. Integer.", "2. Double.", "3. Text.", "4. Enumerated Type"));
+		System.out.println(String.format("%s%n%s%n%s%n%s%n", "1. Integer", "2. Double", "3. Text", "4. Enumerated Type"));
 		System.out.println("Please chose one of the above options: ");
 		return Database.choice(1, 4);
 	}
@@ -26,7 +26,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your data: ");
 		System.out.println("-----------------");
-		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. More Options", "5. Exit."));
+		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Present Data", "2. Change Data", "3. Delete Data", "4. More Options", "5. Exit"));
 		return Database.choice(1,5);
 	}
 
