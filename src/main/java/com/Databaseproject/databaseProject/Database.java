@@ -386,7 +386,7 @@ public class Database implements Serializable {
 	 */
 	public void defineCorrelation() {
 		if ((getTableCounter() != 1)) {			//1st
-			while(checkAvailabilityForCorrelation()) { //5th
+			if(checkAvailabilityForCorrelation()) { //5th
 				Table table1;
 				Table table2;
 				do {
@@ -409,7 +409,7 @@ public class Database implements Serializable {
 				String name = sc.next();
 
 				createCorrelation(name, table1, table2);
-				table2.printHeader();
+
 			}
 			if(checkAvailabilityForCorrelation() == false) {
 				System.out.println("Your Database ran out of tables for a new Correlation." +
@@ -456,7 +456,7 @@ public class Database implements Serializable {
 	 * that make a new Correlation
 	 * @return boolean true if a new Correlation is possible, false otherwise
 	 */
-	public boolean checkAvailabilityForCorrelation() {
+	public boolean checkAvailabilityForCorrelation() { //JUNIT TESTED
 		 int counter = 0;
 		 for(Table t1 : tables) {
 			 for(Table t2 : tables) {
@@ -516,7 +516,6 @@ public class Database implements Serializable {
 	 */
 	public void createCorrelation(String name, Table table1, Table table2) {
 		int option = Menu.correlationOptions();
-		System.out.println(option);
 		if(option == 1 || option == 2) {
 			if(!defineTable2(table1, table2).equals(table2)) {
 				Table temp = table2;
@@ -533,9 +532,11 @@ public class Database implements Serializable {
 					  correlations.add(c2);
 					  c2.fillForeignKeyColumn();
 					  break;
-			default: ManyToMany c3 = new ManyToMany(name, table1, table2);
+			case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
 					  correlations.add(c3);
 					  c3.fillForeignKeyColumn();
+					  break;
+			default : manageTables();
 					  break;
 			}
 	}
