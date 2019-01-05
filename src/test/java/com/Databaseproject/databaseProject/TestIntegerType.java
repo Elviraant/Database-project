@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.util.InputMismatchException;
 
 public class TestIntegerType {
 

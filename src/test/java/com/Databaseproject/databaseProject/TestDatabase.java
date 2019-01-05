@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 
 
 public class TestDatabase {
@@ -35,6 +36,17 @@ public class TestDatabase {
 	}
 
 	@Test
+	public void testGetTables() {
+		ArrayList<Table> testTables = new ArrayList<Table>();
+		testTables.add(table1);
+		testTables.add(table2);
+		testTables.add(table3);
+		Assert.assertEquals("Failure - tables ArrayList gone wrong", testTables, db.getTables());
+
+	}
+
+
+	@Test
 	public void testUniqueTableName() {
 		Assert.assertTrue("Failure - Name of table is not unique",
 						db.uniqueTableName(missingName));
@@ -60,7 +72,7 @@ public class TestDatabase {
 		Assert.assertFalse("Failure - Database ran out of Tables", db.checkAvailabilityForCorrelation());
 	}
 
-	@Test
+	/**@Test
 	public void testCheckDiffrentTables() {
 
 		Assert.assertSame("Failure - Tables are not different",
@@ -68,6 +80,6 @@ public class TestDatabase {
 		Assert.assertNotSame("Failure - Tables are different",
 							db.checkDiffrentTables(table1, table1), table1);
 
-	}
+	} */
 
 }
