@@ -8,7 +8,6 @@ import java.util.Scanner;
 import java.io.Serializable;
 import java.util.Collections;
 
-
 public class Table implements Serializable {
     private ArrayList<Column> columns = new ArrayList<>();
     private int columnCounter = 0;
@@ -287,16 +286,24 @@ public class Table implements Serializable {
         // numberOfRows+= insertions;
     }
 
+	/**
+	 * Adds a record in a Table
+	 * If the Column object is the Record field (first Column at columns),
+	 * method will add to Column object's ArrayList numberOfRows + 1
+	 * Else calls readData(Column) and then, there are two options:
+	 * if the Column is primary key method calls fillPrimaryKeyField(Object)
+	 * else fills the Column object's ArrayList
+	 * Returns nothing
+	 */
     public void addRow() {
         System.out.println("#" + (numberOfRows + 1) + " Record: ");
         for (int i = 0; i < columnCounter; i++) {
 			Column column = getColumns().get(i);
-            if (this.getColumns().get(0).equals(column)) {
+            if (this.getColumns().get(0).equals(column)) { //if is the Record field
                 column.getField().add(numberOfRows + 1);
             } else {
-                System.out.println("Give " + column.getName());
-
-                	Object data = column.getType().getData();
+                System.out.println("Insert " + column.getName());
+				Object data = readData(column);
 				if (column.getPrimaryKey()) { //if is primary key
                 	 column.fillPrimaryKeyField(data);
                 }
@@ -308,7 +315,7 @@ public class Table implements Serializable {
 
         }
 
-}
+	}
 
     public Column matchingKeys(int position) {
 		Column prKey = null;
@@ -340,7 +347,7 @@ public class Table implements Serializable {
                     System.out.println("-----------------");
                     for (int j = 0; j < numberOfRows; j++) {
                         System.out.print("#" + (j + 1) + " Record: ");
-                        Object data = column.getType().getData();
+                        Object data = readData(column);
                         column.fillPrimaryKeyField(data);
                     }
                 } else if (columns.get(0).equals(column)) {
@@ -353,7 +360,7 @@ public class Table implements Serializable {
                     System.out.println("-----------------");
                     for (int j = 0; j < numberOfRows; j++) {
                         System.out.print("#" + (j + 1) + " Record: ");
-                        Object data = column.getType().getData();
+                        Object data = readData(column);
                         column.getField().add(data);
                     }
                 }
@@ -362,6 +369,27 @@ public class Table implements Serializable {
         }
 
     }
+
+	/**
+	 * Checks a space record for a StringType and doesn't allow it
+	 * @param column column, that is being filled
+	 * @return Object that is read
+	 */
+    public Object readData(Column column) {
+		Scanner sc = new Scanner(System.in);
+		Object data = column.getType().getData();
+		if (column.getType() instanceof StringType) {
+			String s = (String)data;
+			while((s.startsWith("") && s.endsWith(" ")) || (s.length() == 0) || (s.startsWith(" "))) {
+				s = (String)data;
+				System.out.print("A space record, or a space at the beginning is not acceptable. \n"
+								+ "Please try again: ");
+				s = sc.next();
+			}
+			data = s;
+		}
+		return data;
+	}
 
     public void manageData() {
         boolean continueProcess = true;
@@ -506,10 +534,10 @@ public class Table implements Serializable {
         }
     }
 
-	/* *checks if input is valid.
-	   *if it is, calls the suitable method.
-	   *When process done, asks user if he wants to continue.
-	   *if it is not, the process is repeated until input is valid.
+	/**checks if input is valid.
+	  *if it is, calls the suitable method.
+	  *When process done, asks user if he wants to continue.
+	  *if it is not, the process is repeated until input is valid.
 	*/
 	public void changeData() {
         int choice;
