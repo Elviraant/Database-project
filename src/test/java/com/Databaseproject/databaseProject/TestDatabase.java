@@ -42,46 +42,6 @@ public class TestDatabase {
 						db.uniqueTableName(existingName));
 
 	}
-	/**@Test //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public void testCreateNewTable() {
-		Assert.assertEquals("Failure - Table didn't created", db.createNewTable());
-
-	}**/
-	/**
-	@Test
-	public void testChooseTable() {
-
-
-	} **/
-
-	@Test
-	public void testFindDecision() {
-		String input = "y";
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-   		System.setIn(in);
-		Assert.assertTrue("Failure - yes returns false", Database.findDecision());
-	}
-
-	/**@Test //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public void testChoice() {
-
-		int input = inRange;
-		InputStream in = new ByteArrayInputStream(input.getBytes());
-   		System.setIn(in);
-		Assert.assertEquals("Failure - Out of range", Database.choice(startPoint,endPoint), 3);
-		//Assert.assertEquals("Failure - Out of range", Database.choice(startPoint,endPoint), 3);
-	}**/
-
-	/**@Test
-	public void testValid() {
-
-
-	}**/
-
-	@Test
-	public void testSetUpTableForCorrelation() {
-		Assert.assertSame("Failure - Table has changed", db.setUpTableForCorrelation(table1), table1);
-	}
 
 	@Test
 	public void testCheckingCorrelation() {
@@ -90,6 +50,14 @@ public class TestDatabase {
 		Assert.assertFalse("Failure - Correlation exists",
 						db.checkingCorrelation(table1, table3));
 
+	}
+
+	@Test
+	public void testCheckAvailabilityForCorrelation() {
+		Assert.assertTrue("Failure - Database has enough Tables", db.checkAvailabilityForCorrelation());
+		Correlation c2 = new Correlation("living", table1, table3);
+		Correlation c3 = new Correlation("living", table2, table3);
+		Assert.assertFalse("Failure - Database ran out of Tables", db.checkAvailabilityForCorrelation());
 	}
 
 	@Test
