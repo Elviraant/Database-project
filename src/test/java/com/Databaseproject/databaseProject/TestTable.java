@@ -29,4 +29,24 @@ public class TestTable {
        		Assert.assertEquals("failure - contains missing element",
                 	table.containsName(missingElement), -1);
 	}
+
+	@Test
+	public void testInputFieldName() {
+		int position = table.inputFieldName("random process");
+   		if (position != -1) {
+			Assert.assertEquals("failure - wrong position", position, 0);
+		} else {
+			Assert.assertEquals("failure - this field does not exist in Table", position, -1);
+		}
+	}
+
+
+	@Test
+	public void testFindPrimaryKeyColumn() {
+		column.setPrimaryKey(true);
+		Assert.assertEquals("failure - wrong position of Primary Key Column", table.findPrimaryKeyColumn(), 0);
+		column.setPrimaryKey(false);
+		Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
+	}
+
 }
