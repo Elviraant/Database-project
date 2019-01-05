@@ -32,7 +32,7 @@ public class TestTable {
 
 	@Test
 	public void testInputFieldName() {
-		int position = table.inputFieldName("random process");
+		int position = table.inputFieldName("random process1");
    		if (position != -1) {
 			Assert.assertEquals("failure - wrong position", position, 0);
 		} else {
