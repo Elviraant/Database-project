@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Scanner;
+import java.lang.System.*;
 
 public class TestTable {
 
@@ -42,30 +44,16 @@ public class TestTable {
 		Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
 	}
 
-	public void input() {
-			Scanner sc = new Scanner(System.in);
-			String input = sc.nextLine();
-			System.out.println(input);
-			input = sc.nextLine();
-			System.out.println(input);
-		}
+	@Test
+	public void testInputFieldName() {
+		ByteArrayInputStream input1 = new ByteArrayInputStream(firstElement.getBytes());
+		System.setIn(input1);
+		Assert.assertEquals("failure - wrong position", table.inputFieldName("random process"), 0);
 
-		public void output() {
-			String fieldname = "NAME";
-			System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
-			input();
-		}
+		ByteArrayInputStream input2 = new ByteArrayInputStream(missingElement.getBytes());
+		System.setIn(input2);
+		Assert.assertEquals("failure - this field does not exist in Table",table.inputFieldName("random process") , -1);
+	}
 
-			@Test
-			public void testInputFieldName() {
-				String fieldname = firstElement;
-				System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
-				input();
-				Assert.assertEquals("failure - wrong position", table.inputFieldName("random process"), 0);
 
-				fieldname = missingElement;
-				System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
-				input();
-				Assert.assertEquals("failure - this field does not exist in Table",table.inputFieldName("random process") , -1);
-			}
-		}
+}
