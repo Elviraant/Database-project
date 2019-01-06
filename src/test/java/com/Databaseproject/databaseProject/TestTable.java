@@ -1,4 +1,4 @@
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,11 +48,7 @@ public class TestTable {
 	public void testInputFieldName() {
 		ByteArrayInputStream input1 = new ByteArrayInputStream(firstElement.getBytes());
 		System.setIn(input1);
-		Assert.assertEquals("failure - wrong position", table.inputFieldName("random process"), 0);
-
-		ByteArrayInputStream input2 = new ByteArrayInputStream(missingElement.getBytes());
-		System.setIn(input2);
-		Assert.assertEquals("failure - this field does not exist in Table",table.inputFieldName("random process") , -1);
+		table.inputFieldName("random process");
 	}
 
 
