@@ -69,16 +69,22 @@ public class Correlation implements Serializable {
 					Correlation.deleteCorrelation(correlations);
 					break;
 				case 4:
-					System.out.println("Choose the correlation you want to view");
-					Correlation correlation = chooseCorrelation(correlations);
-					if (correlation instanceof OneToOne) {
-						correlation = (OneToOne) correlation;
-					} else if (correlation instanceof ManyToMany) {
-						correlation = (ManyToMany) correlation;
+					if (correlations.size() != 0) {
+						System.out.println("Choose the correlation you want to view");
+						Correlation correlation = chooseCorrelation(correlations);
+						if (correlation instanceof OneToOne) {
+							correlation = (OneToOne) correlation;
+						} else if (correlation instanceof ManyToMany) {
+							correlation = (ManyToMany) correlation;
+						} else {
+							correlation = (OneToMany) correlation;
+						}
+						correlation.viewProperties();
 					} else {
-						correlation = (OneToMany) correlation;
+						System.out.println("This option has to do with linked entities");
+						System.out.println("You should create at least one correlation");
+						System.out.println();
 					}
-					correlation.viewProperties();
 					break;
 				default:
 					continueProcess = false;
@@ -113,21 +119,26 @@ public class Correlation implements Serializable {
 						the list of the correlations in the base
 	*/
 	public static void deleteCorrelation(ArrayList<Correlation> correlations) {
-		System.out.println("Please choose the correlation you want to delete");
-		Correlation correlation = chooseCorrelation(correlations);
-		int pos = correlations.indexOf(correlation);
-		correlations.remove(pos);
-		correlation.getTable2().getColumns().remove(correlation.fK());
-		int counter = correlation.getTable2().getColumnCounter() - 1;
-		correlation.getTable2().setColumnCounter(counter);
-		correlation.getTable1().setReferences(false);
-		if (correlation instanceof ManyToMany) {
-			correlation.getTable1().getColumns().remove(((ManyToMany)correlation).fK1());
-			counter = correlation.getTable1().getColumnCounter() - 1;
-			correlation.getTable1().setColumnCounter(counter);
-			correlation.getTable2().setReferences(false);
+		if (correlations.size() != 0) {
+			System.out.println("Please choose the correlation you want to delete");
+			Correlation correlation = chooseCorrelation(correlations);
+			int pos = correlations.indexOf(correlation);
+			correlations.remove(pos);
+			correlation.getTable2().getColumns().remove(correlation.fK());
+			int counter = correlation.getTable2().getColumnCounter() - 1;
+			correlation.getTable2().setColumnCounter(counter);
+			correlation.getTable1().setReferences(false);
+			if (correlation instanceof ManyToMany) {
+				correlation.getTable1().getColumns().remove(((ManyToMany)correlation).fK1());
+				counter = correlation.getTable1().getColumnCounter() - 1;
+				correlation.getTable1().setColumnCounter(counter);
+				correlation.getTable2().setReferences(false);
+			}
+		} else {
+			System.out.println("No correlations found");
+			System.out.println();
 		}
-		}
+	}
 
 	/**
 	*asks user which is the table that he wants to search for related records
