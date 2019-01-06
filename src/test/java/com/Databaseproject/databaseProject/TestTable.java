@@ -34,26 +34,15 @@ public class TestTable {
 	}
 
 	@Test
-	public void testInputFieldName() {
-		int position = table.inputFieldName("random process1");
-   		if (position != -1) {
-			Assert.assertEquals("failure - wrong position", position, 0);
-		} else {
-			Assert.assertEquals("failure - this field does not exist in Table", position, -1);
-		}
-	}
-
-
-	@Test
 	public void testFindPrimaryKeyColumn() {
 		column.setPrimaryKey(true);
 		Assert.assertEquals("failure - wrong position of Primary Key Column", table.findPrimaryKeyColumn(), 0);
+
 		column.setPrimaryKey(false);
 		Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
 	}
 
-
-		public void input() {
+	public void input() {
 			Scanner sc = new Scanner(System.in);
 			String input = sc.nextLine();
 			System.out.println(input);
@@ -66,6 +55,7 @@ public class TestTable {
 			System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
 			input();
 		}
+
 			@Test
 			public void testInputFieldName() {
 				String fieldname = firstElement;
@@ -78,14 +68,4 @@ public class TestTable {
 				input();
 				Assert.assertEquals("failure - this field does not exist in Table",table.inputFieldName("random process") , -1);
 			}
-
-			@Test
-			public void testFindPrimaryKeyColumn() {
-				column.setPrimaryKey(true);
-				Assert.assertEquals("failure - wrong position of Primary Key Column", table.findPrimaryKeyColumn(), 0);
-
-				column.setPrimaryKey(false);
-				Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
 		}
-
-}
