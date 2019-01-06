@@ -1,3 +1,4 @@
+//package com.Databaseproject.databaseProject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +20,7 @@ public class TestIntegerType {
 	@Test
 	public void testGetData() throws InputMismatchException {
 		String input = "NOT AN INTEGER";
-		InputStream in = new ByteArrayInputStream(input.getBytes());
+		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
    		integer.getData();
 	}

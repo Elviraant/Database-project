@@ -1,5 +1,4 @@
-//package com.databaseProject.Databaseproject;
-
+//package com.Databaseproject.databaseProject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

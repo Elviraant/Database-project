@@ -3,7 +3,7 @@
 *Correlation exists between two tables of a base
 *Correltion can be one-to-one, one-to-many, many-to-many
 */
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,5 +1,4 @@
-
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
