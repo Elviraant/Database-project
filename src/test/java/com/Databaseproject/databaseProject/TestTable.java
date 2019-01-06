@@ -3,6 +3,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class TestTable {
 
@@ -48,5 +51,41 @@ public class TestTable {
 		column.setPrimaryKey(false);
 		Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
 	}
+
+
+		public void input() {
+			Scanner sc = new Scanner(System.in);
+			String input = sc.nextLine();
+			System.out.println(input);
+			input = sc.nextLine();
+			System.out.println(input);
+		}
+
+		public void output() {
+			String fieldname = "NAME";
+			System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
+			input();
+		}
+			@Test
+			public void testInputFieldName() {
+				String fieldname = firstElement;
+				System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
+				input();
+				Assert.assertEquals("failure - wrong position", table.inputFieldName("random process"), 0);
+
+				fieldname = missingElement;
+				System.setIn(new ByteArrayInputStream(fieldname.getBytes()));
+				input();
+				Assert.assertEquals("failure - this field does not exist in Table",table.inputFieldName("random process") , -1);
+			}
+
+			@Test
+			public void testFindPrimaryKeyColumn() {
+				column.setPrimaryKey(true);
+				Assert.assertEquals("failure - wrong position of Primary Key Column", table.findPrimaryKeyColumn(), 0);
+
+				column.setPrimaryKey(false);
+				Assert.assertEquals("failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
+		}
 
 }
