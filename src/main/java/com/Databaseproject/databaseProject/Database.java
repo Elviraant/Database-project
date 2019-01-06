@@ -84,7 +84,12 @@ public class Database implements Serializable {
 		d1.manageTables();
 		d1.save();
 	}
-
+	/**
+	*Sets up the base that the user wants to use
+	*New base can be created or already existing bases can be retrieved
+	*if user wants to retrieve a base but there are no saved, a new base will
+	*be automatically created
+	*/
 	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
 		Database d1 = new Database("");
 		boolean can = true;
@@ -106,7 +111,10 @@ public class Database implements Serializable {
 		}
 		return d1;
 	}
-
+	/**
+	*Presents the options which concern the processes
+	*that can be applied to already existing tables of the base
+	*/
 	public void manageTables() {
 		boolean continueProcess = true;
 		while (continueProcess) {
@@ -146,7 +154,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Method, that create a new table in this Database
+	 * Method, that creates a new table in this Database
 	 * Method calls uniqueTableName(String name) method, and checks the uniqueness of user's insertion
 	 * @returns Table database's new table/entity
 	 */
@@ -161,7 +169,9 @@ public class Database implements Serializable {
 		return new Table(name, this);
 	}
 
-
+	/**
+	*Method
+	*/
 	public Table chooseTable() {
 		Table table = tables.get(0);
 		if (tableCounter > 1) {
@@ -209,10 +219,10 @@ public class Database implements Serializable {
 		return yn;
 	}
 	/**
-	*returns number of choice from given range checking it is valid
-	*@param start starting number of the range of options
-	*@param end ending number of the range of options
-	*@return choice returns the final option
+	*Method that checks if a user's choice is within an allowed range
+	*@param start starting number of this range
+	*@param end ending number of this range
+	*@return choice final decision of the user
 	*/
 	public static int choice(int start, int end) {
 		int choice = valid();
@@ -225,7 +235,8 @@ public class Database implements Serializable {
 
 	/**
 	*checks if user gives an integer and handles Exception.
-	*@param return integer given by the user.
+	*@return integer given by the user and prints message
+	*asking for numerical data.
 	*/
 	public static int valid() {
 		Scanner cs = new Scanner(System.in);
@@ -245,13 +256,20 @@ public class Database implements Serializable {
 	}
 
 //SAVING
-
+	/**
+	*Method that checks if user wants to save the database
+	*calls method writeObject() and throws IOException which is
+	*handled in writeObject()
+	*/
 	public void save() throws IOException {
 		if (wantsToSave()) {
 			writeObject();
 		}
 	}
 
+	/**
+	*@return true if user wants to save the base
+	*/
 	public boolean wantsToSave() {
 		System.out.println("Do you want to save your database?");
 		return Database.findDecision();
@@ -273,9 +291,7 @@ public class Database implements Serializable {
 		Scanner cs = new Scanner(System.in);
 		String filename = this.getName();
 		try {
-			//System.out.println("Please insert a valid filepath: ");
-			//String path = cs.next();
-			FileWriter file = new FileWriter("saved", true); //(path+"\\"+ filename);
+			FileWriter file = new FileWriter("saved", true);
 			BufferedWriter out = new BufferedWriter(file);
 			out.write(filename);
 			out.newLine();
@@ -285,9 +301,7 @@ public class Database implements Serializable {
 		}
 
 		try {
-			//System.out.println("Please insert a valid filepath: ");
-			//String path = cs.next();
-			FileOutputStream file = new FileOutputStream(filename); //(path+"\\"+ filename);
+			FileOutputStream file = new FileOutputStream(filename);
 			ObjectOutputStream out = new ObjectOutputStream(file);
 			out.writeObject(this);
 			out.reset();
@@ -299,14 +313,15 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Retrieves the databases which exist
+	*Retrieves the asked database
+	*@param
+			nameOfBase name chosen by the user
+	*@return Database by retrieving the file in which the object is stored
 	*/
 	public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
 		Database d1 = new Database("");
 		String filename = nameOfBase;
 		try {
-			//System.out.println("Please insert the path where your database is stored.");
-			//String path = cs.next();
 			FileInputStream file = new FileInputStream(filename);
 			ObjectInputStream in = new ObjectInputStream(file);
 			d1 = (Database) in.readObject();
@@ -324,14 +339,13 @@ public class Database implements Serializable {
 
 	/**
 	*Prints available bases that user has created
-	*@returns
+	*@return
 			 the name of the chosen base
+			 if no bases are saved it returns "no bases"
 	*/
 	public static String chooseBase() {
 		ArrayList<String> saved = new ArrayList<String>();
 		try {
-			//System.out.println("Please insert the path where your database is stored.");
-			//String path = cs.next();
 			FileReader file = new FileReader("saved");
 			BufferedReader in = new BufferedReader(file);
 			int i = 1;

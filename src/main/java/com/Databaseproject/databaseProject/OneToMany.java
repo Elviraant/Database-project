@@ -47,12 +47,15 @@ public class OneToMany extends Correlation{
 		}
 	}
 
-
+	/**
+	*Returns void
+	*Gives yser a range of options concerning an one-to-many relationship
+	*/
 	@Override
 	public void viewProperties() {
 		boolean continueProcess = true;
  		while (continueProcess) {
-			System.out.print(String.format("\n\n"));
+			System.out.println();
 			int choice = Menu.viewPopertiesMenu();
 			switch (choice)
 			{

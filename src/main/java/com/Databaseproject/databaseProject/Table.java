@@ -203,7 +203,7 @@ public class Table implements Serializable {
     /*
      * Defines, which Column is the primary Key field Checks, if the name of a field
      * exists at this Table If it exists, sets the boolean instance variable true
-     * Returns nothing
+     * Returns void
      */
     public void definePrimaryKey() {
         Scanner cs = new Scanner(System.in);
@@ -314,18 +314,6 @@ public class Table implements Serializable {
 
 	}
 
-    public Column matchingKeys(int position) {
-		Column prKey = null;
-		for (int key : invPositionOffFk.keySet()) {
-			if (key == position) {
-				Table table = invPositionOffFk.get(key);
-				int pkpos = table.findPrimaryKeyColumn();
-				prKey = table.getColumns().get(pkpos);
-			}
-		}
-		return prKey;
-	}
-
 
     /**
      * Fill in with Data, Fills by column
@@ -366,7 +354,10 @@ public class Table implements Serializable {
         }
 
     }
-
+	/**
+	*Returns void
+	*Calls methods concerning presentation, changing and deletion
+	*/
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
@@ -394,7 +385,11 @@ public class Table implements Serializable {
 			}
 		}
 	}
-
+	/**
+	*Returns void
+	*Calls methods for sorting, adding data, searching
+	*findind max, min element and view design
+	*/
     public void moreOptions() {
         boolean continueProcess = true;
         while (continueProcess) {
@@ -445,7 +440,7 @@ public class Table implements Serializable {
             		    System.out.println("Deletion completed successfully");
 						}
 					} else {
-						System.out.println("This table references another table of your base");
+						System.out.println("This table is refered by another table of your base");
 					}
             	    break;
             	case 2:
@@ -478,7 +473,10 @@ public class Table implements Serializable {
         }
     }
 
-
+	/**
+	*Calls methods concerning data presentation
+	*Specific range of records and specific fields can also be presented
+	*/
     public void presentData() {
         int choice;
         boolean continueProcess = true;
@@ -609,7 +607,7 @@ public class Table implements Serializable {
             	break;
             }
             if ((choice==1) || (choice==2)){
-				System.out.println("Add completed successfully");
+				System.out.println("Adding completed successfully");
 				System.out.println("Continue with the adding of data?");
 				continueProcess = Database.findDecision();
 			} else {
@@ -759,6 +757,7 @@ public class Table implements Serializable {
     }
 
 	/**
+	*Returns void
 	*Present specific rows within a range given by the user
 	*/
 	public void printRangeOfRows() {
@@ -785,7 +784,7 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*Prints specific rows of the table
+	*Prints specific rows of the table by calling method presentRow(int)
 	*@param rows
 				given by the user or the programmer
 	*/
@@ -827,6 +826,7 @@ public class Table implements Serializable {
 
 	/**
 	*Prints columns according to a list given by the user
+	*list is created by calling method inputSpecificColumns
 	*/
 	public void printSpecificColumns() {
 		ArrayList<String> attributes = inputSpecificColumns();
@@ -836,6 +836,7 @@ public class Table implements Serializable {
 			this.presentColumns(attributes);
 		}
 	}
+
 	/**
 	*Prints specific names of attributes as header to a table
 	*@param attributes
@@ -1023,9 +1024,10 @@ public class Table implements Serializable {
         }
     }
 
-   /*  *search if there is a Field with primary keys.
-   	   *if exists, returns field's position in Table.
-   	   *else returns -1.
+   /**
+   *search if there is a Field with primary keys.
+   *if exists, returns field's position in Table.
+   *else returns -1.
 	*/
     public int findPrimaryKeyColumn() {
         int j = 0;
@@ -1167,6 +1169,7 @@ public class Table implements Serializable {
     }
 
 	/**
+	* Returns void
 	* deletes one row
 	*/
 	public void deleteRow(int row) {
@@ -1180,7 +1183,9 @@ public class Table implements Serializable {
 		}
 	}
 
-	/** deletes any row you want(one or more)*/
+	/**
+	*deletes any row you want(one or more)
+	*/
 	public void deleteSpecificRows() {
 		boolean continueProcess = true;
 		int counter =0;
@@ -1224,7 +1229,9 @@ public class Table implements Serializable {
 
 
 
-	/** deletes any column you want(one or more)*/
+	/**
+	*deletes any column you want(one or more)
+	*/
 	public void deleteColumns() {
 		boolean continueProcess = true;
 		int y = 0;
@@ -1272,7 +1279,11 @@ public class Table implements Serializable {
 	}
 
 	/**
-	* deletes any element you want
+	*Deletes any element of the table
+	*If an element is primary key the whole record is deleted
+	*after permission of the user
+	*If an element is primary key and refered by another table
+	*it can't be altered
 	*/
 	public void deleteElements(){
 		Scanner cs = new Scanner(System.in);

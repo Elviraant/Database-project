@@ -101,7 +101,7 @@ public class Column implements Serializable {
 
   /*
    * Creates the right FieldType object, based on a choice
-   * This is a static mrthod
+   * This is a static method
    * @param choice
    * @return FieldType object, that is created
    */

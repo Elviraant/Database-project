@@ -118,7 +118,12 @@ public class ManyToMany extends Correlation {
 				column.getForeignKeys().add(new ArrayList <Object>());
 			}
 	}
-
+	/**
+	*Properties for many-to-many correlatios
+	*User chooses from a range of options a property concerning  two linked entities
+	*Those options include information about the type of correlation and presentation
+	*of related records according to a key
+	*/
 	@Override
 	public void viewProperties() {
 		boolean continueProcess = true;
@@ -161,7 +166,9 @@ public class ManyToMany extends Correlation {
 		return searched;
 	}
 	/**
-	*applied only to many-to-many searching
+	*finds all linked entities with given primary key
+	*if the key doesn't exist or the respective record doesn't
+	*participate in the correlation a message is shown to inform the user
 	*/
 	@Override
 	public void search() {
