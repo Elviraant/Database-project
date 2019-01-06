@@ -645,8 +645,8 @@ public class Table implements Serializable {
    				 }
    			}
    		 System.out.println("Search Data completed successfully");
-            System.out.println("Continue with the searching of data?");
-            continueProcess = Database.findDecision();
+         System.out.println("Continue with the searching of data?");
+         continueProcess = Database.findDecision();
         } while (continueProcess);
    }
 
@@ -920,9 +920,7 @@ public class Table implements Serializable {
         int ex = this.containsName(nameofField);
         if (ex == -1) {
             System.out.println("This name of field doesn't exist in your Data Base");
-            System.out.println("Do you want to try again?");
-            // System.out.println("Answer Yes or No");
-            Boolean answer = Database.findDecision();
+            Boolean answer = Menu.printTryAgainQuestionMessage();
             if (answer) {
                 return inputFieldName(function);
             }
@@ -962,8 +960,8 @@ public class Table implements Serializable {
                 	        	    answer = false;
                 	        	} else {
                 	        	    System.out.println(
-                	        	            "This value of primary key already exists.Do you want to try again?(Yes/No)");
-                	        	    answer = Database.findDecision();
+                	        	            "This value of primary key already exists.");
+                	        	    answer = Menu.printTryAgainQuestionMessage();
                 	        	    if (answer) {
                 	        	        System.out.println("Enter new value again :");
                		        	    }
@@ -1018,8 +1016,7 @@ public class Table implements Serializable {
         	            System.out.println("Change completed successfully");
         	        } else {
         	            System.out.println("This name is already in use.");
-        	            System.out.println("Do you want to try again?");
-        	            answer = Database.findDecision();
+        	            answer = Menu.printTryAgainQuestionMessage();
         	        }
             	}
 			}
@@ -1106,8 +1103,8 @@ public class Table implements Serializable {
                 	        	    answer = false;
                 	        	} else {
                 	        	    System.out.println(
-                	        	            "This value of primary key already exists. Do you want to try again?(Yes/No)");
-                	        	    answer = Database.findDecision();
+       									"This value of primary key already exists.");
+                	        	    answer = Menu.printTryAgainQuestionMessage();
                 	        	    if (answer) {
                 	        	        System.out.println("Enter new value again :");
                 	        	    }
