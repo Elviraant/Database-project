@@ -3,7 +3,7 @@ Represents a relationship between two tables where the rows of table1
 *can be linked to multiple rows of table2 but
 *a row of table2 can be linked only to one row of table1
 */
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.HashMap;
 

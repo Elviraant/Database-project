@@ -1,4 +1,4 @@
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.io.Serializable;
 

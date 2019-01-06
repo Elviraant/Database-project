@@ -1,7 +1,7 @@
 /**
  *Represents a table of our database.
  */
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;

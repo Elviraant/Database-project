@@ -1,4 +1,4 @@
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 

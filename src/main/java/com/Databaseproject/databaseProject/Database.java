@@ -2,7 +2,7 @@
 /**
  *Represents a Database
  */
-//package com.databaseProject.Databaseproject;
+//package com.Databaseproject.databaseProject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
