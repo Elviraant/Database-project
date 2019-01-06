@@ -1,6 +1,6 @@
 /**
-Represents a table of our database.
-*/
+ *Represents a table of our database.
+ */
 //package com.databaseProject.Databaseproject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,17 +16,14 @@ public class Table implements Serializable {
     private boolean references = false;
     private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
 	private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
+
     /**
-     * Constructor for Table class
-     *
-     *  @param columns
-     *            arraylist with objects of Column
-     * @param columnCounter
-     *            number of columns in this table
-     * @param name
-     *            name of this table
-     * @param numberOfRows
-     *            number of row insertions from user
+     * Creates a Table for Database
+     * Add it to its Database tables ArrayList
+     * With secified name
+     * Update in Database the tableCounter
+     * @param name name of this table
+     * @param d1 Database that belongs to
      */
     public Table(String name, Database d1) {
         this.name = name;
@@ -303,7 +300,7 @@ public class Table implements Serializable {
                 column.getField().add(numberOfRows + 1);
             } else {
                 System.out.println("Insert " + column.getName());
-				Object data = readData(column);
+				Object data = column.getType().getData();
 				if (column.getPrimaryKey()) { //if is primary key
                 	 column.fillPrimaryKeyField(data);
                 }
@@ -339,15 +336,15 @@ public class Table implements Serializable {
             System.out.println("How many records would you like to fill for " + this.getName());
             numberOfRows = Database.valid();
         }
-
+        ArrayList<String> attributes = new ArrayList<String>();
         for (Column column : columns) {
             if (column.getField().isEmpty()) {
+				attributes.add(column.getName());
                 if (column.getPrimaryKey()) {
-                    System.out.println("	" + column.getName());
-                    System.out.println("-----------------");
+					printHeaderOfSpecificColumns(attributes);
                     for (int j = 0; j < numberOfRows; j++) {
                         System.out.print("#" + (j + 1) + " Record: ");
-                        Object data = readData(column);
+                        Object data = column.getType().getData();
                         column.fillPrimaryKeyField(data);
                     }
                 } else if (columns.get(0).equals(column)) {
@@ -356,40 +353,19 @@ public class Table implements Serializable {
                         // fill the record column.
                     }
                 } else {
-                    System.out.println("	" + column.getName());
-                    System.out.println("-----------------");
+					printHeaderOfSpecificColumns(attributes);
                     for (int j = 0; j < numberOfRows; j++) {
                         System.out.print("#" + (j + 1) + " Record: ");
-                        Object data = readData(column);
+                        Object data = column.getType().getData();
                         column.getField().add(data);
                     }
                 }
+                attributes.remove(0);
             }
             System.out.println();
         }
 
     }
-
-	/**
-	 * Checks a space record for a StringType and doesn't allow it
-	 * @param column column, that is being filled
-	 * @return Object that is read
-	 */
-    public Object readData(Column column) {
-		Scanner sc = new Scanner(System.in);
-		Object data = column.getType().getData();
-		if (column.getType() instanceof StringType) {
-			String s = (String)data;
-			while((s.startsWith("") && s.endsWith(" ")) || (s.length() == 0) || (s.startsWith(" "))) {
-				s = (String)data;
-				System.out.print("A space record, or a space at the beginning is not acceptable. \n"
-								+ "Please try again: ");
-				s = sc.next();
-			}
-			data = s;
-		}
-		return data;
-	}
 
     public void manageData() {
         boolean continueProcess = true;
@@ -439,6 +415,9 @@ public class Table implements Serializable {
             	    break;
             	case 5:
             	    findMinData();
+            	    break;
+            	case 6:
+            	    designView();
             	    break;
             	default:
             	    continueProcess = false;
@@ -1466,6 +1445,24 @@ public class Table implements Serializable {
             presentColumns(print);
         }
     }
+	/**
+	 * Presents number of Table's Columns and Table's records
+	 * Presents each Table's Column
+	 * Returns nothing
+	 */
+  	public void designView() {
+
+  		System.out.println("Table: " + name +
+  						   "\n Number of Columns: " + columnCounter +
+  						   "\n Number of Records: " + numberOfRows);
+  		int i = 0;
+  		for(Column column : columns) {
+  			if(i != 0) {
+  				System.out.println("#" + i + " " + column.toString());
+  			}
+  			i++;
+  		}
+	}
 
 
 }

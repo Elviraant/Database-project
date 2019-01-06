@@ -273,7 +273,16 @@ public class Column implements Serializable {
      return -1;
   }
 
+ /**
+  * Present a Column object with its characteristics
+  * @return String
+  */
+  public String toString() {
 
+	  return "Column Name: " + name + " ---- " + type.toString() + " ---- Primary Key: "
+	  		  + isPrimaryKey + " ---- Foreign Key: " + isForeignKey + " ---- ";
+
+  }
 
 
 }
