@@ -136,10 +136,10 @@ public class Database implements Serializable {
 						table.manageData();
 					}
 					break;
-				case 3:
+				case 4:
 					Correlation.manageCorrelations(this);
 					break;
-				case 4:
+				case 3:
 					if (tableCounter == 0) {
 
 						System.out.println("No tables in your database");
