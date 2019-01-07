@@ -43,7 +43,7 @@ public class Menu implements Serializable{
 		System.out.println();
 		System.out.println("Manage your tables: ");
 		System.out.println("---------------------");
-		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Create new table", "2. Manage Tables", "3. Ask Questions", "4. Make Correlationship", "5. Exit"));
+		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Create new table", "2. Manage Tables", "3. Make Correlationship",  "4. Ask Questions", "5. Exit"));
 		System.out.println("Please choose one of the above options");
 	}
 

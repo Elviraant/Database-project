@@ -362,7 +362,6 @@ public class Table implements Serializable {
     public void manageData() {
         boolean continueProcess = true;
         while (continueProcess) {
-			if (numberOfRows > 0) {
         	    int choice = Menu.startingMenu();
         	    switch (choice) {
         	    case 1:
@@ -380,10 +379,6 @@ public class Table implements Serializable {
         	    default:
         	    	continueProcess = false;
 				}
-			} else {
-				continueProcess = false;
-				System.out.println("This table is empty");
-			}
 		}
 	}
 	/**
@@ -394,34 +389,37 @@ public class Table implements Serializable {
     public void moreOptions() {
         boolean continueProcess = true;
         while (continueProcess) {
-			if (numberOfRows > 0) {
             	int choice = Menu.moreOptionsMenu();
-            	switch (choice) {
-				case 1:
-            	    sortData();
-            	    break;
-            	case 2:
-            	    addData();
-            	    break;
-            	case 3:
-            	    searchData();
-            	    break;
-            	case 4:
-            	    findMaxData();
-            	    break;
-            	case 5:
-            	    findMinData();
-            	    break;
-            	case 6:
-            	    designView();
-            	    break;
-            	default:
-            	    continueProcess = false;
+            	if (choice == 2) {
+					addData();
 				}
-            } else {
+				if (numberOfRows > 0) {
+            		switch (choice) {
+					case 1:
+            		    sortData();
+            		    break;
+            		case 2:
+            		    addData();
+            		    break;
+            		case 3:
+            		    searchData();
+            		    break;
+            		case 4:
+            		    findMaxData();
+            		    break;
+            		case 5:
+            		    findMinData();
+            		    break;
+            		case 6:
+            		    designView();
+            		    break;
+            		default:
+            		    continueProcess = false;
+					}
+            	} else {
 				continueProcess = false;
 				System.out.println("This table is empty.");
-			}
+				}
         }
     }
 
@@ -530,21 +528,36 @@ public class Table implements Serializable {
             switch (choice) {
 
             case (1):
-                changeFieldName();
+            	if (columnCounter > 0) {
+                	changeFieldName();
+				} else {
+					System.out.println("No existing fields");
+				}
                 break;
 
             case (2):
-                changeValue();
+            	if (numberOfRows > 0) {
+                	changeValue();
+				} else {
+					System.out.println("Table is empty");
+				}
                 break;
 
             case (3):
-            	printAll();
-                changeDataByRow();
+            	if (numberOfRows > 0) {
+            		printAll();
+               	    changeDataByRow();
+				} else {
+					System.out.println("Table is empty");
+				}
                 break;
-
             case (4):
-            	printAll();
-                sameValue();
+            	if (numberOfRows > 0) {
+            		printAll();
+               	    sameValue();
+				} else {
+					System.out.println("Table is empty");
+				}
                 break;
             default:
                 manageData();
@@ -600,16 +613,24 @@ public class Table implements Serializable {
             choice = Database.choice(1, 3);
             switch (choice) {
             case 1:
-            	System.out.println("Until now, these are your records: ");
-            	System.out.println();
-            	printAll();
-                columnFillerByRow();
+            	if (columnCounter > 0) {
+            		System.out.println("Until now, these are your records: ");
+            		System.out.println();
+            		printAll();
+                	columnFillerByRow();
+				} else {
+					System.out.println("You have to define fields first");
+				}
                 break;
             case 2:
-             	System.out.print("Until now, you have these columns: ");
-             	System.out.println();
-            	printHeader();
-            	setFieldNames();
+            	if (columnCounter > 0) {
+	             	System.out.print("Until now, you have these columns: ");
+     	        	System.out.println();
+     		       	printHeader();
+     		       	setFieldNames();
+				} else if (columnCounter == 0) {
+					setUpColumns();
+				}
 				columnFillerByColumn();
                 break;
             default:
@@ -1268,6 +1289,7 @@ public class Table implements Serializable {
               if (columnCounter == 1) {
                 columns.remove(0);
                 columnCounter = 0;
+                numberOfRows =0;
                 System.out.println("You deleted all the columns of the table");
                 continueProcess = false;
                 y = 1;
