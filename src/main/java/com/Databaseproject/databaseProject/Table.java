@@ -25,7 +25,7 @@ public class Table implements Serializable {
    * @param name name of this table.
    * @param d1 Database that belongs to.
    */
- 
+
   public Table(String name, Database d1) { /*checkstyle checked*/
     this.name = name;
     d1.getTables().add(this);
@@ -426,53 +426,57 @@ public class Table implements Serializable {
     }
 
 
-    public void deleteData() {
-        int choice;
-        boolean continueProcess = true;
-        while (continueProcess) {
-			if (numberOfRows > 0) {
-            	Menu.deletionMenu();
-            	choice = Database.choice(1, 5);
-            	switch (choice) {
-            	case 1:
-            		if (! references) {
-            		    deleteRows();
-            		 	if (numberOfRows>0) {
-            		    System.out.println("Deletion completed successfully");
-						}
-					} else {
-						System.out.println("This table is refered by another table of your base");
-					}
-            	    break;
-            	case 2:
-            		printAll();
-            	    deleteColumns();
-            	    break;
-            	case 3:
-            		printAll();
-            	    deleteElements();
-            	    break;
-            	case 4:
-            		printAll();
-            	    deleteAll();
-            	    break;
-            	default:
-					manageData();
-					break;
-            	}
-            	if ((choice>=1) && (choice<5)) {
-					if (numberOfRows>0) {
-					System.out.println("Continue with the deletion of data?");
-					continueProcess = Database.findDecision();
-					}
-				} else {
-					continueProcess = false;
-				}
-			} else {
-				continueProcess = false;
-			}
+  /**
+  * Choose deletion.
+  */
+
+  public void deleteData() {
+    int choice;
+    boolean continueProcess = true;
+    while (continueProcess) {
+      if (numberOfRows > 0) {
+        Menu.deletionMenu();
+        choice = Database.choice(1, 5);
+        switch (choice) {
+          case 1:
+            if (!references) {
+              deleteRows();
+              if (numberOfRows > 0) {
+                System.out.println("Deletion completed successfully");
+              }
+            } else {
+              System.out.println("This table is refered by another table of your base");
+            }
+            break;
+          case 2:
+            printAll();
+            deleteColumns();
+            break;
+          case 3:
+            printAll();
+            deleteElements();
+            break;
+          case 4:
+            printAll();
+            deleteAll();
+            break;
+          default:
+            manageData();
+            break;
         }
+        if ((choice >= 1) && (choice < 5)) {
+          if (numberOfRows > 0) {
+            System.out.println("Continue with the deletion of data?");
+            continueProcess = Database.findDecision();
+          }
+        } else {
+          continueProcess = false;
+        }
+      } else {
+        continueProcess = false;
+      }
     }
+  }
 
 	/**
 	*Calls methods concerning data presentation
@@ -555,33 +559,38 @@ public class Table implements Serializable {
         } while (decision);
     }
 
-  	public void sortData() {
-		int choice=0;
-		boolean continueProcess = true;
-		while (continueProcess) {
-			if (numberOfRows>1) {
-				Menu.assortmentMenu();
-				choice = Database.choice(1, 2);
-				switch (choice) {
-				case 1:
-					printAll();
-					chooseSort();
-					break;
-				default:
-					manageData();
-					break;
-				}
-			}
-			if (choice==1) {
-				System.out.println("Assortment completed successfully");
-				System.out.println("Continue with the assortment of data?");
-				continueProcess = Database.findDecision();
-			} else {
-				System.out.println("Not enough records");
-				continueProcess = false;
-			}
-		}
-	}
+  /**
+  *Sorting method.
+  */
+
+  public void sortData() {
+    int choice = 0;
+    boolean continueProcess = true;
+    while (continueProcess) {
+      if (numberOfRows > 1) {
+        Menu.assortmentMenu();
+        choice = Database.choice(1, 2);
+        switch (choice) {
+          case 1:
+            printAll();
+            chooseSort();
+            break;
+          default:
+            manageData();
+            break;
+        }
+      }
+      if (choice == 1) {
+        System.out.println("Assortment completed successfully");
+        System.out.println("Continue with the assortment of data?");
+        continueProcess = Database.findDecision();
+      } else {
+        System.out.println("Not enough records");
+        continueProcess = false;
+      }
+    }
+  }
+
 
     public void addData() {
         int choice;
@@ -1146,191 +1155,198 @@ public class Table implements Serializable {
 	   	}
     }
 
-    public void deleteRows() {
-		if (numberOfRows!=0){
-        System.out.println(String.format("%s%n%s%n", "1. Delete Specific Records", "2. Delete specific range of records"));
-        int choice;
-        choice = Database.choice(1, 2);
-        switch (choice) {
+  /**
+   * Rows deletion method.
+   */
+  public void deleteRows() {
+    if (numberOfRows != 0) {
+      System.out.println(String.format("%s%n%s%n", "1. Delete Specific Records",
+                "2. Delete specific range of records"));
+      int choice;
+      choice = Database.choice(1, 2);
+      switch (choice) {
         case 1:
-            deleteSpecificRows();
-            break;
+          deleteSpecificRows();
+          break;
         case 2:
-            deleteSpecificRangeofRows();
-            break;
+          deleteSpecificRangeofRows();
+          break;
         default:
-        	deleteData();
-        	break;
-		}
-		} else {
-			System.out.println("No records to delete.");
-		}
+          deleteData();
+          break;
+      }
+    } else {
+      System.out.println("No records to delete.");
     }
+  }
 
-	/**
-	* Returns void
-	* deletes one row
-	*/
-	public void deleteRow(int row) {
-		for (int k=0; k<columnCounter; k++) {
-			Column column = columns.get(k);
-			column.getField().remove(row-1);
-		}
-		numberOfRows--;
-		for (int i = 0; i < numberOfRows; i++) {
-			columns.get(0).getField().set(i,i+1);
-		}
-	}
-
-	/**
-	*deletes any row you want(one or more)
-	*/
-	public void deleteSpecificRows() {
-		boolean continueProcess = true;
-		int counter =0;
-		while (continueProcess) {
-			printAll();
-			System.out.println("Which record do you want to delete?");
-			int x = Database.choice(1,numberOfRows);
-			deleteRow(x);
-			if (numberOfRows!=0){
-				System.out.println("Delete another record?");
-				continueProcess = Database.findDecision();
-			} else {
-				System.out.println("Deletion completed successfully.\nYou can't delete another record");
-				continueProcess= false;
-			}
-		}
-	}
-
-	/**
-	* deletes specific rows, which are within a range given by the user
-	*/
-	public void deleteSpecificRangeofRows(){
-		System.out.println("Please insert the range of records you want to delete.");
-		int startRow;
-		int endRow;
-		do {
-			System.out.println("Starting record: ");
-			startRow = Database.choice(1, numberOfRows);
-			System.out.println("Ending record: ");
-			endRow = Database.choice(1,numberOfRows) ;
-			if (startRow > endRow) {
-				System.out.println("Starting can't be greater than ending record");
-			}
-		} while ( startRow> endRow);
-			int counter=0;
-			for (int j= startRow; j <= endRow; j++) {
-				deleteRow(j-counter);
-				counter++;
-			}
-	}
-
-
-
-	/**
-	*deletes any column you want(one or more)
-	*/
-	public void deleteColumns() {
-		boolean continueProcess = true;
-		int y = 0;
-		while (continueProcess) {
-			if ((columnCounter==2) && (primaryKeyColumnExists())) {
-				System.out.println("No columns to delete.");
-				y=1;
-			} else {
-			int x =  inputFieldName("delete");
-			if (x != -1) {
-				Column column = columns.get(x);
-				if (column.getPrimaryKey()) {
-					System.out.println("This column is primary key. Cannot be deleted!");
-				} else if (column.getForeignKey()) {
-					Menu.printColumnRefersMessage("be deleted");
-					System.out.println("To delete this column please delete the correlation between the tables");
-				} else {
-					columns.remove(x);
-					columnCounter--;
-					if (!primaryKeyColumnExists()) {
-						if (columnCounter == 1) {
-							columns.remove(0);
-							columnCounter=0;
-							System.out.println("You deleted all the columns of the table");
-							continueProcess = false;
-							y=1;
-						}
-					} else {
-						if (columnCounter ==2) {
-							System.out.println("Deletion completed successfully.\nYou can't delete another column.");
-							continueProcess = false;
-							y=1;
-						}
-					}
-				}
-			}
-		}
-			if (y==0) {
-				System.out.println("Delete another column?");
-				continueProcess = Database.findDecision();
-			} else {
-				continueProcess = false;
-			}
-		}
-	}
-
-	/**
-	*Deletes any element of the table
-	*If an element is primary key the whole record is deleted
-	*after permission of the user
-	*If an element is primary key and refered by another table
-	*it can't be altered
-	*/
-	public void deleteElements(){
-		Scanner cs = new Scanner(System.in);
-		boolean continueProcess = true;
-		boolean continueProcessPrimaryKey = false;
-		while (continueProcess) {
-			int x;
-			do{
-				System.out.println("Please insert the name of the column in which the element exists: ");
-				String name = cs.next();
-				x = containsName(name);
-			} while ( x == -1);
-			Column column = this.getColumns().get(x);
-			System.out.println("Please insert the row in which the element exists: ");
-			int y = Database.choice(1,numberOfRows);
-			if (column.getPrimaryKey()) {
-				if (!references) {
-					System.out.println("This element is a primary key. If you delete it the whole row will be deleted.\nAre you sure you want to continue? Y/N");
-					continueProcessPrimaryKey= Database.findDecision();
-					if (continueProcessPrimaryKey) {
-						deleteRow(y);
-					}
-				} else {
-					Menu.deletionFailed(this);
-				}
-			} else {
-				column.getField().set(y-1, " ");
-				System.out.println("Deletion completed successfully");
-			}
-			System.out.println("Do you want to delete another element? Y/N");
-			continueProcess = Database.findDecision();
-		}
-	}
-
-    /* deletes a whole table */
-    public void deleteAll() {
-		if (!getReferences()) {
-        	for (int i = columnCounter - 1; i >= 0; i--) {
-        	    columns.remove(i);
-
-        	}
-        	columnCounter = 0;
-        	numberOfRows = 0;
-        	System.out.println("Deletion completed successfully");
-		} else {
-			Menu.deletionFailed(this);
-		}
+  /**
+  * Returns void
+  * deletes one row.
+  */
+  public void deleteRow(int row) {
+    for (int k = 0; k < columnCounter; k++) {
+      Column column = columns.get(k);
+      column.getField().remove(row - 1);
     }
+    numberOfRows--;
+    for (int i = 0; i < numberOfRows; i++) {
+      columns.get(0).getField().set(i,i + 1);
+    }
+  }
+
+  /**
+  *deletes any row you want(one or more).
+  */
+  public void deleteSpecificRows() {
+    boolean continueProcess = true;
+    int counter = 0;
+    while (continueProcess) {
+      printAll();
+      System.out.println("Which record do you want to delete?");
+      int x = Database.choice(1, numberOfRows);
+      deleteRow(x);
+      if (numberOfRows!=0){
+        System.out.println("Delete another record?");
+        continueProcess = Database.findDecision();
+      } else {
+        System.out.println("Deletion completed successfully.\nYou can't delete another record");
+        continueProcess= false;
+      }
+    }
+  }
+
+  /**
+  * deletes specific rows, which are within a range given by the user.
+  */
+  public void deleteSpecificRangeofRows(){
+    System.out.println("Please insert the range of records you want to delete.");
+    int startRow;
+    int endRow;
+    do {
+      System.out.println("Starting record: ");
+      startRow = Database.choice(1, numberOfRows);
+      System.out.println("Ending record: ");
+      endRow = Database.choice(1, numberOfRows);
+      if (startRow > endRow) {
+        System.out.println("Starting can't be greater than ending record");
+      }
+    } while (startRow > endRow);
+    int counter = 0;
+    for (int j = startRow; j <= endRow; j++) {
+      deleteRow(j - counter);
+      counter++;
+    }
+  }
+
+
+
+  /**
+  *deletes any column you want(one or more).
+  */
+  public void deleteColumns() {
+    boolean continueProcess = true;
+    int y = 0;
+    while (continueProcess) {
+      if ((columnCounter == 2) && (primaryKeyColumnExists())) {
+        System.out.println("No columns to delete.");
+        y = 1;
+      } else {
+        int x =  inputFieldName("delete");
+        if (x != -1) {
+          Column column = columns.get(x);
+          if (column.getPrimaryKey()) {
+            System.out.println("This column is primary key. Cannot be deleted!");
+          } else if (column.getForeignKey()) {
+            Menu.printColumnRefersMessage("be deleted");
+            System.out.println("To delete this column please delete the "
+                       + "correlation between the tables");
+          } else {
+            columns.remove(x);
+            columnCounter--;
+            if (!primaryKeyColumnExists()) {
+              if (columnCounter == 1) {
+                columns.remove(0);
+                columnCounter = 0;
+                System.out.println("You deleted all the columns of the table");
+                continueProcess = false;
+                y = 1;
+              }
+            } else {
+              if (columnCounter == 2) {
+                System.out.println("Deletion completed successfully.\n"
+                    + "You can't delete another column.");
+                continueProcess = false;
+                y = 1;
+              }
+            }
+          }
+        }
+      }
+      if (y == 0) {
+        System.out.println("Delete another column?");
+        continueProcess = Database.findDecision();
+      } else {
+        continueProcess = false;
+      }
+    }
+  }
+
+  /**
+  *Deletes any element of the table
+  *If an element is primary key the whole record is deleted
+  *after permission of the user
+  *If an element is primary key and refered by another table
+  *it can't be altered.
+  */
+  public void deleteElements(){
+    Scanner cs = new Scanner(System.in);
+    boolean continueProcess = true;
+    boolean continueProcessPrimaryKey = false;
+    while (continueProcess) {
+      int x;
+      do {
+        System.out.println("Please insert the name of the column in which the element exists: ");
+        String name = cs.next();
+        x = containsName(name);
+      } while (x == -1);
+      Column column = this.getColumns().get(x);
+      System.out.println("Please insert the row in which the element exists: ");
+      int y = Database.choice(1,numberOfRows);
+      if (column.getPrimaryKey()) {
+        if (!references) {
+          System.out.println("This element is a primary key. If you delete it the whole row "
+                 + "will be deleted.\nAre you sure you want to continue? Y/N");
+          continueProcessPrimaryKey = Database.findDecision();
+          if (continueProcessPrimaryKey) {
+            deleteRow(y);
+          }
+        } else {
+          Menu.deletionFailed(this);
+        }
+      } else {
+        column.getField().set(y - 1, " ");
+        System.out.println("Deletion completed successfully");
+      }
+      System.out.println("Do you want to delete another element? Y/N");
+      continueProcess = Database.findDecision();
+    }
+  }
+
+  /**
+  *  deletes a whole table. */
+  public void deleteAll() {
+    if (!getReferences()) {
+      for (int i = columnCounter - 1; i >= 0; i--) {
+        columns.remove(i);
+      }
+      columnCounter = 0;
+      numberOfRows = 0;
+      System.out.println("Deletion completed successfully");
+    } else {
+      Menu.deletionFailed(this);
+    }
+  }
 
    /**
    	* Compares two given datas(Objects)
