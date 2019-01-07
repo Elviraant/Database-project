@@ -1,17 +1,6 @@
 ## Overview
 
 ### This project was developped during the third semester of our undergraduate studies in the Department of Management Science and Technology of Athens University Of Economics and Business. Our aim was to create a program in Java which offers user the ability to store and process data.
-### Our course leader was: @dio
-
-## Our team
-@github.com/tandreadi
-@github.com/kantoniadis
-@github.com/Elviraant
-@github.com/MariaGkoulta
-@github.com/IlianaGriva
-@github.com/dafnith
-@github.com/kPerikou
-@github.com/giasemi
 
 ## Set up your Database
 #### Step #1: Name your Database 
@@ -27,7 +16,6 @@
 - Delete Data
 
 ## Special Features
-
 - Search
 - Sort
 - Find maximum and minimum element
@@ -37,3 +25,5 @@
 ## Guide
 #### For more specific instuctions on how to run your database click here:
 
+## Team Members
+https://github.com/tandreadi, https://github.com/kantoniadis, https://github.com/Elviraant, https://github.com/MariaGkoulta, https://github.com/IlianaGriva, https://github.com/dafnith, https://github.com/kPerikou, https://github.com/giasemi
