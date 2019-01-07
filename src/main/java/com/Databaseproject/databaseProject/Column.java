@@ -165,29 +165,29 @@ public class Column implements Serializable {
     setName(name);
   }
 
-/*
+  /*
   *search if a specific element exists in specific field.
   *if exists, prints the all records that it is found in a list.
   *if it does not, prints suitable message.
   *@param Object Type variable, to be searched in field.
  */
   public void searchElement(Object element) { /*checkstyle checked*/
-      ArrayList<Integer> rows = matchingRows(element);
-      if (rows.size() != 0) {
-        System.out.println(element);
-        System.out.print("found in record(s):");
-        for (Integer row : rows) {
-  		 System.out.print(+row+1+". " );
-         }
-      } else {
-        System.out.print(element);
-        System.out.println("doesn't exist in this field.");
+    ArrayList<Integer> rows = matchingRows(element);
+    if (rows.size() != 0) {
+      System.out.println(element);
+      System.out.print("found in record(s):");
+      for (Integer row : rows) {
+        System.out.print(+row+1+". " );
       }
-     System.out.println();
+    } else {
+      System.out.print(element);
+      System.out.println("doesn't exist in this field.");
+    }
+    System.out.println();
   }
 
   /*
-  	*search if a specific element exists in specific field.
+	*search if a specific element exists in specific field.
     *if exists, keeps all the positions that it is found in a list.
     *returns this list, even if element does not exist.
     *@param Object Type variable, to be searched in field.
@@ -222,9 +222,9 @@ public class Column implements Serializable {
   */
 
   public void sortInAscendingOrder(int j, Object s1, Object s2) { /*checkstyle checked*/
-		Object temp = s2;
-    	this.getField().set(j,s1);
-    	this.getField().set(j - 1,temp);
+    Object temp = s2;
+    this.getField().set(j,s1);
+    this.getField().set(j - 1,temp);
   }
 
   /**
