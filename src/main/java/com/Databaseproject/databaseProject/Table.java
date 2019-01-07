@@ -2,132 +2,133 @@
  *Represents a table of our database.
  */
 //package com.Databaseproject.databaseProject;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.io.Serializable;
-import java.util.Collections;
 
 public class Table implements Serializable {
-    private ArrayList<Column> columns = new ArrayList<>();
-    private int columnCounter = 0;
-    private String name;
-    private int numberOfRows = 0;
-    private boolean references = false;
-    private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
-	private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
+  private ArrayList<Column> columns = new ArrayList<>();
+  private int columnCounter = 0;
+  private String name;
+  private int numberOfRows = 0;
+  private boolean references = false;
+  private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
+  private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
 
-    /**
-     * Creates a Table for Database
-     * Add it to its Database tables ArrayList
-     * With secified name
-     * Update in Database the tableCounter
-     * @param name name of this table
-     * @param d1 Database that belongs to
-     */
-    public Table(String name, Database d1) {
-        this.name = name;
-        d1.getTables().add(this);
-        int counter = d1.getTableCounter();
-        counter++;
-        d1.setTableCounter(counter);
+  /**
+   * Creates a Table for Database.
+   * Add it to its Database tables ArrayList.
+   * With secified name.
+   * Update in Database the tableCounter.
+   * @param name name of this table.
+   * @param d1 Database that belongs to.
+   */
+ 
+  public Table(String name, Database d1) { /*checkstyle checked*/
+    this.name = name;
+    d1.getTables().add(this);
+    int counter = d1.getTableCounter();
+    counter++;
+    d1.setTableCounter(counter);
+  }
+
+  public ArrayList<Column> getColumns() { /*checkstyle checked setters and getters*/
+    return columns;
+  }
+
+  public void setColumns(ArrayList<Column> columns) {
+    this.columns = columns;
+  }
+
+  public int getColumnCounter() {
+    return columnCounter;
+  }
+
+  public void setColumnCounter(int columnCounter) {
+    this.columnCounter = columnCounter;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getNumberOfRows() {
+    return numberOfRows;
+  }
+
+  public void setNumberOfRows(int numberOfRows) {
+    this.numberOfRows = numberOfRows;
+  }
+
+  public HashMap<Table, Integer> getPositionOffFk() {
+    return positionOffFk;
+  }
+
+  public void setPositionOffFk(Table key, Integer value) {
+    positionOffFk.put(key, value);
+  }
+
+  public HashMap<Integer, Table> getInvPositionOffFk() {
+    return invPositionOffFk;
+  }
+
+  public void setInvPositionOffFk(Integer value, Table key) {
+    invPositionOffFk.put(value, key);
+  }
+
+  public boolean getReferences() {
+    return references;
+  }
+
+  public void setReferences(boolean references) {
+    this.references = references;
+  }
+
+
+
+  /**
+   * public HashMap<Table, Integer> getPositionOfFK() { return positionOffFk; }
+   **/
+
+
+  /**
+   * Returns void Creates fields for a Table and calls findType method, to create
+   *  the correct ArrayList.
+   */
+
+  public void setUpColumns() {
+    Column rows = new Column("Record", new IntegerType(), this);
+    setFieldNames();
+  }
+
+  /**
+   * Set the Column's names until the user insert EXIT.
+   * Method setFieldNames() calls setFieldType(String) to create a Column object.
+   * Returns nothing.
+   */
+
+  public void setFieldNames() { /*checkstyle checked*/
+    System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
+    String nameOfField = nameAColumn();
+    nameOfField = uniqueFieldName(nameOfField);
+    while ((nameOfField.equals("EXIT")) && (columnCounter < 2)) {
+      Menu.printDeletePath();
+      nameOfField = nameAColumn();
+      nameOfField = uniqueFieldName(nameOfField);
     }
-
-    public ArrayList<Column> getColumns() {
-        return columns;
+    while (!nameOfField.equals("EXIT")) {
+      setFieldType(nameOfField);
+      nameOfField = nameAColumn();
+      nameOfField = uniqueFieldName(nameOfField);
     }
-
-    public void setColumns(ArrayList<Column> columns) {
-        this.columns = columns;
-    }
-
-    public int getColumnCounter() {
-        return columnCounter;
-    }
-
-    public void setColumnCounter(int columnCounter) {
-        this.columnCounter = columnCounter;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getNumberOfRows() {
-        return numberOfRows;
-    }
-
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
-    }
-
-    public HashMap<Table, Integer> getPositionOffFk() {
-        return positionOffFk;
-    }
-
-    public void setPositionOffFk(Table key, Integer value) {
-        positionOffFk.put(key, value);
-    }
-
-    public HashMap<Integer, Table> getInvPositionOffFk() {
-	    return invPositionOffFk;
-	}
-
-	public void setInvPositionOffFk(Integer value, Table key) {
-	    invPositionOffFk.put(value, key);
-    }
-
-    public boolean getReferences() {
-	    return references;
-	}
-
-	public void setReferences(boolean references) {
-	    this.references = references;
-    }
-
-
-
-    /**
-     * public HashMap<Table, Integer> getPositionOfFK() { return positionOffFk; }
-     **/
-
-
-    /**
-     * Returns void Creates fields for a Table and calls findType method, to create
-     *  the correct ArrayList
-     */
-
-    public void setUpColumns() {
-        Column rows = new Column("Record", new IntegerType(), this);
-        setFieldNames();
-    }
-
-	/**
-	 * Set the Column's names until the user insert EXIT
-	 * Method setFieldNames() calls setFieldType(String) to create a Column object
-	 * Returns nothing
-	 */
-    public void setFieldNames() {
-
-        System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
-		String nameOfField = nameAColumn();
-		nameOfField = uniqueFieldName(nameOfField);
-		while((nameOfField.equals("EXIT")) && (columnCounter < 2)) {
-			Menu.printDeletePath();
-			nameOfField = nameAColumn();
-			nameOfField = uniqueFieldName(nameOfField);
-		}
-		 while (!nameOfField.equals("EXIT")) {
-			setFieldType(nameOfField);
-			nameOfField = nameAColumn();
-			nameOfField = uniqueFieldName(nameOfField);
-		}
-        System.out.println();
-    }
+    System.out.println();
+  }
 
 	/**
 	 * User decide the type for Column FieldType type and create a Column object
@@ -933,61 +934,59 @@ public class Table implements Serializable {
 	   *Process stops, if user types suitable string('no').
 	   *or if there are no other columns to be processed.
 	 */
-    public void changeDataByRow() {
-        System.out.println("Which record do you want to change?");
-        printAll();
-        int row = Database.choice(1, numberOfRows) - 1;
-        if (row != -1) {
-            Boolean continueProcess = true;
-            int i = 1;
-            System.out.println("#" + (row + 1) + " Record: ");      //checks if record input is valid and keeps position of element.
-            do {
-                Column col = columns.get(i);
-                System.out.println("#" + (i) + " Field: ");
-                Boolean answer = false;
-                if (col.getForeignKey()) {
-					Menu.printColumnRefersMessage("change its element");
-				} else if (col.getPrimaryKey() && references) {
-					Menu.printColumnReferredMessage("change its element");
-				} else {
-                	System.out.println("Give the new value of " + col.getName());
-                	do {
-                	    Object nValue = col.getType().getData();
-                	    if (col.getPrimaryKey()) {
-
-                	        	if (col.checkUniqueness(nValue)) {
-                	        	    col.getField().set(row, nValue);
-                	        	    System.out.println("Change completed successfully");
-                	        	    answer = false;
-                	        	} else {
-                	        	    System.out.println(
-                	        	            "This value of primary key already exists.");
-                	        	    answer = Menu.printTryAgainQuestionMessage();
-                	        	    if (answer) {
-                	        	        System.out.println("Enter new value again :");
-               		        	    }
-                	        	}
-
-                	    } else {
-                	        col.getField().set(row, nValue);
-                	        System.out.println("Change completed successfully.");
-                	        answer = false;
-                	    }
-               		 } while (answer);
-				}
-                if (i != columnCounter-1) {
-                    System.out.println("Do you want to continue? (Yes/No)");
-                    continueProcess = Database.findDecision();
-                    if (!continueProcess) {
-                        i = columnCounter;
-                    }
-                }
-               	i++;
-            } while (i <= columnCounter-1);
+  public void changeDataByRow() {
+    System.out.println("Which record do you want to change?");
+    printAll();
+    int row = Database.choice(1, numberOfRows) - 1;
+    if (row != -1) {
+      Boolean continueProcess = true;
+      int i = 1;
+      System.out.println("#" + (row + 1) + " Record: ");      //checks if record input is valid and keeps position of element.
+      do {
+        Column col = columns.get(i);
+        System.out.println("#" + (i) + " Field: ");
+        Boolean answer = false;
+        if (col.getForeignKey()) {
+          Menu.printColumnRefersMessage("change its element");
+        } else if (col.getPrimaryKey() && references) {
+          Menu.printColumnReferredMessage("change its element");
         } else {
-            System.out.println("The record you typed is probably incorrect.");
+          System.out.println("Give the new value of " + col.getName());
+          do {
+            Object nValue = col.getType().getData();
+            if (col.getPrimaryKey()) {
+              if (col.checkUniqueness(nValue)) {
+                col.getField().set(row, nValue);
+                System.out.println("Change completed successfully");
+                answer = false;
+              } else {
+                System.out.println(
+                    "This value of primary key already exists.");
+                answer = Menu.printTryAgainQuestionMessage();
+                if (answer) {
+                  System.out.println("Enter new value again :");
+                }
+              }
+            } else {
+              col.getField().set(row, nValue);
+              System.out.println("Change completed successfully.");
+              answer = false;
+            }
+          } while (answer);
         }
+        if (i != columnCounter - 1) {
+          System.out.println("Do you want to continue? (Yes/No)");
+          continueProcess = Database.findDecision();
+          if (!continueProcess) {
+            i = columnCounter;
+          }
+        }
+        i++;
+      } while (i <= columnCounter - 1);
+    } else {
+      System.out.println("The record you typed is probably incorrect.");
     }
+  }
 
 
 	/* *change name of field given by user.
