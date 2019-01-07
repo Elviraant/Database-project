@@ -36,7 +36,7 @@ public class Menu implements Serializable{
 		System.out.println("------------");
 		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n%s%n%s%n", "1. Sort Data", "2. Add Data",
 					       "3. Search Data", "4. Find Maximum Element", "5. Find Minimum Element", "6. Design View", "7. Exit" ));
-		return Database.choice(1,6);
+		return Database.choice(1,7);
 	}
 
 	public static void multipleTablesMenu() {

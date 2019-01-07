@@ -326,7 +326,7 @@ public class Table implements Serializable {
         }
         ArrayList<String> attributes = new ArrayList<String>();
         for (Column column : columns) {
-            if (column.getField().isEmpty()) {
+            if (column.getField().isEmpty() && !column.getForeignKey()) {
 				attributes.add(column.getName());
                 if (column.getPrimaryKey()) {
 					printHeaderOfSpecificColumns(attributes);
