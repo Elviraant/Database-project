@@ -4,14 +4,14 @@
 ### Our course leader was: @dio
 
 ## Our team
-### @ github.com/tandreadi
-### @ github.com/kantoniadis
-### @ github.com/Elviraant
-### @ github.com/MariaGkoulta
-### @ github.com/IlianaGriva
-### @ github.com/dafnith
-### @ github.com/kPerikou
-### @ github.com/giasemi
+@github.com/tandreadi
+@github.com/kantoniadis
+@github.com/Elviraant
+@github.com/MariaGkoulta
+@github.com/IlianaGriva
+@github.com/dafnith
+@github.com/kPerikou
+@github.com/giasemi
 
 ## Set up your Database
 #### Step #1: Name your Database 
