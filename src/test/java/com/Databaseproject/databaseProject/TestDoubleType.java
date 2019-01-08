@@ -1,4 +1,3 @@
-//package com.Databaseproject.databaseProject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,24 +6,22 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.util.InputMismatchException;
 
-public class TestIntegerType {
+public class TestDoubleType {
 
-	private IntegerType integer;
+	private DoubleType doub;
 
 	@Before
 	public void setUp() {
-		integer = new IntegerType();
+		doub = new DoubleType();
 	}
 
 
 	@Test
 	public void testGetData() {
-		String input = "1";
+		String input = "1.2";
 		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
-   		Assert.assertSame("Failure - Not an IntegerType", integer.getData(), input);
+   		Assert.assertSame("Failure - Not a DoubleType", doub.getData(), input);
 	}
-
-
 
 }
