@@ -940,7 +940,7 @@ public class Table implements Serializable {
         String nameofField = name.getData();
         int ex = this.containsName(nameofField);
         if (ex == -1) {
-			if (nameofField.equals("Records")) {
+			if (nameofField.equals("Record")) {
 				System.out.println("You are not allowed to process field Record");
 			}else {
 				System.out.println("This name of field doesn't exist in your Data Base");
