@@ -22,7 +22,7 @@ public class TestStringType {
 		String input = "ABC";
 		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
-   		Assert.assertSame("Failure - Not a StringType", str.getData(), input);
+   		Assert.assertSame("Failure - Not a StringType", str.getData(), "ABC");
 	}
 
 }

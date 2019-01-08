@@ -22,7 +22,7 @@ public class TestDoubleType {
 		String input = "1.2";
 		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
-   		Assert.assertSame("Failure - Not a DoubleType", doub.getData(), input);
+   		Assert.assertSame("Failure - Not a DoubleType", doub.getData(), 1.2);
 	}
 
 }
