@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestEnumeratedType {
 
   private EnumeratedType type;
-  private String missingValue = "Dog"
+  private String missingValue = "Dog";
 
   @Before
   public void setUp() {
