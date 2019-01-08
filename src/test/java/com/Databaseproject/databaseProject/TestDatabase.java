@@ -19,10 +19,6 @@ public class TestDatabase {
 	private Correlation correlation;
 	private String missingName = "Lessons";
 	private String existingName = "Student";
-	private int startPoint = 1;
-	private int endPoint = 4;
-	private int inRange = 3;
-	private int outOfRange = 5;
 
 	@Before
 	public void setUp() {
@@ -31,6 +27,7 @@ public class TestDatabase {
 		table2 = new Table("Teachers", db);
 		table3 = new Table("Countries", db);
 		correlation = new Correlation("teaches", table2, table1);
+		db.getCorrelations().add(correlation);
 		type = new StringType();
 		column = new Column("Name", type, table1);
 
@@ -69,18 +66,9 @@ public class TestDatabase {
 	public void testCheckAvailabilityForCorrelation() {
 		Assert.assertTrue("Failure - Database has enough Tables", db.checkAvailabilityForCorrelation());
 		Correlation c2 = new Correlation("living", table1, table3);
+		db.getCorrelations().add(c2);
 		Correlation c3 = new Correlation("living", table2, table3);
+		db.getCorrelations().add(c2);
 		Assert.assertFalse("Failure - Database ran out of Tables", db.checkAvailabilityForCorrelation());
 	}
-
-	/**@Test
-	public void testCheckDiffrentTables() {
-
-		Assert.assertSame("Failure - Tables are not different",
-							db.checkDiffrentTables(table1, table2), table2);
-		Assert.assertNotSame("Failure - Tables are different",
-							db.checkDiffrentTables(table1, table1), table1);
-
-	} */
-
 }
