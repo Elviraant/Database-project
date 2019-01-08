@@ -25,5 +25,15 @@
 ## Guide
 #### For more specific instuctions on how to run your database click here:
 
+## Project Documentation 
+#### Find our Project's Documentation on [Database Project-Java Documentation](https://elviraant.github.io/Database-project/apidocs/)
+
 ## Team Members
-https://github.com/tandreadi, https://github.com/kantoniadis, https://github.com/Elviraant, https://github.com/MariaGkoulta, https://github.com/IlianaGriva, https://github.com/dafnith, https://github.com/kPerikou, https://github.com/giasemi
+- [tandreadi](https://github.com/tandreadi)
+- [kantoniadis](https://github.com/kantoniadis)
+- [Elviraant](https://github.com/Elviraant)
+- [MariaGkoulta](https://github.com/MariaGkoulta)
+- [IlianaGriva](https://github.com/IlianaGriva)
+- [dafnith](https://github.com/dafnith)
+- [kPerikou](https://github.com/kPerikou)
+- [giasemi](https://github.com/giasemi)
