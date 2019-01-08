@@ -338,10 +338,12 @@ public class Table implements Serializable {
 	/**
 	*Call method for presentation, changing or deletion
 	*according to user's choice
+	*if table is empty processes cannot be done.
 	*/
     public void manageData() {
-        boolean continueProcess = true;
-        while (continueProcess) {
+		if (columnCounter != 0) {
+         boolean continueProcess = true;
+         while (continueProcess) {
         	    int choice = Menu.startingMenu();
         	    switch (choice) {
         	    case 1:
@@ -359,8 +361,12 @@ public class Table implements Serializable {
         	    default:
         	    	continueProcess = false;
 				}
+		 }
+		}else {
+		   System.out.println("There are no columns to be processed in this table.");
 		}
 	}
+
 	/**
 	*Call method for sorting, adding data, searching
 	*findind max, min element or view design
@@ -525,16 +531,14 @@ public class Table implements Serializable {
 
             case (3):
             	if (numberOfRows > 0) {
-            		printAll();
-               	    changeDataByRow();
+            		changeDataByRow();
 				} else {
 					System.out.println("Table is empty");
 				}
                 break;
             case (4):
             	if (numberOfRows > 0) {
-            		printAll();
-               	    sameValue();
+					sameValue();
 				} else {
 					System.out.println("Table is empty");
 				}
@@ -936,7 +940,11 @@ public class Table implements Serializable {
         String nameofField = name.getData();
         int ex = this.containsName(nameofField);
         if (ex == -1) {
-            System.out.println("This name of field doesn't exist in your Data Base");
+			if (nameofField.equals("Records")) {
+				System.out.println("You are not allowed to process field Record");
+			}else {
+				System.out.println("This name of field doesn't exist in your Data Base");
+			}
             Boolean answer = Menu.printTryAgainQuestionMessage();
             if (answer) {
                 return inputFieldName(function);

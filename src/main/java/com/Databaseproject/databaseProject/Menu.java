@@ -56,7 +56,7 @@ public class Menu implements Serializable{
 	public static void changeMenu() {
 		System.out.println();
 		System.out.println("-----------------");
-		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Change name of Field", "2. Change specific value of an element in a list","3. Change data by row",
+		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Change name of Field", "2. Change specific value of an element in a Field","3. Change data by row",
 										"4. Change all values of elements with the same value", "5. Exit"));
 		System.out.println("Please chose one of the above options: ");
 	}
