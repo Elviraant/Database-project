@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.Scanner;
 
 /**
- * Represent a String Type of Database
+ * Represent a String Type of Database.
  */
 
 public class StringType extends FieldType implements Serializable { /*checkstyle checked*/
 
   /**
    * Read a String from keybord
-   * and don't allow space records
+   * and don't allow space records.
    * @return String - inserted data
    */
   public String getData() {
@@ -26,7 +26,7 @@ public class StringType extends FieldType implements Serializable { /*checkstyle
   }
 
   /**
-   * Return the type of the object
+   * Return the type of the object.
    * @return String
    */
   public String toString() {
