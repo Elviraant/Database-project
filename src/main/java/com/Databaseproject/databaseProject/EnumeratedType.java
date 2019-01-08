@@ -1,93 +1,98 @@
 //package com.Databaseproject.databaseProject;
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
- *  Represent an Enumerated Type of Database
+ *  Represent an Enumerated Type of Database.
  */
+
 public class EnumeratedType extends FieldType implements Serializable{
 
-	/**
-	 * EnumeratedType's allowed Strings list
-	 */
-	private ArrayList<String> allowedStrings;
+  /**
+   * EnumeratedType's allowed Strings list.
+   */
+  
+  private ArrayList<String> allowedStrings;
 
-	/**
-	 * Create an EnumeratedType with an ArrayList of Strings, that will keep a set
-	 * of possible values.
-	 */
-	public EnumeratedType() {
-		allowedStrings = new ArrayList<String>();
-	}
+  /**
+   * Create an EnumeratedType with an ArrayList of Strings, that will keep a set
+   * of possible values.
+   */
 
-	/**
-	 * Gets the EnumeratedType's allowed Strings list
-	 * @return ArrayList
-	 */
-	public ArrayList getAllowedStrings() {
-		return allowedStrings;
-	}
+  public EnumeratedType() {
+    allowedStrings = new ArrayList<String>();
+  }
 
-	/**
-	 * Check, if the user's insertion is one of the allowed Strings
-	 * If it isn't, user tries again
-	 * @return String user's final choice
-	 */
-	public String getData() {
-		Scanner cs = new Scanner(System.in);
-		String data = null;
-		boolean flag = true;
-		while(flag == true) {
+  /**
+   * Gets the EnumeratedType's allowed Strings list.
+   * @return ArrayList.
+   */
 
-			data = cs.nextLine();
+  public ArrayList getAllowedStrings() {
+    return allowedStrings;
+  }
 
-			if (correctValue(data)) {
-				flag = false;
-			} else {
-				System.out.print("You have to insert one of these: " + getAllowedStrings());
-			}
+  /**
+   * Check, if the user's insertion is one of the allowed Strings.
+   * If it isn't, user tries again.
+   * @return String user's final choice.
+   */
 
-		}
-		return data;
-	}
+  public String getData() {
+    Scanner cs = new Scanner(System.in);
+    String data = null;
+    boolean flag = true;
+    while (flag == true) {
+      data = cs.nextLine();
+      if (correctValue(data)) {
+        flag = false;
+      } else {
+        System.out.print("You have to insert one of these: " + getAllowedStrings());
+      }
+    }
+    return data;
+  }
 
-	/**
-	 * Ask user to define the set on which EnumeratedType type will be defined
-	 * @param nameOfField Column name
-	 */
-	public void defineEnumeration(String nameOfField) {
-		Scanner cs = new Scanner(System.in);
-		System.out.println("Please type the values that you want for " + nameOfField
-							+ " . \nEnter EXIT to stop");
-		String type = cs.nextLine();
-		while (!type.equals("EXIT")) {
-			allowedStrings.add(type);
-			type = cs.nextLine();
-		}
-	}
+  /**
+   * Ask user to define the set on which EnumeratedType type will be defined.
+   * @param nameOfField Column name.
+   */
+ 
+  public void defineEnumeration(String nameOfField) {
+    Scanner cs = new Scanner(System.in);
+    System.out.println("Please type the values that you want for " + nameOfField
+        + " . \nEnter EXIT to stop");
+    String type = cs.nextLine();
+    while (!type.equals("EXIT")) {
+      allowedStrings.add(type);
+      type = cs.nextLine();
+    }
+  }
 
-	/**
-	 * Check, if there is an insertion in the set, on which EnumeratedType type is defined
-	 * @param filler under control insertion
-	 * @return boolean - true, if there is, and false otherwise
-	 */
-	public boolean correctValue(String filler) {
-		boolean isCorrect = false;
-		for (String allowedString: allowedStrings) {
-			if (filler.equals(allowedString)) {
-				isCorrect = true;
-			}
-		}
-		return isCorrect;
-	}
+  /**
+   * Check, if there is an insertion in the set, on which EnumeratedType type is defined.
+   * @param filler under control insertion.
+   * @return boolean - true, if there is, and false otherwise.
+   */
 
-	/**
-	 * Return the type of the object and allowed Strings ArrayList
-	 * @return String
-	 */
-	public String toString() {
-		return "Type: Enumerated Type " + allowedStrings;
-	}
+  public boolean correctValue(String filler) {
+    boolean isCorrect = false;
+    for (String allowedString: allowedStrings) {
+      if (filler.equals(allowedString)) {
+        isCorrect = true;
+      }
+    }
+    return isCorrect;
+  }
+
+  /**
+   * Return the type of the object and allowed Strings ArrayList.
+   * @return String.
+   */
+
+  public String toString() {
+    return "Type: Enumerated Type " + allowedStrings;
+  }
 
 }
