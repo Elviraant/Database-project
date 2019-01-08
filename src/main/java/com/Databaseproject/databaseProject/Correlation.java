@@ -3,7 +3,7 @@
 *Correlation exists between two tables of a base
 *Correltion can be one-to-one, one-to-many, many-to-many
 */
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +41,9 @@ public class Correlation implements Serializable {
 
 	public String toString() {
 		return table1.getName() + " " + name + " " + table2.getName();
+	}
+
+	public void fillForeignKeyColumn() {
 	}
 
 	/**
@@ -115,8 +118,7 @@ public class Correlation implements Serializable {
 	*Deletes foreign key columns
 	*table1 doesn't refer to another table anymore
 	*Sets counter in right position
-	*@param correlations
-						the list of the correlations in the base
+	*@param correlations, the list of the correlations in the base
 	*/
 	public static void deleteCorrelation(ArrayList<Correlation> correlations) {
 		if (correlations.size() != 0) {
@@ -141,10 +143,10 @@ public class Correlation implements Serializable {
 	}
 
 	/**
-	*asks user which is the table that he wants to search for related records
+	*Ask user which is the table that he wants to search for related records
 	*according to the choice prints the other table which contains the primary keys
-	*returns
-			number of chosen table
+	*returns number of chosen table
+	*@return choice int
 	*/
 	public int choice() {
 		System.out.println("1. " + table1.getName());
@@ -200,9 +202,9 @@ public class Correlation implements Serializable {
 
 	/**
 	*prints the related rows of a record in a correlation
-	*@param rows
+	*@param rows int
 				related records
-	*param table
+	*@param table ArrayList
 				related table
 	*/
 	public void printRelated(ArrayList<Integer> rows, Table table) {

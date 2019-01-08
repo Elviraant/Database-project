@@ -1,16 +1,18 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
+import java.util.Scanner;
 import java.io.Serializable;
 import java.util.Scanner;
 
 /**
- *  Represents a String Type of Database extend Field Type.
+ * Represent a String Type of Database
  */
+
 public class StringType extends FieldType implements Serializable { /*checkstyle checked*/
 
   /**
-   * Reads from keyboard a String.
-   * Checks a space record for a StringType and doesn't allow it.
-   * @return String has been read String.
+   * Read a String from keybord
+   * and don't allow space records
+   * @return String - inserted data
    */
   public String getData() {
     Scanner sc = new Scanner(System.in);
@@ -24,8 +26,8 @@ public class StringType extends FieldType implements Serializable { /*checkstyle
   }
 
   /**
-   * Returns the type of the object.
-   * @return String.
+   * Return the type of the object
+   * @return String
    */
   public String toString() {
     return "Type: Text";

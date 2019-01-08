@@ -1,13 +1,13 @@
-/**
- *Represents a table of our database.
- */
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ *Represent a table of a database
+ */
 public class Table implements Serializable {
   private ArrayList<Column> columns = new ArrayList<>();
   private int columnCounter = 0;
@@ -18,10 +18,9 @@ public class Table implements Serializable {
   private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
 
   /**
-   * Creates a Table for Database.
-   * Add it to its Database tables ArrayList.
-   * With secified name.
-   * Update in Database the tableCounter.
+   * Create a Table for Database
+   * and add it to its Database tables ArrayList.
+   * with specified name
    * @param name name of this table.
    * @param d1 Database that belongs to.
    */
@@ -98,8 +97,7 @@ public class Table implements Serializable {
 
 
   /**
-   * Returns void Creates fields for a Table and calls findType method, to create
-   *  the correct ArrayList.
+   * Create fields for a Table
    */
 
   public void setUpColumns() {
@@ -108,9 +106,7 @@ public class Table implements Serializable {
   }
 
   /**
-   * Set the Column's names until the user insert EXIT.
-   * Method setFieldNames() calls setFieldType(String) to create a Column object.
-   * Returns nothing.
+   * Set the Column objects' names until the user inserts EXIT
    */
 
   public void setFieldNames() { /*checkstyle checked*/
@@ -131,10 +127,7 @@ public class Table implements Serializable {
   }
 
 	/**
-	 * User decide the type for Column FieldType type and create a Column object
-	 * Method calls the fieldTypesMenu() and if choice is 1, 2 or 3 create the Column object
-	 * If choice is number 4, the Column object is created, but first method calls defineEnumeration() method
-	 * Returns nothing
+	 * Ask user to define Column object's type of field
 	 * @param nameOfField Column object's name
 	 */
     public void setFieldType(String nameOfField) {
@@ -154,8 +147,8 @@ public class Table implements Serializable {
 	}
 
 	/**
-	 * Set one Column object's name
-	 * @return String Column object's name
+	 * Set a Column object's name
+	 * @return String - Column object's name
 	 */
 	public String nameAColumn() {
 		Scanner sc = new Scanner(System.in);
@@ -166,8 +159,8 @@ public class Table implements Serializable {
 	}
 
    /*
-   	* Checks, if the Column object's name is unique in this Table
-   	* If it is not, user will insert again a name until it is unique in this Table
+   	* Check the Column object's name uniqueness in the Table
+   	* and ask user to insert again until it is unique
    	* @param nameOfField name for checking
    	* @return String tested name
    	*/
@@ -182,14 +175,9 @@ public class Table implements Serializable {
 		return nameOfField;
 	}
 
-   /*
-    * Adds a Column object, that is primary key, in a Table object
-    * Calls nameAColumn() method to have a Column name
-    * Calls uniqueFieldName(String) to check if this name is unique
-    * Calls setFieldType(String) to create the right Column object
-    * Sets Column objects as a primary key -column object is the last element in ArrayList columns at this moment-
-    * Calls columnFillerByColumn() to fill the new Column object
-    * @returns Table same Table with a Primary key Column object
+   /**
+    * Add a Column object which is primary key in the Table
+    * @return Table - the Table with the primary key Column object
     */
 	public Table addPrimaryKeyColumn() {
 		String name = nameAColumn();
@@ -201,10 +189,8 @@ public class Table implements Serializable {
 	}
 
 
-    /*
-     * Defines, which Column is the primary Key field Checks, if the name of a field
-     * exists at this Table If it exists, sets the boolean instance variable true
-     * Returns void
+    /**
+     * Define which existent Column is the primary Key field
      */
     public void definePrimaryKey() {
         Scanner cs = new Scanner(System.in);
@@ -233,8 +219,8 @@ public class Table implements Serializable {
 
     }
 
-	/*
-	 * Checks by name, if Column object's type is EnumeratedType
+	/**
+	 * Check by name if a Column object's type is EnumeratedType
 	 * @param name name of Column object
 	 * @return boolean true if this Column object's type is EnumeratedType; false otherwise
 	 */
@@ -251,8 +237,8 @@ public class Table implements Serializable {
 	}
 
     /**
-     * ask how to fill the fields and call method columnFillerByRow or
-     * columnFillerByCollumn
+     * Ask how to fill the fields
+     * and call suitable methods
      */
     public void callFiller() {
         System.out.println("How would you like to fill the table?");
@@ -267,7 +253,7 @@ public class Table implements Serializable {
     }
 
     /**
-     * Fill in with Data, Fills by row
+     * Fill Column objects' fields by row
      */
     public void columnFillerByRow() {
 		if (foreignKeyColumnExists()) {
@@ -285,13 +271,7 @@ public class Table implements Serializable {
     }
 
 	/**
-	 * Adds a record in a Table
-	 * If the Column object is the Record field (first Column at columns),
-	 * method will add to Column object's ArrayList numberOfRows + 1
-	 * Else calls readData(Column) and then, there are two options:
-	 * if the Column is primary key method calls fillPrimaryKeyField(Object)
-	 * else fills the Column object's ArrayList
-	 * Returns nothing
+	 * Add a record in the Table
 	 */
     public void addRow() {
         System.out.println("#" + (numberOfRows + 1) + " Record: ");
@@ -317,7 +297,7 @@ public class Table implements Serializable {
 
 
     /**
-     * Fill in with Data, Fills by column
+     * Fill Column objects' fields by column
      */
     public void columnFillerByColumn() {
 
@@ -356,8 +336,8 @@ public class Table implements Serializable {
 
     }
 	/**
-	*Returns void
-	*Calls methods concerning presentation, changing and deletion
+	*Call method for presentation, changing or deletion
+	*according to user's choice
 	*/
     public void manageData() {
         boolean continueProcess = true;
@@ -387,9 +367,9 @@ public class Table implements Serializable {
 		}
 	}
 	/**
-	*Returns void
-	*Calls methods for sorting, adding data, searching
-	*findind max, min element and view design
+	*Call method for sorting, adding data, searching
+	*findind max, min element or view design
+	*according to user's choice
 	*/
     public void moreOptions() {
         boolean continueProcess = true;
@@ -427,7 +407,8 @@ public class Table implements Serializable {
 
 
   /**
-  * Choose deletion.
+  *Call method concerning data deletion
+  *according to user's choice
   */
 
   public void deleteData() {
@@ -479,8 +460,8 @@ public class Table implements Serializable {
   }
 
 	/**
-	*Calls methods concerning data presentation
-	*Specific range of records and specific fields can also be presented
+	*Call method concerning data presentation
+	*according to user's choice
 	*/
     public void presentData() {
         int choice;
@@ -516,10 +497,9 @@ public class Table implements Serializable {
         }
     }
 
-	/**checks if input is valid.
-	  *if it is, calls the suitable method.
-	  *When process done, asks user if he wants to continue.
-	  *if it is not, the process is repeated until input is valid.
+	/**
+	*Call method concerning data changing
+	*according to user's choice
 	*/
 	public void changeData() {
         int choice;
@@ -560,7 +540,8 @@ public class Table implements Serializable {
     }
 
   /**
-  *Sorting method.
+  *Call method concerning data assortment
+  *according to user's choice
   */
 
   public void sortData() {
@@ -591,7 +572,10 @@ public class Table implements Serializable {
     }
   }
 
-
+    /**
+	 *Call method concerning data addition
+	 *according to user's choice
+    */
     public void addData() {
         int choice;
         boolean continueProcess = true;
@@ -626,9 +610,10 @@ public class Table implements Serializable {
         }
     }
 
-	/* *search for element given by the user.
-	   *if it exists, prints all the positions where it is found.
-	   *else prints suitable message.
+	/**
+	*Search for the element given
+	*and print all the positions found
+	*else print suitable message
 	*/
 	public void searchData() {
     	Menu.searchingMenu();
@@ -658,8 +643,9 @@ public class Table implements Serializable {
         } while (continueProcess);
    }
 
-	/* *find maximum value of an element in a specific field given by user.
-	   *prints all the positions that maximum value is found.
+	/**
+	 *Find maximum value of an element in a specific field given by the user
+	 *and print all the positions where it is found.
 	*/
      public void findMaxData() {
 	 	Boolean continueProcess = true;
@@ -685,10 +671,11 @@ public class Table implements Serializable {
 	        } while (continueProcess);
     }
 
-	/* *find minimum value of an element in a specific field given by user.
-	   *prints all the positions that minimum value is found.
+	/**
+	*Find minimum value of an element in a specific field given by the user
+	*and print all the positions where it is found.
 	*/
-    public void findMinData() {
+	 public void findMinData() {
 		Boolean continueProcess = true;
 		    do {
 	           int pfield = inputFieldName("find the minimum value");
@@ -714,7 +701,7 @@ public class Table implements Serializable {
 
 
     /**
-     * prints all table insertions and the titles of the attributes
+     * Print all table insertions and the names of columns
      */
     public void printAll() {
         if (numberOfRows != 0) {
@@ -730,7 +717,7 @@ public class Table implements Serializable {
     }
 
     /**
-     * Prints the header with the title of all the fields
+     * Print the header with the names of all columns
      */
     public void printHeader() {
         ArrayList<String> list = new ArrayList<String>();
@@ -745,11 +732,11 @@ public class Table implements Serializable {
 
 
     /**
-    *Prints only one row of the table
-    *Checks if a column is foreign key in a many-to-many relationship
-    *If it is, the column is not printed
+    *Print a row of the table
+    *and if a column is foreign key in a many-to-many relationship,
+    *it is not printed
     *@param row
-    			position in the arraylist if fields
+    			position in the arraylist of fields
     */
     public void presentRow(int row) {
         for (int i = 0; i < columnCounter; i++) {
@@ -767,7 +754,6 @@ public class Table implements Serializable {
     }
 
 	/**
-	*Returns void
 	*Present specific rows within a range given by the user
 	*/
 	public void printRangeOfRows() {
@@ -794,9 +780,9 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*Prints specific rows of the table by calling method presentRow(int)
+	*Print specific rows of the table
 	*@param rows
-				given by the user or the programmer
+				given
 	*/
 	public void specificRows(ArrayList<Integer> rows) {
 		printHeader();
@@ -806,9 +792,9 @@ public class Table implements Serializable {
 	}
 
 	 /**
-	  * Gets the names of the attributes by the user and puts them in an ArrayList
+	  * Get the names of the columns by the user and put them in an ArrayList
 	  *
-	  * @return the ArrayList of the attributes given by the user
+	  * @return ArrayList of the columns given by the user
 	  */
 	public ArrayList <String> inputSpecificColumns() {
 		ArrayList <String>  attributes = new ArrayList<String>();
@@ -835,8 +821,7 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*Prints columns according to a list given by the user
-	*list is created by calling method inputSpecificColumns
+	*Print columns according to a list given by the user
 	*/
 	public void printSpecificColumns() {
 		ArrayList<String> attributes = inputSpecificColumns();
@@ -848,7 +833,7 @@ public class Table implements Serializable {
 	}
 
 	/**
-	*Prints specific names of attributes as header to a table
+	*Print specific names of columns as header to a table
 	*@param attributes
 						the list of field names given by the user or the programmer
 	*/
@@ -873,12 +858,12 @@ public class Table implements Serializable {
     }
 
     /**
-     * Checks by name, if a Column exists in a Table If the column exists, returns
-     * its position at ArrayList columns. If it doesn't exist, returns -1
+     * Find the position of the column searching by to the name given
      *
      * @param name
-     *            of this field
-     * @returns int position
+     *            name of  field
+     * @return int - returns -1 if the column's name is Record
+     *or it doesn't exist
      */
     public int containsName(String name) {
         if (name.equals("Record")) {
@@ -894,7 +879,7 @@ public class Table implements Serializable {
     }
 
     /**
-     * present columns according to a list of attributes
+     * Present columns according to a list of attributes
      *
      * @param attributes
      *            the list of the attributes
@@ -916,13 +901,13 @@ public class Table implements Serializable {
         }
     }
 
-  /*  *Input name of field by user.
-      *Checks for existance.
-      *If exists, method returns field's position in Table.
-      *If it does not exist, prints suitable message.
-      *If user wants to try again, process of input name of field is repeated.
-      *@param String variable : states the process to be done in field.
-   */
+  /**
+  *Insert name of field by user
+  * return its position, if it exists
+  *, else return -1
+  *@param function  the process to be done in field
+  *@return int
+  */
    public int inputFieldName(String function) {
 	    printHeader();
         System.out.println("Give the name of the field you want to " + function + ".");
@@ -939,9 +924,9 @@ public class Table implements Serializable {
         return ex;
     }
 
-	/* *Change values of elements by row.
-	   *Process stops, if user types suitable string('no').
-	   *or if there are no other columns to be processed.
+	/**
+	*Change values of elements by row
+	* until the user wants to stop
 	 */
   public void changeDataByRow() {
     System.out.println("Which record do you want to change?");
@@ -998,13 +983,9 @@ public class Table implements Serializable {
   }
 
 
-	/* *change name of field given by user.
-	   *checks if the given field exists in Table.
-	   *if it does not, prints suitable message.
-	   *Process is repeated until user types existing field name
-        or until types "no".
-	   *if name of field is valid, checks if the new name is unique.
-	   *if name is not unique, prints suitable message and asks user to try again.
+	/**
+	*Change existent name of field given by the user
+	* with an non-existent name
 	*/
     public void changeFieldName() {
         StringType name = new StringType();
@@ -1033,9 +1014,9 @@ public class Table implements Serializable {
     }
 
    /**
-   *search if there is a Field with primary keys.
-   *if exists, returns field's position in Table.
-   *else returns -1.
+   *Find foreign key's Column position
+   *and return -1 if it doesn't exist
+   *@return int
 	*/
     public int findPrimaryKeyColumn() {
         int j = 0;
@@ -1051,7 +1032,12 @@ public class Table implements Serializable {
         return exprimarykey;
     }
 
-    public int findForeignKeyColumn() {
+   /**
+   *Find foreign key's Column position
+   *and return -1 if it doesn't exist
+   *@return int
+   */
+   public int findForeignKeyColumn() {
 
         int posF = -1;
         boolean cont = false;
@@ -1063,6 +1049,7 @@ public class Table implements Serializable {
         }
         return -1;
     }
+
 
     public boolean foreignKeyColumnExists() {
 		for (Column c : columns) {
@@ -1084,10 +1071,10 @@ public class Table implements Serializable {
     }
 
 
-	/* *if name of field is valid, change specific value of an element in given field.
-	   *asks user to input which record(row) is the element that wants to change.
-	   *if record is valid, asks user to type new value.
-	   *if new value is valid, change is done.
+	/**
+	*Change value of element in a field if the
+	*Column doesn't refer to or is referred by
+	*another Column
 	 */
     public void changeValue() {
         int pfield = inputFieldName("change");
@@ -1133,8 +1120,9 @@ public class Table implements Serializable {
         	}
     }
 
-	/* *if name of field is valid,replace all values of elements of field with same value.
-	   *if field contains primary keys, method does not allow this process to be done.
+	/**
+	*Replace all elements of a field
+	* with the same value, if the Column isn't primary or foreign key
 	*/
 	public void sameValue() {
 		int pfield = inputFieldName("change");
@@ -1156,7 +1144,8 @@ public class Table implements Serializable {
     }
 
   /**
-   * Rows deletion method.
+   * Call method concerning rows' deletion
+   * according to  user's choice
    */
   public void deleteRows() {
     if (numberOfRows != 0) {
@@ -1180,10 +1169,10 @@ public class Table implements Serializable {
     }
   }
 
-  /**
-  * Returns void
-  * deletes one row.
-  */
+ /**
+ * Delete the row given
+ * @param row - the row given
+ */
   public void deleteRow(int row) {
     for (int k = 0; k < columnCounter; k++) {
       Column column = columns.get(k);
@@ -1196,7 +1185,7 @@ public class Table implements Serializable {
   }
 
   /**
-  *deletes any row you want(one or more).
+  *Delete rows
   */
   public void deleteSpecificRows() {
     boolean continueProcess = true;
@@ -1217,7 +1206,7 @@ public class Table implements Serializable {
   }
 
   /**
-  * deletes specific rows, which are within a range given by the user.
+  * Delete a specific range of rows given by the user
   */
   public void deleteSpecificRangeofRows(){
     System.out.println("Please insert the range of records you want to delete.");
@@ -1242,7 +1231,7 @@ public class Table implements Serializable {
 
 
   /**
-  *deletes any column you want(one or more).
+  *Delete a Column, if it isn't foreign key
   */
   public void deleteColumns() {
     boolean continueProcess = true;
@@ -1293,11 +1282,10 @@ public class Table implements Serializable {
   }
 
   /**
-  *Deletes any element of the table
-  *If an element is primary key the whole record is deleted
-  *after permission of the user
-  *If an element is primary key and refered by another table
-  *it can't be altered.
+  *Delete an element of a field
+  *, if it is not primary ot foreign key.
+  * If it's primary the user
+  * is able to delete the whole record
   */
   public void deleteElements(){
     Scanner cs = new Scanner(System.in);
@@ -1334,7 +1322,7 @@ public class Table implements Serializable {
   }
 
   /**
-  *  deletes a whole table. */
+  * Delete a whole table */
   public void deleteAll() {
     if (!getReferences()) {
       for (int i = columnCounter - 1; i >= 0; i--) {
@@ -1349,11 +1337,13 @@ public class Table implements Serializable {
   }
 
    /**
-   	* Compares two given datas(Objects)
-   	* Converts them to Strings in order to compare them.
-   	* If the Objects are equal, returns 0
-   	* If the first given Object is greater than the second, returns a positive number
-   	* If the first given Object is less than the second, returns a negative number
+   	* Compare two given elements
+   	*  If they are equal, returns 0
+   	*  If the first given Object is greater than the second, returns a positive number
+   	*  If the first given Object is less than the second, returns a negative number
+   	* @param str1 Object
+   	* @param str2 Object
+   	* @return int
    	*/
    	public int compareStrings(Object str1, Object str2) {
    			String st1= String.valueOf(str1);
@@ -1362,11 +1352,13 @@ public class Table implements Serializable {
    	}
 
    	/**
-   	* Compares two given datas(Objects)
-   	* Converts them to Integers in order to compare them.
-   	* If the Objects are equal, returns 0.
-   	* If the first given Object is greater than the second, returns 1.
-   	* If the first given Object is less than the second, returns -1.
+   	* Compare two given elements
+   	*  If they are equal, returns 0.
+   	*  If the first given Object is greater than the second, returns 1.
+   	*  If the first given Object is less than the second, returns -1.
+   	*@param str1 Object
+   	*@param str2 Object
+   	*@return int
    	*/
    	public int compareIntegers(Object str1, Object str2) {
    			int st1 = (int)str1;
@@ -1380,12 +1372,14 @@ public class Table implements Serializable {
    			}
    	}
 
-   	/**
-   	* Compares two given datas(Objects)
-   	* Converts them to Double in order to compare them.
-   	* If the Objects are equal, returns 0.
-   	* If the first given Object is greater than the second, returns a positive number.
-   	* If the first given Object is less than the second, returns a negative number.
+	  /**
+	   	* Compare two given elements
+	   	*  If they are equal, returns 0
+	   	*  If the first given Object is greater than the second, returns a positive number
+	   	*  If the first given Object is less than the second, returns a negative number
+	   	* @param str1 Object
+	   	* @param str2 Object
+	   	* @return int
    	*/
    	public int compareDoubles(Object str1, Object str2) {
    			String st1= String.valueOf(str1);
@@ -1399,12 +1393,10 @@ public class Table implements Serializable {
 
 
    	/**
-   	* Sorts the table based on a column given by the user
-   	* The user seletcs in which order the assortment will be made(ascending or descending)
-   	* According to the type of the column, the corresponding method(compareStrings()/compareIntegers()/compareDoubles()) is called in order to compare all the datas of the column.
-   	* Then it is called another method(sort()), which sorts the whole table based on the the previous comparation.
-   	*/
-   	public void chooseSort() {
+   	* Sort the table according to the assortment chosen by the user
+   	*based on a Column given by the user
+	*/
+	public void chooseSort() {
    		Scanner cs = new Scanner(System.in);
    		int x;
    		do{
@@ -1437,6 +1429,12 @@ public class Table implements Serializable {
    			printAll();
    	}
 
+	/*
+	*Sort all columns
+	*@param result  comparison's result
+	*@param j Column object's position
+	*@param choice user's assortment choice
+	*/
    	public void sort(int result, int j, int choice) {
    		for (int k=1; k<columnCounter; k++) {
    			Column column1 = this.getColumns().get(k);
@@ -1459,6 +1457,10 @@ public class Table implements Serializable {
    		}
 	}
 
+	/**
+	*Print the primary key Column of the Table,
+	* if it exists
+	*/
 	 public void printPrimaryKeyColumn() {
         if (primaryKeyColumnExists()) {
             System.out.println("Table: " + name + "");
@@ -1468,10 +1470,10 @@ public class Table implements Serializable {
             presentColumns(print);
         }
     }
+
 	/**
-	 * Presents number of Table's Columns and Table's records
-	 * Presents each Table's Column
-	 * Returns nothing
+	 * Present number of Table's columns and Table's records
+	 * and each Table's Column
 	 */
   	public void designView() {
 

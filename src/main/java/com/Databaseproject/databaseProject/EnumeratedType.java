@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	private ArrayList<String> allowedStrings;
 
 	/**
-	 * Creates an EnumeratedType with an ArrayList<String>, that will keep a set
+	 * Creates an EnumeratedType with an ArrayList of Strings, that will keep a set
 	 * of possible values.
 	 */
 	public EnumeratedType() {

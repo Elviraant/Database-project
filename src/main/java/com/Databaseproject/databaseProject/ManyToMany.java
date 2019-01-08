@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -24,14 +24,14 @@ public class ManyToMany extends Correlation {
 	public ManyToMany(String name, Table table1, Table table2) {
 
 		super(name, table1, table2);
-		this.column1 = new Column(table1, true, this);
+		this.column1 = new Column(table1, true);
 		this.column1.createFkColumnName(table2);
 		posF1 = table1.getColumnCounter();
 		table2.setPositionOffFk(table1, posF1);
 		table2.setInvPositionOffFk(posF1, table1);
 		table1.setReferences(true);
 		table2.setReferences(true);
-		this.column2 = new Column(table2, true, this);
+		this.column2 = new Column(table2, true);
 		this.column2.createFkColumnName(table1);
 		posF2 = table2.getColumnCounter();
 	}
@@ -51,7 +51,9 @@ public class ManyToMany extends Correlation {
 	public void setColumn2(Column column) {
 		column2 = column;
 	}
-
+	/**
+	*Fill foreignKeys list with data
+	*/
 	public void fillForeignKeyColumn() {
 
 	Column primaryKeyColumn1 = pKColumn1();
@@ -118,10 +120,7 @@ public class ManyToMany extends Correlation {
 			}
 	}
 	/**
-	*Properties for many-to-many correlatios
-	*User chooses from a range of options a property concerning  two linked entities
-	*Those options include information about the type of correlation and presentation
-	*of related records according to a key
+	 *Give user a range of options concerning an one-to-many relationship
 	*/
 	@Override
 	public void viewProperties() {
@@ -150,8 +149,8 @@ public class ManyToMany extends Correlation {
 	}
 
 	/**
-	*asks user to define the table in which he wants to search for related records
-	*@returns
+	*Ask user to define the table in which he wants to search for related records
+	*@return
 			chosen table
 	*/
 	public Table defineSearched() {
@@ -165,7 +164,7 @@ public class ManyToMany extends Correlation {
 		return searched;
 	}
 	/**
-	*finds all linked entities with given primary key
+	*Find all linked entities with given primary key
 	*if the key doesn't exist or the respective record doesn't
 	*participate in the correlation a message is shown to inform the user
 	*/
@@ -197,12 +196,12 @@ public class ManyToMany extends Correlation {
 	}
 
 	/**
-	*finds the arraylist which matches a specific primary key in a many-to-many relationship
+	*Find the arraylist which matches a specific primary key in a many-to-many relationship
 	*@param column
 					the column with primary keys
 	*@param foreignKeys
 					the list which contains the lists of respective foreigns
-	*@returns
+	*@return
 			matching list of foreigns related to a record
 	*/
 	public ArrayList<Object> foreigns(Column column, ArrayList<ArrayList<Object>> foreignKeys) {

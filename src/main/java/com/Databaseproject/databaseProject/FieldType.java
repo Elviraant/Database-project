@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 
 /**
@@ -17,6 +17,7 @@ abstract class FieldType implements Serializable{
  	/**
  	 * Abstract method, the child class
    	 * must implement these method
+   	 * @return Object
  	 */
 	abstract Object getData();
 

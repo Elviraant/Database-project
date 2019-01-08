@@ -1,8 +1,10 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
+/**
+*Represent a Column of a Table
+*/
 public class Column implements Serializable {
   private String name;
   private FieldType type;
@@ -30,11 +32,11 @@ public class Column implements Serializable {
   /**
    * Second Constructor for Column class.
    * Used by Correlation for the foreign keys.
-   * @param name name of this field.
    * @param table database's entity of this field.
    * @param isForeignKey sets true is this Column is a foreign key.
+   *
    */
-  public Column(Table table, boolean isForeignKey, Correlation correlation) {
+  public Column(Table table, boolean isForeignKey) {
     //this.name = name;
     field = new ArrayList<Object>();
     //foreignKey.add(field);
@@ -42,11 +44,6 @@ public class Column implements Serializable {
     table.getColumns().add(this);
     table.setColumnCounter(table.getColumnCounter() + 1);
     }
-
-
-  /**public static int getCounter() {
-    return counter;
-  } **/
 
   public String getName() { /*checkstyle checked*/
     return name;
@@ -88,9 +85,9 @@ public class Column implements Serializable {
     return foreignKeys;
   }
 
- /*
-   *Prints an element of the field accoording to the row given.
-   *@param row
+ /**
+   *Print an element of the field accoording to the row given.
+   *@param row a row of the field
    */
 
    public void printElement(int row) { /*checkstyle checked*/
@@ -99,11 +96,11 @@ public class Column implements Serializable {
     System.out.print("     ");
   }
 
-  /*
-   * Creates the right FieldType object, based on a choice
-   * This is a static method
-   * @param choice
-   * @return FieldType object, that is created
+  /**
+   * Create the right FieldType object,
+   * based on a choice
+   * @param choice user's choice
+   * @return FieldType created object
    */
 
   public static FieldType findType(int choice) {
@@ -121,8 +118,7 @@ public class Column implements Serializable {
   }
 
   /**
-   * Returns void.
-   * Fills the Primary Key Field.
+   * Fill primary key Field
    * @param data user's insertion.
    */
 
@@ -137,9 +133,9 @@ public class Column implements Serializable {
   }
 
   /**
-   * Returns true if the data is unique.
-   * Use for Primary Key Field.
+   * Check if data in field is unique
    * @param data user's insertion.
+   * @return boolean
    */
 
   public boolean checkUniqueness(Object data) { /*checkstyle checked*/
@@ -153,11 +149,8 @@ public class Column implements Serializable {
   }
 
   /*
-   * Create name for a foreign key Column object,
-   * by using String.concat(String) method to combine the phrase "FK_from_",
-   * with the Table object's name that foreign key Column object is coming from
-   * Then, set the new name as this Column object's name
-   * @param Table object, that the foreign key Column object is coming from
+   * Create name for a foreign key Column object
+   * @param table from which the foreign key Column object is coming
    */
 
   public void createFkColumnName(Table table) { /*checkstyle checked*/
@@ -165,11 +158,11 @@ public class Column implements Serializable {
     setName(name);
   }
 
-  /*
-  *search if a specific element exists in specific field.
-  *if exists, prints the all records that it is found in a list.
-  *if it does not, prints suitable message.
-  *@param Object Type variable, to be searched in field.
+ /*
+  *Search if a specific element exists in specific field
+  *and print all records found in a list or
+  *non-existent message
+  *@param element Object Type variable, to be searched in field.
  */
   public void searchElement(Object element) { /*checkstyle checked*/
     ArrayList<Integer> rows = matchingRows(element);
@@ -186,11 +179,11 @@ public class Column implements Serializable {
     System.out.println();
   }
 
-  /*
-	*search if a specific element exists in specific field.
-    *if exists, keeps all the positions that it is found in a list.
-    *returns this list, even if element does not exist.
-    *@param Object Type variable, to be searched in field.
+/*
+   *Search if a specific element exists in specific field
+   *and return all the positions found in a list
+   *@param element Object Type variable, to be searched in field.
+   *@return ArrayList
  */
   public ArrayList<Integer> matchingRows(Object element) { /*checkstyle checked*/
     ArrayList<Integer> rows = new ArrayList<Integer>();
@@ -203,8 +196,11 @@ public class Column implements Serializable {
   }
 
   /**
-  *returns a list of rows if any element of an arraylist matches a certain key of the table
-  */
+   *Return a list of rows if any element
+   *of an arraylist matches a certain key of the table
+   *@param foreigns ArrayList to match an element with the rows
+   *@return ArrayList
+   */
   public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) { /*checkstyle checked*/
     ArrayList<Integer> rows = new ArrayList<Integer>();
     ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
@@ -218,7 +214,10 @@ public class Column implements Serializable {
   }
 
   /**
-  *changes the data in order to create a table in ascesing order.
+  *Change the data in order to create a table in ascending order.
+  *@param j int , position of the field to change
+  *@param s1 Object, new element in position j
+  *@param s2 Object, new element in position j - 1
   */
 
   public void sortInAscendingOrder(int j, Object s1, Object s2) { /*checkstyle checked*/
@@ -227,8 +226,11 @@ public class Column implements Serializable {
     this.getField().set(j - 1,temp);
   }
 
-  /**
-  *changes the data in order to create a table in descending order.
+    /**
+    *Change the data in order to create a table in descending order.
+    *@param j int  position of the field to change
+    *@param s1 Object new element in position j
+    *@param s2 Object new element in position j - 1
   */
 
   public void sortInDescendingOrder(int j, Object s1, Object s2) {  /*checkstyle checked*/
@@ -237,17 +239,30 @@ public class Column implements Serializable {
     this.getField().set(j,temp);
   }
 
+  /**
+  *Change the data in ForeignsKey order to create a table in sscending order.
+  *@param j int, position of the field to change
+  *@param s1 ArrayList new ArrayList of foreign keys in position j
+  *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
+  */
    public void sortInAscendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
   		ArrayList <Object> temp = s2;
       	this.getForeignKeys().set(j,s1);
       	this.getForeignKeys().set(j - 1,temp);
   }
 
+ /**
+ *Change the data in ForeignsKey order to create a table in descending order.
+ *@param j int position of the field to change
+ *@param s1 ArrayList new ArrayList of foreign keys in position j
+ *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
+  */
    public void sortInDescendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
       ArrayList <Object> temp = s1;
       this.getForeignKeys().set(j - 1,s2);
       this.getForeignKeys().set(j,temp);
   }
+
 
   public void sortForeignKeysColumn(int result, int j, int choice) {
 	  ArrayList <Object> s1 = getForeignKeys().get(j-1);
@@ -262,7 +277,12 @@ public class Column implements Serializable {
 	  		}
    		}
 	}
-
+	/*
+	 *Find position of
+	 *a specific primary key
+	 *@param key
+	 *@return Integer
+	 */
    public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
      if (isPrimaryKey) {
        ArrayList<Integer> positions = matchingRows(key);

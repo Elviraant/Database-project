@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 public class Menu implements Serializable{
 

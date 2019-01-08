@@ -80,27 +80,28 @@
             <artifactId>findbugs-maven-plugin</artifactId>
             <version>3.0.1</version>
    </plugin>
-   <!--    <plugin>
+     <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-site-plugin</artifactId>
   <version>3.7.1</version>
+  <configuration> 
+	  <projectInformation>
+		  <About> This is a program that enables the user to create databases
+		  </About>		
+		 
+		</projectInformation>
+	</configuration>
 </plugin>
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>2.6</version>
 </plugin> 
- <distributionManagement>
-    <site>
-      <id>www.Databaseproject.com</id>
-      <url>scp://www.Databaseproject.com/www/docs/project/</url>
-    </site>
-  </distributionManagement>
-<plugin>
+  <plugin>
 	 <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
 	<version>3.0.1</version>
-</plugin>-->
+</plugin>
 </plugins>
    </reporting>
 </project>

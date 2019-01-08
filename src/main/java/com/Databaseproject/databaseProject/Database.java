@@ -1,8 +1,8 @@
 
 /**
- *Represents a Database
+ *Represent a Database
  */
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Checks, if a table's name, in a database, is unique
+	 * Check whether a table's name in a database is unique
 	 * @param name name of the table
 	 * @return boolean true, if the name is unique, false otherwise
 	 */
@@ -85,10 +85,12 @@ public class Database implements Serializable {
 		d1.save();
 	}
 	/**
-	*Sets up the base that the user wants to use
-	*New base can be created or already existing bases can be retrieved
-	*if user wants to retrieve a base but there are no saved, a new base will
-	*be automatically created
+	*Set up the base that the user wants to use
+	*and create it or retrieve an already existing
+	*@return Database
+	*@throws ClassNotFoundException if the table cannot be stored
+	*@throws EOFException if the database doesn't exist
+	*@throws FileNotFoundException if the database doesn't exist
 	*/
 	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
 		Database d1 = new Database("");
@@ -111,10 +113,7 @@ public class Database implements Serializable {
 		}
 		return d1;
 	}
-	/**
-	*Presents the options which concern the processes
-	*that can be applied to already existing tables of the base
-	*/
+
 	public void manageTables() {
 		boolean continueProcess = true;
 		while (continueProcess) {
@@ -154,9 +153,9 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Method, that creates a new table in this Database
-	 * Method calls uniqueTableName(String name) method, and checks the uniqueness of user's insertion
-	 * @returns Table database's new table/entity
+	 * Create a new table in the database
+	 * if it doesn't already exist
+	 * @return Table database's new table/entity
 	 */
 	public Table createNewTable() {
 		Scanner cs = new Scanner(System.in);
@@ -170,7 +169,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Method
+	*Get which table the user choose to be retrieved
+	*@return Table
 	*/
 	public Table chooseTable() {
 		Table table = tables.get(0);
@@ -187,7 +187,6 @@ public class Database implements Serializable {
 		return table;
 	}
 
-	//YES OR NO METHOD
 	public static boolean findDecision() {
 		Scanner cs = new Scanner(System.in);
 		boolean yn = true;
@@ -219,7 +218,7 @@ public class Database implements Serializable {
 		return yn;
 	}
 	/**
-	*Method that checks if a user's choice is within an allowed range
+	*Check if user's choice is within an allowed range
 	*@param start starting number of this range
 	*@param end ending number of this range
 	*@return choice final decision of the user
@@ -234,8 +233,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*checks if user gives an integer and handles Exception.
-	*@return integer given by the user and prints message
+	*Check if user gives an integer and handles Exception.
+	*@return int given by the user and prints message
 	*asking for numerical data.
 	*/
 	public static int valid() {
@@ -257,9 +256,10 @@ public class Database implements Serializable {
 
 //SAVING
 	/**
-	*Method that checks if user wants to save the database
+	*Check if user wants to save the database
 	*calls method writeObject() and throws IOException which is
 	*handled in writeObject()
+	*@throws IOException if no database is stored
 	*/
 	public void save() throws IOException {
 		if (wantsToSave()) {
@@ -268,6 +268,7 @@ public class Database implements Serializable {
 	}
 
 	/**
+	*Ask if user wants to save the database
 	*@return true if user wants to save the base
 	*/
 	public boolean wantsToSave() {
@@ -276,7 +277,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Checks if user wants to save the data
+	*Check if user wants to save the data
 	*@return true if user doesn't want to create a new Database
 	*/
 	public static boolean wantsToRetrieve() {
@@ -285,7 +286,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Saves database in file with the name of the base
+	*Save database in file with the name of the base
+	*@throws IOException if the file cannot be opened
 	*/
 	public void writeObject() throws IOException {
 		Scanner cs = new Scanner(System.in);
@@ -313,10 +315,13 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Retrieves the asked database
+	*Retrieve the asked database
 	*@param
 			nameOfBase name chosen by the user
 	*@return Database by retrieving the file in which the object is stored
+	*@throws ClassNotFoundException if the table cannot be stored
+	*@throws EOFException if the database doesn't exist
+	*@throws FileNotFoundException if the database doesn't exist
 	*/
 	public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
 		Database d1 = new Database("");
@@ -338,8 +343,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	*Prints available bases that user has created
-	*@return
+	*Print available bases created by the user
+	*@return String
 			 the name of the chosen base
 			 if no bases are saved it returns "no bases"
 	*/
@@ -389,14 +394,13 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * A.Defines a Correlation by checking the following
+	 * A.Define a correlation by checking the following
 	 * 1st Table objects in the Database, must be more than one
 	 * 2nd Table objects must be different
 	 * 3rd Table objects don't participate again in a same Correlation
 	 * 4th Table objects must have a primary Key List
 	 * 5th Database has enough tables for a new Correlation
 	 * B.User insert the name of the Correlation
-	 * Returns nothing
 	 */
 	public void defineCorrelation() {
 		if ((getTableCounter() != 1)) {			//1st
@@ -435,8 +439,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * If a Table has not primary key Column, this method will provide to user an option.
-	 * Add and full a Primary Key Column
+	 * If a Table has no primary key Column, the method will provide to user the option to add primary key column
+	 * @param table Table
 	 * @return Table same Table, if a pk Column already exists, OR same Table with one more Column
 	 */
 	public Table setUpTableForCorrelation(Table table) {
@@ -449,10 +453,10 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Checks, if a correlation already exists
+	 * Check if a correlation already exists
 	 * @param table1 first table/entity in correlation
 	 * @param table2 second table/entity in correlation
-	 * @return boolean This returns true if this correlation already exists
+	 * @return boolean
 	 */
 	public boolean checkingCorrelation(Table table1, Table table2) { //JUNIT TESTED
 		boolean exists = false;
@@ -510,6 +514,7 @@ public class Database implements Serializable {
 	 * Returns Table object
 	 * @param table1 first table/entity in correlation
 	 * @param table2 second table/entity in correlation
+	 * @return Table
 	 */
 	public Table checkDiffrentTables(Table table1, Table table2) { //JUNIT TESTED
 			do {
@@ -526,7 +531,7 @@ public class Database implements Serializable {
 	 * User chooses from a menu the type of correlation, that suits him
 	 * @param name name of correlation
 	 * @param table1 first table/entity of this correlation
-	 * @param table1 second table/entity of this correlation
+	 * @param table2 second table/entity of this correlation
 	 */
 	public void createCorrelation(String name, Table table1, Table table2) {
 		int option = Menu.correlationOptions();
