@@ -543,7 +543,7 @@ public class Table implements Serializable {
           }
           break;
         default:
-          manageData();
+          decision = false;
           break;
       }
       if ((choice >= 1) && (choice < 5)) {
@@ -572,7 +572,7 @@ public class Table implements Serializable {
             chooseSort();
             break;
           default:
-            manageData();
+            continueProcess = false;
             break;
         }
       }
@@ -619,7 +619,7 @@ public class Table implements Serializable {
           columnFillerByColumn();
           break;
         default:
-          manageData();
+          continueProcess = false;
           break;
       }
       if ((choice == 1) || (choice == 2)) {
