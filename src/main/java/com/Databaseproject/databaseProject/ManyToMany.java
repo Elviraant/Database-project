@@ -15,11 +15,11 @@ public class ManyToMany extends Correlation {
 
   @Override
   public int fK() {
-    return posF1 - 1;
+    return posF2 - 1;
   }
 
   public int fK1() {
-    return posF2 - 1;
+    return posF1 - 1;
   }
 
   public ManyToMany(String name, Table table1, Table table2) {
@@ -118,11 +118,11 @@ public class ManyToMany extends Correlation {
       column.getForeignKeys().add(new ArrayList<Object>());
     }
   }
- 
+
   /**
    *Give user a range of options concerning an one-to-many relationship.
    */
-  
+
   @Override
   public void viewProperties() {
     boolean continueProcess = true;
@@ -165,7 +165,7 @@ public class ManyToMany extends Correlation {
     }
     return searched;
   }
- 
+
   /**
   *Find all linked entities with given primary key.
   *if the key doesn't exist or the respective record doesn't
