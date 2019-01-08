@@ -22,5 +22,5 @@ public class TestEnumeratedType {
   public void testCorrectValue() {
     Assert.assertFalse("Failure - Dog isn't one of the values", type.correctValue(missingValue));
     Assert.assertTrue("Failure - Female is one of the values", type.correctValue("Female"));
- }
+  }
 }
