@@ -436,7 +436,6 @@ public class Table implements Serializable {
             }
             break;
           case 2:
-            printAll();
             deleteColumns();
             break;
           case 3:
@@ -847,7 +846,7 @@ public class Table implements Serializable {
   public void printSpecificColumns() {
     ArrayList<String> attributes = inputSpecificColumns();
     if (attributes.size() == 1) {
-      System.out.println("No records in this table.%n");
+      System.out.println("No records in this table.");
     } else {
       this.presentColumns(attributes);
     }
@@ -1171,13 +1170,16 @@ public class Table implements Serializable {
       System.out
           .println(String.format("%s%n%s%n", "1. Delete Specific Records",
                   "2. Delete specific range of records"));
+      System.out.println("Please choose one of the above options:");
       int choice;
       choice = Database.choice(1, 2);
       switch (choice) {
         case 1:
+        	printAll();
           deleteSpecificRows();
           break;
         case 2:
+        	printAll();
           deleteSpecificRangeofRows();
           break;
         default:
@@ -1213,10 +1215,10 @@ public class Table implements Serializable {
     boolean continueProcess = true;
     int counter = 0;
     while (continueProcess) {
-      printAll();
       System.out.println("Which record do you want to delete?");
       int x = Database.choice(1, numberOfRows);
       deleteRow(x);
+      printAll();
       if (numberOfRows != 0) {
         System.out.println("Delete another record?");
         continueProcess = Database.findDecision();
@@ -1248,6 +1250,7 @@ public class Table implements Serializable {
       deleteRow(j - counter);
       counter++;
     }
+    printAll();
   }
 
   /**
@@ -1273,6 +1276,7 @@ public class Table implements Serializable {
           } else {
             columns.remove(x);
             columnCounter--;
+            printAll();
             if (!primaryKeyColumnExists()) {
               if (columnCounter == 1) {
                 columns.remove(0);
@@ -1327,6 +1331,7 @@ public class Table implements Serializable {
           continueProcessPrimaryKey = Database.findDecision();
           if (continueProcessPrimaryKey) {
             deleteRow(y);
+            printAll();
           }
         } else {
           Menu.deletionFailed(this);
@@ -1334,6 +1339,7 @@ public class Table implements Serializable {
       } else {
         column.getField().set(y - 1, " ");
         System.out.println("Deletion completed successfully");
+        printAll();
       }
       System.out.println("Do you want to delete another element? Y/N");
       continueProcess = Database.findDecision();
