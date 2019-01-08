@@ -68,7 +68,7 @@ public class TestDatabase {
 		Correlation c2 = new Correlation("living", table1, table3);
 		db.getCorrelations().add(c2);
 		Correlation c3 = new Correlation("living", table2, table3);
-		db.getCorrelations().add(c2);
+		db.getCorrelations().add(c3);
 		Assert.assertFalse("Failure - Database ran out of Tables", db.checkAvailabilityForCorrelation());
 	}
 }

@@ -34,7 +34,7 @@ public class TestTable {
   public void testCheckOwnType() {
 	  column2 = new Column("GENDER", type2, table);
 	  Assert.assertTrue("Failure - Enumerated Field return false", table.checkOwnType("GENDER"));
-	  Assert.assertTrue("Failure - String Field return true", table.checkOwnType(firstElement));
+	  Assert.assertFalse("Failure - String Field return true", table.checkOwnType(firstElement));
   }
 	@Test
 	public void testContainsName() {
@@ -64,7 +64,7 @@ public class TestTable {
   public void testFindForeignKeyColumn() {
 	  Assert.assertEquals("Failure - Foreign Key Column exists", table.findForeignKeyColumn(), -1);
 	  column3 = new Column(table, true);
-	  Assert.assertEquals("Failure - Foreign Key Column does not exist", table.findForeignKeyColumn(), 2);
+	  Assert.assertEquals("Failure - Foreign Key Column does not exist", table.findForeignKeyColumn(), 1);
 
   }
 
