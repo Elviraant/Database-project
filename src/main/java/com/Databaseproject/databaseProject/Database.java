@@ -405,10 +405,10 @@ public class Database implements Serializable {
   /**
    *Define a Correlation and its name.
    */
-  
+
   public void defineCorrelation() {
     if ((getTableCounter() != 1)) {  //check if tables in the Database more than one
-      if (checkAvailabilityForCorrelation()) { 
+      if (checkAvailabilityForCorrelation()) {
         //check if there are enough tables for a new Correlation
         Table table1;
         Table table2;
@@ -422,7 +422,7 @@ public class Database implements Serializable {
           table1 = setUpTableForCorrelation(table1); //check if table1 has primary key
           table2 = setUpTableForCorrelation(table2); //check if table2 has primary key
           if (checkingCorrelation(table1, table2)) {
-            System.out.println("Correlation with tables/entities " + table1.getName() 
+            System.out.println("Correlation with tables/entities " + table1.getName()
                 + " and " + table2.getName() + " already exists.");
           }
         } while (checkingCorrelation(table1, table2)); //3rd
@@ -446,10 +446,10 @@ public class Database implements Serializable {
    * Set up the table to correlate by adding primary key Column
    *if it doesn't have.
    * @param table Table.
-   * @return Table - given Table, if a pk Column already exists 
+   * @return Table - given Table, if a pk Column already exists
       or given Table with one more Column.
    */
- 
+
   public Table setUpTableForCorrelation(Table table) {
     while (!table.primaryKeyColumnExists()) {
       System.out.print("Table " + table.getName() + " doesn't have a primary key Column.");
@@ -465,7 +465,7 @@ public class Database implements Serializable {
    * @param table2 second table/entity in correlation.
    * @return boolean.
    */
- 
+
   public boolean checkingCorrelation(Table table1, Table table2) { //JUNIT TESTED
     boolean exists = false;
     for (Correlation c : correlations) {
@@ -482,7 +482,7 @@ public class Database implements Serializable {
    * that make a new Correlation.
    * @return boolean true if a new Correlation is possible, false otherwise.
    */
- 
+
   public boolean checkAvailabilityForCorrelation() { //JUNIT TESTED
     int counter = 0;
     for (Table t1 : tables) {
@@ -523,7 +523,7 @@ public class Database implements Serializable {
    * @param table2 second table/entity in correlation.
    * @return Table.
    */
-  
+
   public Table checkDiffrentTables(Table table1, Table table2) { //JUNIT TESTED
     do {
       if (table2.equals(table1)) {
@@ -542,7 +542,7 @@ public class Database implements Serializable {
    * @param table1 first table/entity of this correlation.
    * @param table2 second table/entity of this correlation.
    */
-  
+
   public void createCorrelation(String name, Table table1, Table table2) {
     int option = Menu.correlationOptions();
     if (option == 1 || option == 2) {
