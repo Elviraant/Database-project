@@ -43,9 +43,9 @@ public class TestColumn {
 	public void testFindPKeyPosition() {
 		column.setPrimaryKey(true);
 		Object data = 20;
-		Assert.assertEquals("Failure - Key is not at first position", findPKeyPosition(data), 1);
+		Assert.assertEquals("Failure - Key is not at first position", column.findPKeyPosition(data), 1);
 		data = 10;
-		Assert.assertEquals("Failure - Key exists", findPKeyPosition(data), -1);
+		Assert.assertEquals("Failure - Key exists", column.findPKeyPosition(data), -1);
 	}
 
 	@Test
