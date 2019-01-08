@@ -19,7 +19,7 @@ public class TestIntegerType {
 
 	@Test
 	public void testGetData() {
-		String input = "1";
+		Integer input = 1;
 		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
    		Assert.assertSame("Failure - Not an IntegerType", integer.getData(), input);
