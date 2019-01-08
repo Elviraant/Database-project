@@ -20,10 +20,10 @@ public class TestDoubleType {
 	@Test
 	public void testGetData() {
 		String input = "1.2";
-		Double doub = 1.2;
+		Double doub1 = 1.2;
 		ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
    		System.setIn(in);
-   		Assert.assertSame("Failure - Not a DoubleType", doub.getData(), doub);
+   		Assert.assertSame("Failure - Not a DoubleType", doub.getData(), doub1);
 	}
 
 }
