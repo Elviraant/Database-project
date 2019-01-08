@@ -300,7 +300,7 @@ public class Column implements Serializable {
    * @return String.
    */
   public String toString() {
-    return "Column Name: " + name + " ---- " + type.toString() + " ---- Primary Key: "
+    return "Column Name: " + name + " ---- Primary Key: "
         + isPrimaryKey + " ---- Foreign Key: " + isForeignKey + " ---- ";
 
   }
