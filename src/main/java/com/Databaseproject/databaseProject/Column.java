@@ -1,4 +1,4 @@
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -43,7 +43,7 @@ public class Column implements Serializable {
     this.isForeignKey = isForeignKey;
     table.getColumns().add(this);
     table.setColumnCounter(table.getColumnCounter() + 1);
-    }
+  }
 
   public String getName() { /*checkstyle checked*/
     return name;
@@ -85,12 +85,13 @@ public class Column implements Serializable {
     return foreignKeys;
   }
 
+
  /**
    *Print an element of the field accoording to the row given.
    *@param row a row of the field
    */
 
-   public void printElement(int row) { /*checkstyle checked*/
+  public void printElement(int row) { /*checkstyle checked*/
     String data = String.format("|%-15s|", field.get(row).toString());
     System.out.print(data);
     System.out.print("     ");
@@ -170,7 +171,7 @@ public class Column implements Serializable {
       System.out.println(element);
       System.out.print("found in record(s):");
       for (Integer row : rows) {
-        System.out.print(+row+1+". " );
+        System.out.print(+row + 1 + ". ");
       }
     } else {
       System.out.print(element);
@@ -179,11 +180,12 @@ public class Column implements Serializable {
     System.out.println();
   }
 
-/*
-   *Search if a specific element exists in specific field
-   *and return all the positions found in a list
-   *@param element Object Type variable, to be searched in field.
-   *@return ArrayList
+
+ /*
+ * Search if a specific element exists in specific field
+ * and return all the positions found in a list
+ * @param element Object Type variable, to be searched in field.
+ * @return ArrayList
  */
   public ArrayList<Integer> matchingRows(Object element) { /*checkstyle checked*/
     ArrayList<Integer> rows = new ArrayList<Integer>();
@@ -196,11 +198,12 @@ public class Column implements Serializable {
   }
 
   /**
-   *Return a list of rows if any element
-   *of an arraylist matches a certain key of the table
-   *@param foreigns ArrayList to match an element with the rows
-   *@return ArrayList
+   * Return a list of rows if any element
+   * of an arraylist matches a certain key of the table
+   * @param foreigns ArrayList to match an element with the rows
+   * @return ArrayList
    */
+
   public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) { /*checkstyle checked*/
     ArrayList<Integer> rows = new ArrayList<Integer>();
     ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
@@ -226,18 +229,19 @@ public class Column implements Serializable {
     this.getField().set(j - 1,temp);
   }
 
-    /**
-    *Change the data in order to create a table in descending order.
-    *@param j int  position of the field to change
-    *@param s1 Object new element in position j
-    *@param s2 Object new element in position j - 1
-  */
 
+  /**
+  * Change the data in order to create a table in descending order.
+  * @param j int  position of the field to change
+  * @param s1 Object new element in position j
+  * @param s2 Object new element in position j - 1
+  */
   public void sortInDescendingOrder(int j, Object s1, Object s2) {  /*checkstyle checked*/
     Object temp = s1;
     this.getField().set(j - 1,s2);
     this.getField().set(j,temp);
   }
+
 
   /**
   *Change the data in ForeignsKey order to create a table in sscending order.
@@ -245,62 +249,59 @@ public class Column implements Serializable {
   *@param s1 ArrayList new ArrayList of foreign keys in position j
   *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
   */
-   public void sortInAscendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
-  		ArrayList <Object> temp = s2;
-      	this.getForeignKeys().set(j,s1);
-      	this.getForeignKeys().set(j - 1,temp);
+ public void sortInAscendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
+  	 ArrayList <Object> temp = s2;
+     this.getForeignKeys().set(j,s1);
+     this.getForeignKeys().set(j - 1,temp);
   }
-
  /**
  *Change the data in ForeignsKey order to create a table in descending order.
  *@param j int position of the field to change
  *@param s1 ArrayList new ArrayList of foreign keys in position j
  *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
   */
-   public void sortInDescendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
+  public void sortInDescendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
       ArrayList <Object> temp = s1;
       this.getForeignKeys().set(j - 1,s2);
       this.getForeignKeys().set(j,temp);
   }
 
-
   public void sortForeignKeysColumn(int result, int j, int choice) {
-	  ArrayList <Object> s1 = getForeignKeys().get(j-1);
-	  ArrayList <Object> s2 = getForeignKeys().get(j);
-	  	if (choice ==1) {
-	  		if (result > 0) {
-	  			sortInAscendingOrder(j,s1,s2);
-	  		}
-		} else {
-	  		if (result<0) {
-	  			sortInDescendingOrder(j, s1,s2);
-	  		}
-   		}
-	}
-	/*
-	 *Find position of
-	 *a specific primary key
-	 *@param key
-	 *@return Integer
-	 */
-   public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
-     if (isPrimaryKey) {
-       ArrayList<Integer> positions = matchingRows(key);
-       if (!positions.isEmpty()) {
-         return positions.get(0);
-       }
-     }
-     return -1;
+    ArrayList<Object> s1 = getForeignKeys().get(j - 1);
+    ArrayList<Object> s2 = getForeignKeys().get(j);
+    if (choice == 1) {
+      if (result > 0) {
+        sortInAscendingOrder(j,s1,s2);
+      }
+    } else {
+      if (result < 0) {
+        sortInDescendingOrder(j, s1,s2);
+      }
+    }
+  }
+  /*
+  *Find position of
+  *a specific primary key
+  *@param key
+  *@return Integer
+  */
+  public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
+    if (isPrimaryKey) {
+      ArrayList<Integer> positions = matchingRows(key);
+      if (!positions.isEmpty()) {
+        return positions.get(0);
+      }
+    }
+    return -1;
   }
 
- /**
-  * Present a Column object with its characteristics
-  * @return String
-  */
+  /**
+   * Present a Column object with its characteristics.
+   * @return String.
+   */
   public String toString() {
-
-	  return "Column Name: " + name + " ---- " + type.toString() + " ---- Primary Key: "
-	  		  + isPrimaryKey + " ---- Foreign Key: " + isForeignKey + " ---- ";
+    return "Column Name: " + name + " ---- " + type.toString() + " ---- Primary Key: "
+        + isPrimaryKey + " ---- Foreign Key: " + isForeignKey + " ---- ";
 
   }
 

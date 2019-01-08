@@ -1,16 +1,16 @@
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
 /**
- *  Represents an Integer Type of Database extend Field Type
+ *  Represent an Integer Type of Database
  */
 public class IntegerType extends FieldType implements Serializable {
 
 /**
- * Reads an Integer from keyboard
- * Catch InputMismatchException e and reads again
+ * Read an Integer from keyboard
+ * , catch InputMismatchException e and read again
  * @return Integer Integer, that has been read
  */
   public Integer getData() {
@@ -29,7 +29,7 @@ public class IntegerType extends FieldType implements Serializable {
   }
 
   	/**
-  	 * Returns the type of the object
+  	 * Return the type of the object
   	 * @return String
   	 */
   	public String toString() {

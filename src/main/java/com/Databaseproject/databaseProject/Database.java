@@ -1,4 +1,4 @@
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,268 +21,280 @@ import java.io.BufferedReader;
  *Represent a Database
  */
 public class Database implements Serializable {
-	private ArrayList<Table> tables = new ArrayList<Table>();
-	private int tableCounter;
-	private String name;
-	private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
-	/**
-	 * Create a Database with a specified name
-	 * @param name name of Database
-	 */
-	public Database(String name) {
-		this.name = name;
-	}
+  private ArrayList<Table> tables = new ArrayList<Table>();
+  private int tableCounter;
+  private String name;
+  private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
-	public ArrayList<Table> getTables() {
-		return tables;
-	}
+  /**
+  * Create a Database with a specified name
+  * @param name name of Database
+  */
+  public Database(String name) {
+    this.name = name;
+  }
 
-	public void setTables(ArrayList<Table> tables) {
-		this.tables = tables;
-	}
+  public ArrayList<Table> getTables() {
+    return tables;
+  }
 
-	public int getTableCounter() {
-		return tableCounter;
-	}
+  public void setTables(ArrayList<Table> tables) {
+    this.tables = tables;
+  }
 
-	public void setTableCounter(int tableCounter) {
-		this.tableCounter = tableCounter;
-	}
+  public int getTableCounter() {
+    return tableCounter;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public void setTableCounter(int tableCounter) {
+    this.tableCounter = tableCounter;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public ArrayList<Correlation> getCorrelations() {
-		return correlations;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Check whether a table's name in a database is unique
-	 * @param name name of the table
-	 * @return boolean true, if the name is unique, false otherwise
-	 */
-	public boolean uniqueTableName(String name) {				//JUNIT TESTED
+  public ArrayList<Correlation> getCorrelations() {
+    return correlations;
+  }
 
-		boolean exists = true;
-		for(Table t : tables) {
-			if((t.getName()).equals(name)) {
-				exists = false;
-			}
-		}
-		return exists;
-	}
+  /**
+  * Check whether a table's name in a database is unique
+  * @param name name of the table
+  * @return boolean true, if the name is unique, false otherwise
+  */
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException{
-		Database d1 = Database.startBase();
-		d1.manageTables();
-		d1.save();
-	}
-	/**
-	*Set up the base that the user wants to use
-	*and create it or retrieve an already existing
-	*@return Database
-	*@throws ClassNotFoundException if the table cannot be stored
-	*@throws EOFException if the database doesn't exist
-	*@throws FileNotFoundException if the database doesn't exist
-	*/
-	public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
-		Database d1 = new Database("");
-		boolean can = true;
-		boolean wants = false;
-		if (Database.wantsToRetrieve()) {
-			wants = true;
-			String name = Database.chooseBase();
-			if (!name.equals("no bases")) {
-				d1 = Database.readObject(name);
-			} else {
-				can = false;
-			}
-		}
-		if (!(wants && can)) {
-			Scanner cs = new Scanner(System.in);
-			System.out.println("Name of new database: ");
-			String name = cs.next();
-			d1 = new Database(name);
-		}
-		return d1;
-	}
+  public boolean uniqueTableName(String name) {  //JUNIT TESTED
+    boolean exists = true;
+    for (Table t : tables) {
+      if ((t.getName()).equals(name)) {
+        exists = false;
+      }
+    }
+    return exists;
+  }
 
-	public void manageTables() {
-		boolean continueProcess = true;
-		while (continueProcess) {
-			Menu.multipleTablesMenu();
-			int choice = Database.choice(1,5);
-			switch (choice)
-			{
-				case 1:
-					Table table = createNewTable();
-					table.setUpColumns();
-					table.definePrimaryKey();
-					table.callFiller();
-					break;
-				case 2:
-					if (tableCounter == 0) {
-						System.out.println("No tables in your database");
-					} else {
-						table = chooseTable();
-						table.manageData();
-					}
-					break;
-				case 3:
-					Correlation.manageCorrelations(this);
-					break;
-				case 4:
-					if (tableCounter == 0) {
+  public static void main(String[] args) throws IOException, ClassNotFoundException, EOFException {
+    Database d1 = Database.startBase();
+    d1.manageTables();
+    d1.save();
+  }
 
-						System.out.println("No tables in your database");
-					} else {
-						defineCorrelation();
-					}
-					break;
-				default:
-					continueProcess = false;
-			}
-		}
-	}
+  /**
+  * Set up the base that the user wants to use
+  * and create it or retrieve an already existing
+  * @return Database
+  * @throws ClassNotFoundException if the table cannot be stored
+  * @throws EOFException if the database doesn't exist
+  * @throws FileNotFoundException if the database doesn't exist
+  */
 
-	/**
-	 * Create a new table in the database
-	 * if it doesn't already exist
-	 * @return Table database's new table/entity
-	 */
-	public Table createNewTable() {
-		Scanner cs = new Scanner(System.in);
-		System.out.println("Name of table:");
-		String name = cs.next();
-		while(!uniqueTableName(name)) {
-			System.out.print("This name already exists. Please try with another: ");
-			name = cs.next();
-		}
-		return new Table(name, this);
-	}
+  public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
+    Database d1 = new Database("");
+    boolean can = true;
+    boolean wants = false;
+    if (Database.wantsToRetrieve()) {
+      wants = true;
+      String name = Database.chooseBase();
+      if (!name.equals("no bases")) {
+        d1 = Database.readObject(name);
+      } else {
+        can = false;
+      }
+    }
+    if (!(wants && can)) {
+      Scanner cs = new Scanner(System.in);
+      System.out.println("Name of new database: ");
+      String name = cs.next();
+      d1 = new Database(name);
+    }
+    return d1;
+  }
 
-	/**
-	*Get which table the user choose to be retrieved
-	*@return Table
-	*/
-	public Table chooseTable() {
-		Table table = tables.get(0);
-		if (tableCounter > 1) {
-			System.out.println("Choose one of your tables: ");
-			for (int i = 0; i < tableCounter; i++) {
-				table = tables.get(i);
-				System.out.println(String.format("%s%s%s", (i +1), ". ", table.getName()));
-			}
-			System.out.println("Insert the number of your choice: ");
-			int choice = Database.choice(1, tableCounter);
-			table = tables.get(choice - 1);
-		}else if (tableCounter == 1) table = tables.get(0);
-		return table;
-	}
+  /**
+   * Present the options corcerning the processes
+   * that can be applied to already existing tables of the base.
+   */
 
-	public static boolean findDecision() {
-		Scanner cs = new Scanner(System.in);
-		boolean yn = true;
-		String decision = cs.next();
-		boolean answerfound = false;
-		while (answerfound == false) {
-			switch(decision) {
+  public void manageTables() {
+    boolean continueProcess = true;
+    while (continueProcess) {
+      Menu.multipleTablesMenu();
+      int choice = Database.choice(1,5);
+      switch (choice) {
+        case 1:
+          Table table = createNewTable();
+          table.setUpColumns();
+          table.definePrimaryKey();
+          table.callFiller();
+          break;
+        case 2:
+          if (tableCounter == 0) {
+            System.out.println("No tables in your database");
+          } else {
+            table = chooseTable();
+            table.manageData();
+          }
+          break;
+        case 4:
+          Correlation.manageCorrelations(this);
+          break;
+        case 3:
+          if (tableCounter == 0) {
+            System.out.println("No tables in your database");
+          } else {
+            defineCorrelation();
+          }
+          break;
+        default:
+          continueProcess = false;
+      }
+    }
+  }
 
-				case "YES": yn = true;
-				case "yes": yn = true;
-				case "Yes": yn = true;
-				case "Y": yn = true;
-				case "y": yn = true;
-							answerfound = true;
-							break;
+  /**
+  * Create a new table in the database
+  * if it doesn't already exist
+  * @return Table database's new table/entity
+  */
 
-				case "NO": yn = false;
-				case "no": yn = false;
-				case "No": yn = false;
-				case "N": yn = false;
-				case "n": yn = false;
-							answerfound = true;
-							break;
-				default:
-					System.out.print("Please answer with 'Yes' or 'No' ");
-					decision = cs.next();
-			}
-		}
-		return yn;
-	}
-	/**
-	*Check if user's choice is within an allowed range
-	*@param start starting number of this range
-	*@param end ending number of this range
-	*@return choice final decision of the user
-	*/
-	public static int choice(int start, int end) {
-		int choice = valid();
-		while ((choice < start) || (choice > end)) {
-			System.out.println("Please chose a valid option");
-			choice = valid();
-		}
-		return choice;
-	}
+  public Table createNewTable() {
+    Scanner cs = new Scanner(System.in);
+    System.out.println("Name of table:");
+    String name = cs.next();
+    while (!uniqueTableName(name)) {
+      System.out.print("This name already exists. Please try with another: ");
+      name = cs.next();
+    }
+    return new Table(name, this);
+  }
 
-	/**
-	*Check if user gives an integer and handles Exception.
-	*@return int given by the user and prints message
-	*asking for numerical data.
-	*/
-	public static int valid() {
-		Scanner cs = new Scanner(System.in);
-		int choice = 0;
-		boolean hasError = true;
-		while (hasError) {
-			try {
-				choice = Integer.parseInt(cs.next());
-				hasError = false;
-			} catch (Exception e) {
-				System.out.println("Please choose a valid option");
-				System.out.println("Number expected");
-				cs.reset();
-			}
-		}
-		return choice;
-	}
+  /**
+  * Get which table the user choose to be retrieved
+  * @return Table
+  */
 
-//SAVING
-	/**
-	*Check if user wants to save the database
-	*calls method writeObject() and throws IOException which is
-	*handled in writeObject()
-	*@throws IOException if no database is stored
-	*/
-	public void save() throws IOException {
-		if (wantsToSave()) {
-			writeObject();
-		}
-	}
+  public Table chooseTable() {
+    Table table = tables.get(0);
+    if (tableCounter > 1) {
+      System.out.println("Choose one of your tables: ");
+      for (int i = 0; i < tableCounter; i++) {
+        table = tables.get(i);
+        System.out.println(String.format("%s%s%s", (i + 1), ". ", table.getName()));
+      }
+      System.out.println("Insert the number of your choice: ");
+      int choice = Database.choice(1, tableCounter);
+      table = tables.get(choice - 1);
+    } else if (tableCounter == 1) {
+      table = tables.get(0);
+    }
+    return table;
+  }
 
-	/**
-	*Ask if user wants to save the database
-	*@return true if user wants to save the base
-	*/
-	public boolean wantsToSave() {
-		System.out.println("Do you want to save your database?");
-		return Database.findDecision();
-	}
 
-	/**
-	*Check if user wants to save the data
-	*@return true if user doesn't want to create a new Database
-	*/
-	public static boolean wantsToRetrieve() {
-		System.out.println("Do you want to create a new Database?");
-		return (!(Database.findDecision()));
-	}
+  public static boolean findDecision() {
+    Scanner cs = new Scanner(System.in);
+    boolean yn = true;
+    String decision = cs.next();
+    boolean answerfound = false;
+    while (answerfound == false) {
+      switch (decision) {
+        case "YES": yn = true;
+        case "yes": yn = true;
+        case "Yes": yn = true;
+        case "Y": yn = true;
+        case "y": yn = true;
+          answerfound = true;
+          break;
+
+        case "NO": yn = false;
+        case "no": yn = false;
+        case "No": yn = false;
+        case "N": yn = false;
+        case "n": yn = false;
+          answerfound = true;
+          break;
+        default:
+          System.out.print("Please answer with 'Yes' or 'No' ");
+          decision = cs.next();
+      }
+    }
+    return yn;
+  }
+
+  /**
+  * Check if user's choice is within an allowed range
+  * @param start starting number of this range
+  * @param end ending number of this range
+  * @return choice final decision of the user
+  */
+
+  public static int choice(int start, int end) {
+    int choice = valid();
+    while ((choice < start) || (choice > end)) {
+      System.out.println("Please chose a valid option");
+      choice = valid();
+    }
+    return choice;
+  }
+
+  /**
+  * Check if user gives an integer and handles Exception.
+  * @return int given by the user and prints message
+  */
+  public static int valid() {
+    Scanner cs = new Scanner(System.in);
+    int choice = 0;
+    boolean hasError = true;
+    while (hasError) {
+      try {
+        choice = Integer.parseInt(cs.next());
+        hasError = false;
+      } catch (Exception e) {
+        System.out.println("Please choose a valid option");
+        System.out.println("Number expected");
+        cs.reset();
+      }
+    }
+    return choice;
+  }
+
+  /**
+  * Check if user wants to save the database
+  * and save it
+  * @throws IOException if no database is stored
+  */
+
+  public void save() throws IOException {
+    if (wantsToSave()) {
+      writeObject();
+    }
+  }
+
+  /**
+  * Ask if user wants to save the database
+  * @return true if user wants to save the base
+  */
+
+  public boolean wantsToSave() {
+    System.out.println("Do you want to save your database?");
+    return Database.findDecision();
+  }
+
+
+  /**
+  * Check if user wants to save the data
+  * @return true if user doesn't want to create a new Database
+  */
+  public static boolean wantsToRetrieve() {
+    System.out.println("Do you want to create a new Database?");
+    return (!(Database.findDecision()));
+  }
 
 	/**
 	*Save database in file with the name of the base

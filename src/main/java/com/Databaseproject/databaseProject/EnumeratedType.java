@@ -1,10 +1,10 @@
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
- *  Represents an Enumerated Type of Database
+ *  Represent an Enumerated Type of Database
  */
 public class EnumeratedType extends FieldType implements Serializable{
 
@@ -14,7 +14,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	private ArrayList<String> allowedStrings;
 
 	/**
-	 * Creates an EnumeratedType with an ArrayList of Strings, that will keep a set
+	 * Create an EnumeratedType with an ArrayList of Strings, that will keep a set
 	 * of possible values.
 	 */
 	public EnumeratedType() {
@@ -30,7 +30,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	/**
-	 * Checks, if the user's insertion is one of the allowed Strings
+	 * Check, if the user's insertion is one of the allowed Strings
 	 * If it isn't, user tries again
 	 * @return String user's final choice
 	 */
@@ -53,8 +53,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	/**
-	 * User defines the set on which EnumeratedType type will be defined
-	 * Returns nothing
+	 * Ask user to define the set on which EnumeratedType type will be defined
 	 * @param nameOfField Column name
 	 */
 	public void defineEnumeration(String nameOfField) {
@@ -69,9 +68,9 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	/**
-	 * Checks, if there is an insertion in the set, on which EnumeratedType type is defined
+	 * Check, if there is an insertion in the set, on which EnumeratedType type is defined
 	 * @param filler under control insertion
-	 * @return boolean true, if there is, and false otherwise
+	 * @return boolean - true, if there is, and false otherwise
 	 */
 	public boolean correctValue(String filler) {
 		boolean isCorrect = false;
@@ -84,7 +83,7 @@ public class EnumeratedType extends FieldType implements Serializable{
 	}
 
 	/**
-	 * Returns the type of the object and allowed Strings ArrayList
+	 * Return the type of the object and allowed Strings ArrayList
 	 * @return String
 	 */
 	public String toString() {

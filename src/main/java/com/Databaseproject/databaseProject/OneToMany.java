@@ -1,12 +1,12 @@
-/**
-Represent a relationship between two tables where the rows of table1
-*can be linked to multiple rows of table2 but
-*a row of table2 can be linked only to one row of table1
-*/
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.HashMap;
 
+/**
+*Represent a correlation between two tables where the records of table1
+*can be linked to multiple records of table2 but
+*each record of table2 can be linked only to one record of table1
+*/
 public class OneToMany extends Correlation{
 
 	private Column column;
@@ -27,6 +27,7 @@ public class OneToMany extends Correlation{
 	/**
 	 *Fill the foreign key column with data
 	 **/
+	@Override
 	public void fillForeignKeyColumn() {
 		Column pKColumnOne = pKColumn1();
 		printPrimaryKeyColumns() ;

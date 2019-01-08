@@ -1,8 +1,12 @@
-package com.Databaseproject.databaseProject;
+//package com.Databaseproject.databaseProject;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
 
+/**
+*Represent a correlation between two tables where the records of both tables
+* can be linked with multiple records of the other
+*/
 
 public class ManyToMany extends Correlation {
 
@@ -54,6 +58,7 @@ public class ManyToMany extends Correlation {
 	/**
 	*Fill foreignKeys list with data
 	*/
+	@Override
 	public void fillForeignKeyColumn() {
 
 	Column primaryKeyColumn1 = pKColumn1();
