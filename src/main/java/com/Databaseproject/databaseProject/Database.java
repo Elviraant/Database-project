@@ -1,24 +1,21 @@
 //package com.Databaseproject.databaseProject;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.EOFException;
-import java.io.NotSerializableException;
-import java.util.InputMismatchException;
-import java.io.Serializable;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
 
 /**
- *Represent a Database
+ *Represent a Database.
  */
 public class Database implements Serializable {
 
@@ -28,8 +25,8 @@ public class Database implements Serializable {
   private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
   /**
-  * Create a Database with a specified name
-  * @param name name of Database
+  * Create a Database with a specified name.
+  * @param name name of Database.
   */
   public Database(String name) {
     this.name = name;
@@ -64,9 +61,9 @@ public class Database implements Serializable {
   }
 
   /**
-  * Check whether a table's name in a database is unique
-  * @param name name of the table
-  * @return boolean true, if the name is unique, false otherwise
+  * Check whether a table's name in a database is unique.
+  * @param name name of the table.
+  * @return boolean true, if the name is unique, false otherwise.
   */
 
   public boolean uniqueTableName(String name) {  //JUNIT TESTED
@@ -87,11 +84,11 @@ public class Database implements Serializable {
 
   /**
   * Set up the base that the user wants to use
-  * and create it or retrieve an already existing
-  * @return Database
-  * @throws ClassNotFoundException if the table cannot be stored
-  * @throws EOFException if the database doesn't exist
-  * @throws FileNotFoundException if the database doesn't exist
+  * and create it or retrieve an already existing.
+  * @return Database.
+  * @throws ClassNotFoundException if the table cannot be stored.
+  * @throws EOFException if the database doesn't exist.
+  * @throws FileNotFoundException if the database doesn't exist.
   */
 
   public static Database startBase() throws ClassNotFoundException, EOFException, IOException {
@@ -158,9 +155,9 @@ public class Database implements Serializable {
   }
 
   /**
-  * Create a new table in the database
-  * if it doesn't already exist
-  * @return Table database's new table/entity
+  * Create a new table in the database.
+  * if it doesn't already exist.
+  * @return Table database's new table/entity.
   */
 
   public Table createNewTable() {
@@ -175,8 +172,8 @@ public class Database implements Serializable {
   }
 
   /**
-  * Get which table the user choose to be retrieved
-  * @return Table
+  * Get which table the user choose to be retrieved.
+  * @return Table.
   */
 
   public Table chooseTable() {
@@ -228,10 +225,10 @@ public class Database implements Serializable {
   }
 
   /**
-  * Check if user's choice is within an allowed range
-  * @param start starting number of this range
-  * @param end ending number of this range
-  * @return choice final decision of the user
+  * Check if user's choice is within an allowed range.
+  * @param start starting number of this range.
+  * @param end ending number of this range.
+  * @return choice final decision of the user.
   */
 
   public static int choice(int start, int end) {
@@ -266,8 +263,8 @@ public class Database implements Serializable {
 
   /**
   * Check if user wants to save the database
-  * and save it
-  * @throws IOException if no database is stored
+  * and save it.
+  * @throws IOException if no database is stored.
   */
 
   public void save() throws IOException {
@@ -277,8 +274,8 @@ public class Database implements Serializable {
   }
 
   /**
-  * Ask if user wants to save the database
-  * @return true if user wants to save the base
+  * Ask if user wants to save the database.
+  * @return true if user wants to save the base.
   */
 
   public boolean wantsToSave() {
@@ -288,283 +285,290 @@ public class Database implements Serializable {
 
 
   /**
-  * Check if user wants to save the data
-  * @return true if user doesn't want to create a new Database
+  * Check if user wants to save the data.
+  * @return true if user doesn't want to create a new Database.
   */
   public static boolean wantsToRetrieve() {
     System.out.println("Do you want to create a new Database?");
     return (!(Database.findDecision()));
   }
 
-	/**
-	*Save database in file with the name of the base
-	*@throws IOException if the file cannot be opened
-	*/
-	public void writeObject() throws IOException {
-		Scanner cs = new Scanner(System.in);
-		String filename = this.getName();
-		try {
-			FileWriter file = new FileWriter("saved", true);
-			BufferedWriter out = new BufferedWriter(file);
-			out.write(filename);
-			out.newLine();
-			out.close();
-		} catch (FileNotFoundException e) {
-			System.err.println("Unable to open file " + filename + ": " + e.getMessage());
-		}
+  /**
+  *Save database in file with the name of the base.
+  *@throws IOException if the file cannot be opened.
+  */
 
-		try {
-			FileOutputStream file = new FileOutputStream(filename);
-			ObjectOutputStream out = new ObjectOutputStream(file);
-			out.writeObject(this);
-			out.reset();
-			out.close();
-			System.out.println("Your database was saved successfully");
-		} catch (FileNotFoundException e) {
-			System.err.println("Unable to open file " + filename + ": " + e.getMessage());
-		}
-	}
+  public void writeObject() throws IOException {
+    Scanner cs = new Scanner(System.in);
+    String filename = this.getName();
+    try {
+      FileWriter file = new FileWriter("saved", true);
+      BufferedWriter out = new BufferedWriter(file);
+      out.write(filename);
+      out.newLine();
+      out.close();
+    } catch (FileNotFoundException e) {
+      System.err.println("Unable to open file " + filename + ": " + e.getMessage());
+    }
+    try {
+      FileOutputStream file = new FileOutputStream(filename);
+      ObjectOutputStream out = new ObjectOutputStream(file);
+      out.writeObject(this);
+      out.reset();
+      out.close();
+      System.out.println("Your database was saved successfully");
+    } catch (FileNotFoundException e) {
+      System.err.println("Unable to open file " + filename + ": " + e.getMessage());
+    }
+  }
 
-	/**
-	*Retrieve the asked database
-	*@param
-			nameOfBase name chosen by the user
-	*@return Database by retrieving the file in which the object is stored
-	*@throws ClassNotFoundException if the table cannot be stored
-	*@throws EOFException if the database doesn't exist
-	*@throws FileNotFoundException if the database doesn't exist
-	*/
-	public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
-		Database d1 = new Database("");
-		String filename = nameOfBase;
-		try {
-			FileInputStream file = new FileInputStream(filename);
-			ObjectInputStream in = new ObjectInputStream(file);
-			d1 = (Database) in.readObject();
-			System.out.println("Data retrieved successfully");
-		} catch (EOFException e) {
-			System.out.println("Error: There is no such database");
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			System.out.println("This table can't be stored");
-		} catch (FileNotFoundException e) {
-			System.out.println("Error: There is no such database");
-		}
-		return d1;
-	}
+  /**
+  *Retrieve the asked database.
+  *@param nameOfBase name chosen by the user.
+  *@return Database by retrieving the file in which the object is stored.
+  *@throws ClassNotFoundException if the table cannot be stored.
+  *@throws EOFException if the database doesn't exist.
+  *@throws FileNotFoundException if the database doesn't exist.
+  */
 
-	/**
-	*Print available bases created by the user
-	*@return String
-			 the name of the chosen base
-			 if no bases are saved it returns "no bases"
-	*/
-	public static String chooseBase() {
-		ArrayList<String> saved = new ArrayList<String>();
-		try {
-			FileReader file = new FileReader("saved");
-			BufferedReader in = new BufferedReader(file);
-			int i = 1;
-			String line;
-			while ((line = in.readLine()) != null) {
-				saved.add(line);
-			}
-		} catch (EOFException e) {
-			System.out.println("Error: There are no bases stored");
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			System.out.println("Error: There are no bases stored");
-		} catch (IOException e) {
-			System.out.println("Unable to save");
-		}
-		if (saved.size() != 0) {
-			System.out.println("Which database do you want to open?");
-			ArrayList<String> diff = new ArrayList<String>();
-			diff.add(saved.get(0));
-			boolean exists;
-			for (int i =1; i < saved.size(); i++) {
-				String base = saved.get(i);
-				exists = false;
-				for (int k = 0; k < diff.size(); k++) {
-					if (base.equals(diff.get(k))) {
-						exists = true;
-					}
-				}
-				if (!exists) {
-					diff.add(base);
-				}
-			}
-			for (int i = 0; i < diff.size(); i++) {
-				System.out.println(String.format("%s.%s", (i+1), diff.get(i)));
-			}
-			int choice = choice(1, saved.size());
-			return saved.get(choice-1);
-		} else {
-			return "no bases";
-		}
-	}
+  public static Database readObject(String nameOfBase) throws ClassNotFoundException, IOException {
+    Database d1 = new Database("");
+    String filename = nameOfBase;
+    try {
+      FileInputStream file = new FileInputStream(filename);
+      ObjectInputStream in = new ObjectInputStream(file);
+      d1 = (Database) in.readObject();
+      System.out.println("Data retrieved successfully");
+    } catch (EOFException e) {
+      System.out.println("Error: There is no such database");
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      System.out.println("This table can't be stored");
+    } catch (FileNotFoundException e) {
+      System.out.println("Error: There is no such database");
+    }
+    return d1;
+  }
 
-	/**
-	 *Define a Correlation and its name
-	 */
-	public void defineCorrelation() {
-		if ((getTableCounter() != 1)) {			//check if tables in the Database more than one
-			if(checkAvailabilityForCorrelation()) { //check if there are enough tables for a new Correlation
-				Table table1;
-				Table table2;
-				do {
-					System.out.println("Please choose the entities you want to relate");
-					System.out.print("First table: ");
-					table1 = chooseTable();
-					System.out.print("Second table: ");
-					table2 = chooseTable();
-					table2 = checkDiffrentTables(table1, table2); //check if Table objects are different
-					table1 = setUpTableForCorrelation(table1);	//check if table1 has primary key
-					table2 = setUpTableForCorrelation(table2);	//check if table2 has primary key
+  /**
+  *Print available bases created by the user.
+  *@return String
+      the name of the chosen base
+      if no bases are saved it returns "no bases".
+  */
 
-					if(checkingCorrelation(table1, table2)) {
-						System.out.println("Correlation with tables/entities " + table1.getName() + " and " + table2.getName() + " already exists.");
-					}
-				} while(checkingCorrelation(table1, table2)); //3rd
+  public static String chooseBase() {
+    ArrayList<String> saved = new ArrayList<String>();
+    try {
+      FileReader file = new FileReader("saved");
+      BufferedReader in = new BufferedReader(file);
+      int i = 1;
+      String line;
+      while ((line = in.readLine()) != null) {
+        saved.add(line);
+      }
+    } catch (EOFException e) {
+      System.out.println("Error: There are no bases stored");
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      System.out.println("Error: There are no bases stored");
+    } catch (IOException e) {
+      System.out.println("Unable to save");
+    }
+    if (saved.size() != 0) {
+      System.out.println("Which database do you want to open?");
+      ArrayList<String> diff = new ArrayList<String>();
+      diff.add(saved.get(0));
+      boolean exists;
+      for (int i = 1; i < saved.size(); i++) {
+        String base = saved.get(i);
+        exists = false;
+        for (int k = 0; k < diff.size(); k++) {
+          if (base.equals(diff.get(k))) {
+            exists = true;
+          }
+        }
+        if (!exists) {
+          diff.add(base);
+        }
+      }
+      for (int i = 0; i < diff.size(); i++) {
+        System.out.println(String.format("%s.%s", (i + 1), diff.get(i)));
+      }
+      int choice = choice(1, saved.size());
+      return saved.get(choice - 1);
+    } else {
+      return "no bases";
+    }
+  }
 
-				Scanner sc = new Scanner(System.in);
-				System.out.println("Please insert the name of Correlation. ex: Teacher teaches-name of Correlation- Student");
-				String name = sc.next();
+  /**
+   *Define a Correlation and its name.
+   */
+  
+  public void defineCorrelation() {
+    if ((getTableCounter() != 1)) {  //check if tables in the Database more than one
+      if (checkAvailabilityForCorrelation()) { 
+        //check if there are enough tables for a new Correlation
+        Table table1;
+        Table table2;
+        do {
+          System.out.println("Please choose the entities you want to relate");
+          System.out.print("First table: ");
+          table1 = chooseTable();
+          System.out.print("Second table: ");
+          table2 = chooseTable();
+          table2 = checkDiffrentTables(table1, table2); //check if Table objects are different
+          table1 = setUpTableForCorrelation(table1); //check if table1 has primary key
+          table2 = setUpTableForCorrelation(table2); //check if table2 has primary key
+          if (checkingCorrelation(table1, table2)) {
+            System.out.println("Correlation with tables/entities " + table1.getName() 
+                + " and " + table2.getName() + " already exists.");
+          }
+        } while (checkingCorrelation(table1, table2)); //3rd
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please insert the name of Correlation. ex: Teacher "
+                + "teaches-name of Correlation- Student");
+        String name = sc.next();
+        createCorrelation(name, table1, table2);
+      }
+      if (checkAvailabilityForCorrelation() == false) {
+        System.out.println("Your Database ran out of tables for a new Correlation." +
+            "You have to create more!");
+      }
+    } else {
+      System.out.println("There are not enough entities/tables in your Database."
+              + " You have to create -at least- one more. ");
+    }
+  }
 
-				createCorrelation(name, table1, table2);
+  /**
+   * Set up the table to correlate by adding primary key Column
+   *if it doesn't have.
+   * @param table Table.
+   * @return Table - given Table, if a pk Column already exists 
+      or given Table with one more Column.
+   */
+ 
+  public Table setUpTableForCorrelation(Table table) {
+    while (!table.primaryKeyColumnExists()) {
+      System.out.print("Table " + table.getName() + " doesn't have a primary key Column.");
+      System.out.println("It's time to add one: ");
+      table.addPrimaryKeyColumn();
+    }
+    return table;
+  }
 
-			}
-			if(checkAvailabilityForCorrelation() == false) {
-				System.out.println("Your Database ran out of tables for a new Correlation." +
-									"You have to create more!");
-			}
-		} else {
-			System.out.println("There are not enough entities/tables in your Database. You have to create -at least- one more. ");
-		}
-	}
+  /**
+   * Check if a correlation already exists.
+   * @param table1 first table/entity in correlation.
+   * @param table2 second table/entity in correlation.
+   * @return boolean.
+   */
+ 
+  public boolean checkingCorrelation(Table table1, Table table2) { //JUNIT TESTED
+    boolean exists = false;
+    for (Correlation c : correlations) {
+      if ((c.getTable1().equals(table1) && c.getTable2().equals(table2))
+          || (c.getTable1().equals(table2) && c.getTable2().equals(table1))) {
+        exists = true;
+      }
+    }
+    return exists;
+  }
 
-	/**
-	 * Set up the table to correlate by adding primary key Column
-	 *if it doesn't have
-	 * @param table Table
-	 * @return Table - given Table, if a pk Column already exists  or given Table with one more Column
-	 */
-	public Table setUpTableForCorrelation(Table table) {
-			while(!table.primaryKeyColumnExists()) {
-				System.out.print("Table " + table.getName() + " doesn't have a primary key Column.");
-				System.out.println("It's time to add one: ");
-				table.addPrimaryKeyColumn();
-			}
-			return table;
-	}
+  /**
+   * Check, if a new Correlation is available or Database ran out of tables,
+   * that make a new Correlation.
+   * @return boolean true if a new Correlation is possible, false otherwise.
+   */
+ 
+  public boolean checkAvailabilityForCorrelation() { //JUNIT TESTED
+    int counter = 0;
+    for (Table t1 : tables) {
+      for (Table t2 : tables) {
+        if (!t1.equals(t2)) {
+          if (!checkingCorrelation(t1, t2)) {
+            counter++;
+          }
+        }
+      }
+    }
+    if (counter == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
-	/**
-	 * Check if a correlation already exists
-	 * @param table1 first table/entity in correlation
-	 * @param table2 second table/entity in correlation
-	 * @return boolean
-	 */
-	public boolean checkingCorrelation(Table table1, Table table2) { //JUNIT TESTED
-		boolean exists = false;
-		for(Correlation c : correlations) {
-			if((c.getTable1().equals(table1) && c.getTable2().equals(table2))
-				|| (c.getTable1().equals(table2) && c.getTable2().equals(table1))) {
-				exists = true;
-			}
-		}
-		return exists;
-	}
+  /**
+   * Define which table will have the foreign key Column.
+   * @param table1 first table/entity in correlation.
+   * @param table2 second table/entity in correlation.
+   * @return Table table who will have the foreign key Column.
+   */
 
-	/**
-	 * Check, if a new Correlation is available or Database ran out of tables,
-	 * that make a new Correlation
-	 * @return boolean true if a new Correlation is possible, false otherwise
-	 */
-	public boolean checkAvailabilityForCorrelation() { //JUNIT TESTED
-		 int counter = 0;
-		 for(Table t1 : tables) {
-			 for(Table t2 : tables) {
-				 if(!t1.equals(t2)) {
-					 if(!checkingCorrelation(t1, t2)) {
-						 counter++;
-					 }
-				 }
-			 }
-		 }
-		 if (counter == 0) {
-			 return false;
-		 } else {
-			 return true;
-		 }
+  public Table defineTable2(Table table1, Table table2) {
+    int choice = Menu.tablesInCorrelationMenu(table1, table2);
+    if (choice == 1) {
+      return table1;
+    } else {
+      return table2;
+    }
+  }
 
-	}
+  /**
+   * Check, if the user correlate same tables.
+   * @param table1 first table/entity in correlation.
+   * @param table2 second table/entity in correlation.
+   * @return Table.
+   */
+  
+  public Table checkDiffrentTables(Table table1, Table table2) { //JUNIT TESTED
+    do {
+      if (table2.equals(table1)) {
+        System.out.println("Error: Same table chosen");
+        System.out.println("Please try again");
+        table2 = chooseTable();
+      }
+    } while (table2.equals(table1));
+    return table2;
+  }
 
-	/**
-	 * Define which table will have the foreign key Column
-	 * @param table1 first table/entity in correlation
-	 * @param table2 second table/entity in correlation
-	 * @return Table table who will have the foreign key Column
-	 */
-	public Table defineTable2(Table table1, Table table2) {
-
-		int choice = Menu.tablesInCorrelationMenu(table1, table2);
-		if (choice == 1) {
-			return table1;
-		} else {
-			return table2;
-		}
-	}
-
-	/**
-	 * Check, if the user correlate same tables
-	 * @param table1 first table/entity in correlation
-	 * @param table2 second table/entity in correlation
-	 * @return Table
-	 */
-	public Table checkDiffrentTables(Table table1, Table table2) { //JUNIT TESTED
-			do {
-				if (table2.equals(table1)) {
-					System.out.println("Error: Same table chosen");
-					System.out.println("Please try again");
-					table2 = chooseTable();
-				}
-			} while (table2.equals(table1));
-			return table2;
-	}
-
-	/**
-	 * Create correlation according to
-	 * user's choice
-	 * @param name name of correlation
-	 * @param table1 first table/entity of this correlation
-	 * @param table2 second table/entity of this correlation
-	 */
-	public void createCorrelation(String name, Table table1, Table table2) {
-		int option = Menu.correlationOptions();
-		if(option == 1 || option == 2) {
-			if(!defineTable2(table1, table2).equals(table2)) {
-				Table temp = table2;
-				table2 = table1;
-				table1 = temp;
-			}
-		}
-		switch (option) {
-			case (1): OneToOne c1 = new OneToOne(name,table1, table2);
-					  correlations.add(c1);
-					  c1.fillForeignKeyColumn();
-					  break;
-			case (2): OneToMany c2 = new OneToMany(name, table1, table2);
-					  correlations.add(c2);
-					  c2.fillForeignKeyColumn();
-					  break;
-			case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
-					  correlations.add(c3);
-					  c3.fillForeignKeyColumn();
-					  break;
-			default : manageTables();
-					  break;
-			}
-	}
+  /**
+   * Create correlation according to
+   * user's choice.
+   * @param name name of correlation.
+   * @param table1 first table/entity of this correlation.
+   * @param table2 second table/entity of this correlation.
+   */
+  
+  public void createCorrelation(String name, Table table1, Table table2) {
+    int option = Menu.correlationOptions();
+    if (option == 1 || option == 2) {
+      if (!defineTable2(table1, table2).equals(table2)) {
+        Table temp = table2;
+        table2 = table1;
+        table1 = temp;
+      }
+    }
+    switch (option) {
+      case (1): OneToOne c1 = new OneToOne(name,table1, table2);
+        correlations.add(c1);
+        c1.fillForeignKeyColumn();
+        break;
+      case (2): OneToMany c2 = new OneToMany(name, table1, table2);
+        correlations.add(c2);
+        c2.fillForeignKeyColumn();
+        break;
+      case (3): ManyToMany c3 = new ManyToMany(name, table1, table2);
+        correlations.add(c3);
+        c3.fillForeignKeyColumn();
+        break;
+      default : manageTables();
+        break;
+    }
+  }
 
 }
 
