@@ -1,5 +1,11 @@
 package com.Databaseproject.databaseProject;
 import java.io.Serializable;
+
+/**
+*Represent menus and messages
+* presented to the user
+*
+*/
 public class Menu implements Serializable{
 
 	public static int fieldTypesMenu() {
@@ -85,6 +91,11 @@ public class Menu implements Serializable{
 		System.out.println("Do you want to search for a specific element? (Yes/No)");
 	}
 
+	/**
+	*Print Correlation options
+	* and return user's choice
+	*@return int
+	*/
 	public static int correlationOptions() {
 		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n","What kind of corrleation do you want to create between your tables?",
 				"1. One to one",
@@ -94,6 +105,11 @@ public class Menu implements Serializable{
 		return Database.choice(1,4);
 	}
 
+	/**
+	*Print Correlation menu
+	* and return user's choice
+	*@return int
+	*/
 	public static int manageCorrelationsMenu() {
 		System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n"
 							,"1. How many correlations have I created?"
@@ -105,6 +121,11 @@ public class Menu implements Serializable{
 		return Database.choice(1,5);
 	}
 
+	/**
+	*Print view properties Menu for a specific Correlation
+	* and return user's choice
+	*@return int
+	*/
 	public static int viewPopertiesMenu() {
 		System.out.println(String.format("%s%n%s%n%s%n"
 							,"1. Show info"
@@ -118,6 +139,12 @@ public class Menu implements Serializable{
 		System.out.println("This primary key doesn't exist.");
 	}
 
+	/**
+	*Ask user if he wants to try again
+	*and return true, if the answer is Yes
+	* and false, if it is No
+	*@return boolean
+	*/
 	public static boolean printTryAgainQuestionMessage() {
 			System.out.println("Do you want to try again?");
 			return Database.findDecision();
@@ -127,6 +154,14 @@ public class Menu implements Serializable{
 		System.out.println("Try again.");
 	}
 
+	/**
+	*Ask user which table has the
+	* foreign keys
+	* and return its choice
+	*@param table1 first table chose to be correlated
+	*@param table2 second table chosen to be correlated
+	*@return int
+	*/
 	public static int tablesInCorrelationMenu(Table table1, Table table2) {
 
 		System.out.println("Choose the table, that in your Correlation has the foreign key column: ");

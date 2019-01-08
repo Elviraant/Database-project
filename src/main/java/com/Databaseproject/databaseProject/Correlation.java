@@ -1,14 +1,14 @@
-/**
-*Represents a correlation of a base
-*Correlation exists between two tables of a base
-*Correltion can be one-to-one, one-to-many, many-to-many
-*/
 package com.Databaseproject.databaseProject;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
 
+/**
+*Represent a correlation of a base.
+* Correlation exists between two tables of the base
+* Correlation can be one-to-one, one-to-many, many-to-many
+*/
 public class Correlation implements Serializable {
 
 	protected String name;
@@ -16,7 +16,7 @@ public class Correlation implements Serializable {
 	protected Table table2; //entity/table 2
 
 	/**
-	*Constructor for Correlation class
+	* Constructor for Correlation class
 	* @param name name of correlationship between the entities
 	* @param table1 first entity
 	* @param table2 second entity
@@ -46,9 +46,6 @@ public class Correlation implements Serializable {
 	public void fillForeignKeyColumn() {
 	}
 
-	/**
-	*Overriden in subclasses
-	*/
 	public void viewProperties() {
 	}
 

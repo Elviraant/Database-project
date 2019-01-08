@@ -1,7 +1,3 @@
-
-/**
- *Represent a Database
- */
 package com.Databaseproject.databaseProject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +17,9 @@ import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 
+/**
+ *Represent a Database
+ */
 public class Database implements Serializable {
 	private ArrayList<Table> tables = new ArrayList<Table>();
 	private int tableCounter;
@@ -28,7 +27,7 @@ public class Database implements Serializable {
 	private ArrayList<Correlation> correlations = new ArrayList<Correlation>();
 
 	/**
-	 * Creates a Database with the specified name
+	 * Create a Database with a specified name
 	 * @param name name of Database
 	 */
 	public Database(String name) {
@@ -394,17 +393,11 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * A.Define a correlation by checking the following
-	 * 1st Table objects in the Database, must be more than one
-	 * 2nd Table objects must be different
-	 * 3rd Table objects don't participate again in a same Correlation
-	 * 4th Table objects must have a primary Key List
-	 * 5th Database has enough tables for a new Correlation
-	 * B.User insert the name of the Correlation
+	 *Define a Correlation and its name
 	 */
 	public void defineCorrelation() {
-		if ((getTableCounter() != 1)) {			//1st
-			if(checkAvailabilityForCorrelation()) { //5th
+		if ((getTableCounter() != 1)) {			//check if tables in the Database more than one
+			if(checkAvailabilityForCorrelation()) { //check if there are enough tables for a new Correlation
 				Table table1;
 				Table table2;
 				do {
@@ -413,9 +406,9 @@ public class Database implements Serializable {
 					table1 = chooseTable();
 					System.out.print("Second table: ");
 					table2 = chooseTable();
-					table2 = checkDiffrentTables(table1, table2); //2nd
-					table1 = setUpTableForCorrelation(table1);	//4th
-					table2 = setUpTableForCorrelation(table2);	//4th
+					table2 = checkDiffrentTables(table1, table2); //check if Table objects are different
+					table1 = setUpTableForCorrelation(table1);	//check if table1 has primary key
+					table2 = setUpTableForCorrelation(table2);	//check if table2 has primary key
 
 					if(checkingCorrelation(table1, table2)) {
 						System.out.println("Correlation with tables/entities " + table1.getName() + " and " + table2.getName() + " already exists.");
@@ -439,9 +432,10 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * If a Table has no primary key Column, the method will provide to user the option to add primary key column
+	 * Set up the table to correlate by adding primary key Column
+	 *if it doesn't have
 	 * @param table Table
-	 * @return Table same Table, if a pk Column already exists, OR same Table with one more Column
+	 * @return Table - given Table, if a pk Column already exists  or given Table with one more Column
 	 */
 	public Table setUpTableForCorrelation(Table table) {
 			while(!table.primaryKeyColumnExists()) {
@@ -470,7 +464,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Checks, if a new Correlation is available or Database ran out of tables,
+	 * Check, if a new Correlation is available or Database ran out of tables,
 	 * that make a new Correlation
 	 * @return boolean true if a new Correlation is possible, false otherwise
 	 */
@@ -510,8 +504,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Checks, if the user correlate same tables
-	 * Returns Table object
+	 * Check, if the user correlate same tables
 	 * @param table1 first table/entity in correlation
 	 * @param table2 second table/entity in correlation
 	 * @return Table
@@ -528,7 +521,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * User chooses from a menu the type of correlation, that suits him
+	 * Create correlation according to
+	 * user's choice
 	 * @param name name of correlation
 	 * @param table1 first table/entity of this correlation
 	 * @param table2 second table/entity of this correlation
