@@ -1,5 +1,4 @@
 //package com.Databaseproject.databaseProject;
-import java.util.Scanner;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,8 +140,8 @@ public class Correlation implements Serializable {
   /**
   * Ask user which is the table that he wants to search for related records
   * according to the choice and print the other table which contains the primary keys
-  * returns number of chosen table
-  * @return choice int
+  * returns number of chosen table.
+  * @return choice int.
   */
 
   public int choice() {

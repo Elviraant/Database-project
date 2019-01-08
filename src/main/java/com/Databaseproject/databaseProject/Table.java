@@ -1175,11 +1175,11 @@ public class Table implements Serializable {
       choice = Database.choice(1, 2);
       switch (choice) {
         case 1:
-        	printAll();
+          printAll();
           deleteSpecificRows();
           break;
         case 2:
-        	printAll();
+          printAll();
           deleteSpecificRangeofRows();
           break;
         default:
@@ -1494,7 +1494,7 @@ public class Table implements Serializable {
   }
 
   /**
-   * Print the primary key Column of the Table, if it exists
+   * Print the primary key Column of the Table, if it exists. 
    */
   public void printPrimaryKeyColumn() {
     if (primaryKeyColumnExists()) {

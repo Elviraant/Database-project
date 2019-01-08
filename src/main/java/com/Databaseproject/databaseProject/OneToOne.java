@@ -23,7 +23,7 @@ public class OneToOne extends Correlation {
   }
 
   /**
-   * Show options concerning the management of an one to one correlation
+   * Show options concerning the management of an one to one correlation.
    */
   @Override
   public void viewProperties() {
@@ -37,7 +37,8 @@ public class OneToOne extends Correlation {
           System.out.println(this.toString());
           System.out.println("This is an One-To-One correlation");
           System.out.println();
-          System.out.println("Every record of a table should be linked to ecxactly one record of the other.");
+          System.out.println("Every record of a table should be linked"
+                  + " to ecxactly one record of the other.");
           System.out.println();
           break;
         case 2:

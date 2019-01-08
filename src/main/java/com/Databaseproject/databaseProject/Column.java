@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
-*Represent a Column of a Table
+*Represent a Column of a Table.
 */
 public class Column implements Serializable {
   private String name;
@@ -20,7 +20,7 @@ public class Column implements Serializable {
    * @param table database's entity of this field.
    */
 
-  public Column(String name, FieldType type, Table table) { /*checkstyle checked*/
+  public Column(String name, FieldType type, Table table) { 
     this.name = name;
     this.type = type;
     field = new ArrayList<Object>();
@@ -28,7 +28,6 @@ public class Column implements Serializable {
     table.setColumnCounter(table.getColumnCounter() + 1);
   }
 
-   /*CHECKSTYLE MESSAGE :UNUSED @param tag for name*/
   /**
    * Second Constructor for Column class.
    * Used by Correlation for the foreign keys.
@@ -45,53 +44,53 @@ public class Column implements Serializable {
     table.setColumnCounter(table.getColumnCounter() + 1);
   }
 
-  public String getName() { /*checkstyle checked*/
+  public String getName() { 
     return name;
   }
 
-  public void setName(String name) { /*checkstyle checked*/
+  public void setName(String name) { 
     this.name = name;
   }
 
-  public boolean getPrimaryKey() { /*checkstyle checked*/
+  public boolean getPrimaryKey() { 
     return isPrimaryKey;
   }
 
-  public void setPrimaryKey(boolean isPrimaryKey) { /*checkstyle checked*/
+  public void setPrimaryKey(boolean isPrimaryKey) { 
     this.isPrimaryKey = isPrimaryKey;
   }
 
-  public void setForeignKey(boolean isForeignKey) { /*checkstyle checked*/
+  public void setForeignKey(boolean isForeignKey) { 
     this.isForeignKey = isForeignKey;
   }
 
-  public boolean getForeignKey() { /*checkstyle checked*/
+  public boolean getForeignKey() { 
     return isForeignKey;
   }
 
-  public ArrayList<Object> getField() { /*checkstyle checked*/
+  public ArrayList<Object> getField() { 
     return field;
   }
 
-  public FieldType getType() { /*checkstyle checked*/
+  public FieldType getType() { 
     return type;
   }
 
-  public void setFieldType(FieldType type) { /*checkstyle checked*/
+  public void setFieldType(FieldType type) {
     this.type = type;
   }
 
-  public ArrayList<ArrayList<Object>> getForeignKeys() { /*checkstyle checked*/
+  public ArrayList<ArrayList<Object>> getForeignKeys() { 
     return foreignKeys;
   }
 
 
- /**
+  /**
    *Print an element of the field accoording to the row given.
    *@param row a row of the field
    */
 
-  public void printElement(int row) { /*checkstyle checked*/
+  public void printElement(int row) { 
     String data = String.format("|%-15s|", field.get(row).toString());
     System.out.print(data);
     System.out.print("     ");
@@ -99,9 +98,9 @@ public class Column implements Serializable {
 
   /**
    * Create the right FieldType object,
-   * based on a choice
-   * @param choice user's choice
-   * @return FieldType created object
+   * based on a choice.
+   * @param choice user's choice.
+   * @return FieldType created object.
    */
 
   public static FieldType findType(int choice) {
@@ -119,11 +118,11 @@ public class Column implements Serializable {
   }
 
   /**
-   * Fill primary key Field
+   * Fill primary key Field.
    * @param data user's insertion.
    */
 
-  public void fillPrimaryKeyField(Object data) { /*checkstyle checked*/
+  public void fillPrimaryKeyField(Object data) { 
     boolean unique = this.checkUniqueness(data);
     while (!unique) {
       System.out.print("This data already exists. Try again: ");
@@ -134,12 +133,12 @@ public class Column implements Serializable {
   }
 
   /**
-   * Check if data in field is unique
+   * Check if data in field is unique.
    * @param data user's insertion.
    * @return boolean
    */
 
-  public boolean checkUniqueness(Object data) { /*checkstyle checked*/
+  public boolean checkUniqueness(Object data) { 
     boolean unique = true;
     for (Object f : field) {
       if (f.equals(data)) {
@@ -154,18 +153,18 @@ public class Column implements Serializable {
    * @param table from which the foreign key Column object is coming
    */
 
-  public void createFkColumnName(Table table) { /*checkstyle checked*/
+  public void createFkColumnName(Table table) { 
     String name = ("Fk_from_").concat(table.getName());
     setName(name);
   }
 
- /*
+  /*
   *Search if a specific element exists in specific field
   *and print all records found in a list or
   *non-existent message
   *@param element Object Type variable, to be searched in field.
  */
-  public void searchElement(Object element) { /*checkstyle checked*/
+  public void searchElement(Object element) { 
     ArrayList<Integer> rows = matchingRows(element);
     if (rows.size() != 0) {
       System.out.println(element);
@@ -181,13 +180,13 @@ public class Column implements Serializable {
   }
 
 
- /*
+  /*
  * Search if a specific element exists in specific field
  * and return all the positions found in a list
  * @param element Object Type variable, to be searched in field.
  * @return ArrayList
  */
-  public ArrayList<Integer> matchingRows(Object element) { /*checkstyle checked*/
+  public ArrayList<Integer> matchingRows(Object element) { 
     ArrayList<Integer> rows = new ArrayList<Integer>();
     for (int i = 0; i < getField().size(); i++) {
       if (element.equals(getField().get(i))) {
@@ -204,7 +203,7 @@ public class Column implements Serializable {
    * @return ArrayList
    */
 
-  public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) { /*checkstyle checked*/
+  public ArrayList<Integer> matchingRows(ArrayList<Object> foreigns) {
     ArrayList<Integer> rows = new ArrayList<Integer>();
     ArrayList<Integer> toBeReturned = new ArrayList<Integer>();
     for (Object foreign : foreigns) {
@@ -223,12 +222,23 @@ public class Column implements Serializable {
   *@param s2 Object, new element in position j - 1
   */
 
-  public void sortInAscendingOrder(int j, Object s1, Object s2) { /*checkstyle checked*/
+  public void sortInAscendingOrder(int j, Object s1, Object s2) {
     Object temp = s2;
     this.getField().set(j,s1);
     this.getField().set(j - 1,temp);
   }
-
+  /**
+  *Change the data in ForeignsKey order to create a table in sscending order.
+  *@param j int, position of the field to change
+  *@param s1 ArrayList new ArrayList of foreign keys in position j
+  *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
+  */
+  public void sortInAscendingOrder(int j, ArrayList<Object> s1, ArrayList<Object> s2) {
+    ArrayList<Object> temp = s2;
+    this.getForeignKeys().set(j,s1);
+    this.getForeignKeys().set(j - 1,temp);
+  }
+  
 
   /**
   * Change the data in order to create a table in descending order.
@@ -236,34 +246,24 @@ public class Column implements Serializable {
   * @param s1 Object new element in position j
   * @param s2 Object new element in position j - 1
   */
-  public void sortInDescendingOrder(int j, Object s1, Object s2) {  /*checkstyle checked*/
+  public void sortInDescendingOrder(int j, Object s1, Object s2) {
     Object temp = s1;
     this.getField().set(j - 1,s2);
     this.getField().set(j,temp);
   }
 
 
+
   /**
-  *Change the data in ForeignsKey order to create a table in sscending order.
-  *@param j int, position of the field to change
-  *@param s1 ArrayList new ArrayList of foreign keys in position j
-  *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
-  */
- public void sortInAscendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
-  	 ArrayList <Object> temp = s2;
-     this.getForeignKeys().set(j,s1);
-     this.getForeignKeys().set(j - 1,temp);
-  }
- /**
  *Change the data in ForeignsKey order to create a table in descending order.
  *@param j int position of the field to change
  *@param s1 ArrayList new ArrayList of foreign keys in position j
  *@param s2 ArrayList new ArrayList of foreign keys in position j - 1
   */
-  public void sortInDescendingOrder(int j, ArrayList <Object> s1, ArrayList <Object> s2) {
-      ArrayList <Object> temp = s1;
-      this.getForeignKeys().set(j - 1,s2);
-      this.getForeignKeys().set(j,temp);
+  public void sortInDescendingOrder(int j, ArrayList<Object> s1, ArrayList<Object> s2) {
+    ArrayList<Object> temp = s1;
+    this.getForeignKeys().set(j - 1,s2);
+    this.getForeignKeys().set(j,temp);
   }
 
   public void sortForeignKeysColumn(int result, int j, int choice) {
@@ -285,7 +285,7 @@ public class Column implements Serializable {
   *@param key
   *@return Integer
   */
-  public Integer findPKeyPosition(Object key) {    /*checkstyle checked*/
+  public Integer findPKeyPosition(Object key) { 
     if (isPrimaryKey) {
       ArrayList<Integer> positions = matchingRows(key);
       if (!positions.isEmpty()) {

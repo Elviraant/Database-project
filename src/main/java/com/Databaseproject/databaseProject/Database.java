@@ -433,8 +433,8 @@ public class Database implements Serializable {
         createCorrelation(name, table1, table2);
       }
       if (checkAvailabilityForCorrelation() == false) {
-        System.out.println("Your Database ran out of tables for a new Correlation." +
-            "You have to create more!");
+        System.out.println("Your Database ran out of tables for a new Correlation." 
+            + "You have to create more!");
       }
     } else {
       System.out.println("There are not enough entities/tables in your Database."
