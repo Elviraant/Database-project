@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,7 +13,7 @@ public class DoubleType extends FieldType implements Serializable {
    * , catch InputMismatchException e and read again.
    * @return Double Double, that has been read.
    */
-  
+
   public Double getData() {
     Scanner cs = new Scanner(System.in);
     double data = 0;
@@ -33,7 +33,7 @@ public class DoubleType extends FieldType implements Serializable {
    * Return the type of the object.
    * @return String.
    */
- 
+
   public String toString() {
     return "Type: Double";
   }

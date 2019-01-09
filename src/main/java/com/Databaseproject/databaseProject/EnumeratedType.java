@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,7 +12,7 @@ public class EnumeratedType extends FieldType implements Serializable{
   /**
    * EnumeratedType's allowed Strings list.
    */
-  
+
   private ArrayList<String> allowedStrings;
 
   /**
@@ -58,7 +58,7 @@ public class EnumeratedType extends FieldType implements Serializable{
    * Ask user to define the set on which EnumeratedType type will be defined.
    * @param nameOfField Column name.
    */
- 
+
   public void defineEnumeration(String nameOfField) {
     Scanner cs = new Scanner(System.in);
     System.out.println("Please type the values that you want for " + nameOfField

@@ -1,5 +1,5 @@
 
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +15,10 @@ public class Table implements Serializable {
   private String name;
   private int numberOfRows = 0;
   private boolean references = false;
-  private HashMap<Table, Integer> positionOffFk = new HashMap<Table, Integer>();
-  private HashMap<Integer, Table> invPositionOffFk = new HashMap<Integer, Table>();
+  private HashMap<Table, Integer> positionOffFk
+  = new HashMap<Table, Integer>();
+  private HashMap<Integer, Table> invPositionOffFk
+  = new HashMap<Integer, Table>();
 
   /**
    * Create a Table for Database and add it to its Database tables ArrayList. with
@@ -28,7 +30,7 @@ public class Table implements Serializable {
    *          Database that belongs to.
    */
 
-  public Table(String name, Database d1) { /* checkstyle checked */
+  public Table(String name, Database d1) {
     this.name = name;
     d1.getTables().add(this);
     int counter = d1.getTableCounter();
@@ -36,7 +38,7 @@ public class Table implements Serializable {
     d1.setTableCounter(counter);
   }
 
-  public ArrayList<Column> getColumns() { /* checkstyle checked setters and getters */
+  public ArrayList<Column> getColumns() {
     return columns;
   }
 
@@ -93,10 +95,6 @@ public class Table implements Serializable {
   }
 
   /**
-   * public HashMap<Table, Integer> getPositionOfFK() { return positionOffFk; }
-   **/
-
-  /**
    * Create fields for a Table.
    */
 
@@ -109,7 +107,7 @@ public class Table implements Serializable {
    * Set the Column objects' names until the user inserts EXIT.
    */
 
-  public void setFieldNames() { /* checkstyle checked */
+  public void setFieldNames() {
     System.out.println("Set the name of the field that you want to create\nEnter EXIT to stop");
     String nameOfField = nameAColumn();
     nameOfField = uniqueFieldName(nameOfField);
@@ -1494,7 +1492,7 @@ public class Table implements Serializable {
   }
 
   /**
-   * Print the primary key Column of the Table, if it exists. 
+   * Print the primary key Column of the Table, if it exists.
    */
   public void printPrimaryKeyColumn() {
     if (primaryKeyColumnExists()) {

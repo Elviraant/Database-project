@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,7 +32,7 @@ public class IntegerType extends FieldType implements Serializable {
    * Return the type of the object.
    * @return String.
    */
-  
+
   public String toString() {
     return "Type: Integer";
   }

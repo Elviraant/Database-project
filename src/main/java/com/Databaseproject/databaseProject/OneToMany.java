@@ -1,5 +1,5 @@
 
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.util.HashMap;
 import java.util.Scanner;
 

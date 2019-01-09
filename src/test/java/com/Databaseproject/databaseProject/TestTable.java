@@ -1,5 +1,5 @@
 
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,13 +51,6 @@ public class TestTable {
 
     column1.setPrimaryKey(false);
     Assert.assertEquals("Failure - Primary Key Column does not exist", table.findPrimaryKeyColumn(), -1);
-  }
-
-  @Test
-  public void testInputFieldName() {
-    ByteArrayInputStream input1 = new ByteArrayInputStream(firstElement.getBytes());
-    System.setIn(input1);
-    table.inputFieldName("random process");
   }
 
   @Test

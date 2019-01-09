@@ -1,5 +1,4 @@
-
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 
 /**
@@ -180,7 +179,8 @@ public class Menu implements Serializable {
 
   public static void deletionFailed(Table table) {
     System.out.println("Deletion failed");
-    System.out.println("Table " + table.getName() + " references another table of the base.");
+    System.out.println("Table " + table.getName()
+       + " references another table of the base.");
     System.out.println();
   }
 

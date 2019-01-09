@@ -1,5 +1,5 @@
 
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;

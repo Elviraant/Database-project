@@ -1,4 +1,5 @@
-//package com.Databaseproject.databaseProject;
+
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,12 +181,10 @@ public class Correlation implements Serializable {
       ArrayList<Integer> primaryRow = pKColumn2().matchingRows(element);
       if (primaryRow.size() != 0) {
         System.out.println("Found in row " + primaryRow.get(0) + " of " + table2.getName());
-        //to be deleted
         ArrayList<Object> foreigns = new ArrayList<Object>();
         for (Integer row: primaryRow) {
           foreigns.add(fColumn.getField().get(row));
           System.out.println("added foreign " + fKColumn().getField().get(row));
-          //will be deleted when checked
         }
         for (Object foreign : foreigns) {
           rowsWanted = pKColumn1().matchingRows(foreign);

@@ -1,4 +1,5 @@
-//package com.Databaseproject.databaseProject;
+
+package com.Databaseproject.databaseProject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.EOFException;

@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -94,20 +94,6 @@ public class ManyToMany extends Correlation {
       }
       if (!foreignKeys2.isEmpty()) {
         column2.getForeignKeys().set(i, foreignKeys2);
-      }
-      System.out.println("" + column1.getName() + "");
-      for (ArrayList<Object> c: column1.getForeignKeys()) {
-        for (Object a: c) {
-          System.out.print("" + a + "   |");
-        }
-        System.out.println();
-      }
-      System.out.println("" + column2.getName() + "");
-      for (ArrayList<Object> c: column2.getForeignKeys()) {
-        for (Object a: c) {
-          System.out.print("" + a + "   |");
-        }
-        System.out.println();
       }
     }
 

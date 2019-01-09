@@ -1,0 +1,14 @@
+com\Databaseproject\databaseProject\Correlation.class
+com\Databaseproject\databaseProject\IntegerType.class
+com\Databaseproject\databaseProject\FieldType.class
+com\Databaseproject\databaseProject\Menu.class
+com\Databaseproject\databaseProject\Database.class
+com\Databaseproject\databaseProject\OneToMany.class
+com\Databaseproject\databaseProject\DoubleType.class
+com\Databaseproject\databaseProject\OneToOne.class
+com\Databaseproject\databaseProject\ManyToMany.class
+com\Databaseproject\databaseProject\Column.class
+com\Databaseproject\databaseProject\EnumeratedType.class
+com\Databaseproject\databaseProject\FieldType$Type.class
+com\Databaseproject\databaseProject\Table.class
+com\Databaseproject\databaseProject\StringType.class

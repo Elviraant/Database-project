@@ -1,4 +1,4 @@
-//package com.Databaseproject.databaseProject;
+package com.Databaseproject.databaseProject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class Column implements Serializable {
    * @param table database's entity of this field.
    */
 
-  public Column(String name, FieldType type, Table table) { 
+  public Column(String name, FieldType type, Table table) {
     this.name = name;
     this.type = type;
     field = new ArrayList<Object>();
@@ -44,35 +44,35 @@ public class Column implements Serializable {
     table.setColumnCounter(table.getColumnCounter() + 1);
   }
 
-  public String getName() { 
+  public String getName() {
     return name;
   }
 
-  public void setName(String name) { 
+  public void setName(String name) {
     this.name = name;
   }
 
-  public boolean getPrimaryKey() { 
+  public boolean getPrimaryKey() {
     return isPrimaryKey;
   }
 
-  public void setPrimaryKey(boolean isPrimaryKey) { 
+  public void setPrimaryKey(boolean isPrimaryKey) {
     this.isPrimaryKey = isPrimaryKey;
   }
 
-  public void setForeignKey(boolean isForeignKey) { 
+  public void setForeignKey(boolean isForeignKey) {
     this.isForeignKey = isForeignKey;
   }
 
-  public boolean getForeignKey() { 
+  public boolean getForeignKey() {
     return isForeignKey;
   }
 
-  public ArrayList<Object> getField() { 
+  public ArrayList<Object> getField() {
     return field;
   }
 
-  public FieldType getType() { 
+  public FieldType getType() {
     return type;
   }
 
@@ -80,7 +80,7 @@ public class Column implements Serializable {
     this.type = type;
   }
 
-  public ArrayList<ArrayList<Object>> getForeignKeys() { 
+  public ArrayList<ArrayList<Object>> getForeignKeys() {
     return foreignKeys;
   }
 
@@ -90,7 +90,7 @@ public class Column implements Serializable {
    *@param row a row of the field
    */
 
-  public void printElement(int row) { 
+  public void printElement(int row) {
     String data = String.format("|%-15s|", field.get(row).toString());
     System.out.print(data);
     System.out.print("     ");
@@ -122,7 +122,7 @@ public class Column implements Serializable {
    * @param data user's insertion.
    */
 
-  public void fillPrimaryKeyField(Object data) { 
+  public void fillPrimaryKeyField(Object data) {
     boolean unique = this.checkUniqueness(data);
     while (!unique) {
       System.out.print("This data already exists. Try again: ");
@@ -138,7 +138,7 @@ public class Column implements Serializable {
    * @return boolean
    */
 
-  public boolean checkUniqueness(Object data) { 
+  public boolean checkUniqueness(Object data) {
     boolean unique = true;
     for (Object f : field) {
       if (f.equals(data)) {
@@ -153,7 +153,7 @@ public class Column implements Serializable {
    * @param table from which the foreign key Column object is coming
    */
 
-  public void createFkColumnName(Table table) { 
+  public void createFkColumnName(Table table) {
     String name = ("Fk_from_").concat(table.getName());
     setName(name);
   }
@@ -164,7 +164,7 @@ public class Column implements Serializable {
   *non-existent message
   *@param element Object Type variable, to be searched in field.
  */
-  public void searchElement(Object element) { 
+  public void searchElement(Object element) {
     ArrayList<Integer> rows = matchingRows(element);
     if (rows.size() != 0) {
       System.out.println(element);
@@ -186,7 +186,7 @@ public class Column implements Serializable {
  * @param element Object Type variable, to be searched in field.
  * @return ArrayList
  */
-  public ArrayList<Integer> matchingRows(Object element) { 
+  public ArrayList<Integer> matchingRows(Object element) {
     ArrayList<Integer> rows = new ArrayList<Integer>();
     for (int i = 0; i < getField().size(); i++) {
       if (element.equals(getField().get(i))) {
@@ -238,7 +238,7 @@ public class Column implements Serializable {
     this.getForeignKeys().set(j,s1);
     this.getForeignKeys().set(j - 1,temp);
   }
-  
+
 
   /**
   * Change the data in order to create a table in descending order.
@@ -285,7 +285,7 @@ public class Column implements Serializable {
   *@param key
   *@return Integer
   */
-  public Integer findPKeyPosition(Object key) { 
+  public Integer findPKeyPosition(Object key) {
     if (isPrimaryKey) {
       ArrayList<Integer> positions = matchingRows(key);
       if (!positions.isEmpty()) {
