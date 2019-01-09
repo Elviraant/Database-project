@@ -2,7 +2,7 @@
 
 ### This project was developped during the third semester of our undergraduate studies in the Department of Management Science and Technology of Athens University Of Economics and Business. Our aim was to create a program in Java which offers user the ability to store and process data.
 
-### The executable jar is located in [target folder](https://github.com/Elviraant/Database-project/tree/master/target)
+### The executable jar is located in [target folder](https://github.com/Elviraant/Database-project/tree/master/target).
 
 ## Execute the program
 #### Step #1: Download or clone the repository
@@ -31,11 +31,11 @@
 - Store and retrieve your base
 
 ## Guide
-#### For more specific instuctions on how to run your database click here: [Technical Report](https://elviraant.github.io/Database-project/Report-General.html)
-##### You can also find our Technical Report as PDF in [master](https://github.com/Elviraant/Database-project)
+#### For more specific instuctions on how to run your database click here: [Technical Report](https://elviraant.github.io/Database-project/Report-General.html).
+##### You can also find our Technical Report as PDF in [master](https://github.com/Elviraant/Database-project).
 
 ## Project Documentation 
-#### Find our Project's Documentation on [Database Project-Java Documentation](https://elviraant.github.io/Database-project/apidocs/)
+#### Find our Project's Documentation on [Database Project-Java Documentation](https://elviraant.github.io/Database-project/apidocs/).
 
 ## Team Members
 - [tandreadi](https://github.com/tandreadi)
