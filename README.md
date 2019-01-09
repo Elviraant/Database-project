@@ -32,6 +32,7 @@
 
 ## Guide
 #### For more specific instuctions on how to run your database click here: [Technical Report](https://elviraant.github.io/Database-project/Report-General.html)
+##### You can also find our Technical Report as PDF in [master].(https://github.com/Elviraant/Database-project)
 
 ## Project Documentation 
 #### Find our Project's Documentation on [Database Project-Java Documentation](https://elviraant.github.io/Database-project/apidocs/)
