@@ -31,7 +31,7 @@
 - Store and retrieve your base
 
 ## Guide
-#### For more specific instuctions on how to run your database click here:
+#### For more specific instuctions on how to run your database click here: [Technical Report](https://elviraant.github.io/Database-project/Report-General.html)
 
 ## Project Documentation 
 #### Find our Project's Documentation on [Database Project-Java Documentation](https://elviraant.github.io/Database-project/apidocs/)
