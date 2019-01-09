@@ -10,14 +10,14 @@ public class Menu implements Serializable {
 
   public static int fieldTypesMenu() {
 
-    System.out.println(String.format("%s%n%s%n%s%n%s%n", "1. Integer", 
+    System.out.println(String.format("%s%n%s%n%s%n%s%n", "1. Integer",
             "2. Double", "3. Text", "4. Enumerated Type"));
     System.out.println("Please chose one of the above options: ");
     return Database.choice(1, 4);
   }
 
   public static void printDeletePath() {
-    System.out.print(String.format("%s%n%s%n%s%n", 
+    System.out.print(String.format("%s%n%s%n%s%n",
             "You have to create -at least- one field/column ",
         "If you don't want to create this table, follow this path: ",
         "Manage Tables -> Delete Data -> Delete All"));
@@ -37,7 +37,7 @@ public class Menu implements Serializable {
     System.out.println();
     System.out.println("Manage your data: ");
     System.out.println("-----------------");
-    System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Present Data", 
+    System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n", "1. Present Data",
             "2. Change Data", "3. Delete Data",
         "4. More Options", "5. Exit"));
     return Database.choice(1, 5);
@@ -47,7 +47,7 @@ public class Menu implements Serializable {
     System.out.println();
     System.out.println("More options ");
     System.out.println("------------");
-    System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n%s%n%s%n", "1. Sort Data", 
+    System.out.println(String.format("%s%n%s%n%s%n%s%n%s%n%s%n%s%n", "1. Sort Data",
             "2. Add Data", "3. Search Data",
         "4. Find Maximum Element", "5. Find Minimum Element", "6. Design View", "7. Exit"));
     return Database.choice(1, 7);
@@ -93,7 +93,7 @@ public class Menu implements Serializable {
     System.out.println();
     System.out.println("Add Options:");
     System.out.println("-----------------");
-    System.out.println(String.format("%s%n%s%n%s%n", "1. Add records", 
+    System.out.println(String.format("%s%n%s%n%s%n", "1. Add records",
             "2. Add Columns", "3. Exit"));
     System.out.println("Please choose one of the above options: ");
   }
@@ -104,7 +104,7 @@ public class Menu implements Serializable {
 
   /**
    * Print Correlation options and return user's choice.
-   * 
+   *
    * @return int
    */
   public static int correlationOptions() {
@@ -117,7 +117,7 @@ public class Menu implements Serializable {
 
   /**
    * Print Correlation menu and return user's choice.
-   * 
+   *
    * @return int
    */
   public static int manageCorrelationsMenu() {
@@ -131,11 +131,11 @@ public class Menu implements Serializable {
   /**
    * Print view properties Menu for a specific Correlation and return user's
    * choice.
-   * 
+   *
    * @return int
    */
   public static int viewPopertiesMenu() {
-    System.out.println(String.format("%s%n%s%n%s%n", "1. Show info", 
+    System.out.println(String.format("%s%n%s%n%s%n", "1. Show info",
             "2. Search related records", "3. Exit"));
     System.out.println("Please choose one of the above options: ");
     return Database.choice(1, 3);
@@ -148,7 +148,7 @@ public class Menu implements Serializable {
   /**
    * Ask user if he wants to try again and return true, if the answer is Yes and
    * false, if it is No.
-   * 
+   *
    * @return boolean
    */
   public static boolean printTryAgainQuestionMessage() {
@@ -162,7 +162,7 @@ public class Menu implements Serializable {
 
   /**
    * Ask user which table has the foreign keys and return its choice.
-   * 
+   *
    * @param table1
    *          first table chose to be correlated
    * @param table2
@@ -191,5 +191,11 @@ public class Menu implements Serializable {
 
   public static void printColumnRefersMessage(String function) {
     System.out.println("This column refers to another table and can't " + function);
+  }
+
+  public static Table defineTable2Message(Table table1, Table table2) {
+  	 System.out.println("Table with foreign key must have less or equal number of records than the other.");
+  	 System.out.println("Table " + table2.getName() + " will refer to " + table1.getName() + ".");
+  	 return table2;
   }
 }

@@ -433,7 +433,7 @@ public class Database implements Serializable {
         createCorrelation(name, table1, table2);
       }
       if (checkAvailabilityForCorrelation() == false) {
-        System.out.println("Your Database ran out of tables for a new Correlation." 
+        System.out.println("Your Database ran out of tables for a new Correlation."
             + "You have to create more!");
       }
     } else {
@@ -502,19 +502,46 @@ public class Database implements Serializable {
   }
 
   /**
-   * Define which table will have the foreign key Column.
+   * Define which table will have the foreign key Column for
+   * OneToMany correlation.
    * @param table1 first table/entity in correlation.
    * @param table2 second table/entity in correlation.
    * @return Table table who will have the foreign key Column.
    */
 
-  public Table defineTable2(Table table1, Table table2) {
+  public Table defineTableMany(Table table1, Table table2) {
     int choice = Menu.tablesInCorrelationMenu(table1, table2);
     if (choice == 1) {
       return table1;
     } else {
       return table2;
     }
+  }
+
+   /**
+     * Define which table will have the foreign key Column for
+     * OneToOne correlation.
+     * @param table1 first table/entity in correlation.
+     * @param table2 second table/entity in correlation.
+     * @return Table table who will have the foreign key Column.
+   */
+
+  public Table defineTable2(Table table1, Table table2) {
+    int choice = Menu.tablesInCorrelationMenu(table1, table2);
+	int records1 = table1.getNumberOfRows();
+	int records2 = table2.getNumberOfRows();
+
+	if (choice  == 1) {
+		if ( records1 > records2) {
+			return Menu.defineTable2Message(table1, table2);
+	    }
+	    return table1;}
+	else {
+		if ( records2 > records1) {
+			return Menu.defineTable2Message(table2, table1);
+		 }
+	    return table2;
+	 }
   }
 
   /**
@@ -545,11 +572,18 @@ public class Database implements Serializable {
 
   public void createCorrelation(String name, Table table1, Table table2) {
     int option = Menu.correlationOptions();
-    if (option == 1 || option == 2) {
+    if (option == 1) {
       if (!defineTable2(table1, table2).equals(table2)) {
         Table temp = table2;
         table2 = table1;
         table1 = temp;
+      }
+    }
+    else if (option == 2) {
+	  if (!defineTableMany(table1, table2).equals(table2)) {
+		 Table temp = table2;
+		 table2 = table1;
+		 table1 = temp;
       }
     }
     switch (option) {
@@ -571,5 +605,6 @@ public class Database implements Serializable {
   }
 
 }
+
 
 
