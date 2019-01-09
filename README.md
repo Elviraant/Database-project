@@ -2,6 +2,15 @@
 
 ### This project was developped during the third semester of our undergraduate studies in the Department of Management Science and Technology of Athens University Of Economics and Business. Our aim was to create a program in Java which offers user the ability to store and process data.
 
+### The executable jar is located in target folder.
+
+## Execute the program
+
+- Step 1: Download or clone the repository
+- Step 2: Open the command line
+- Step 3: Change the directory to the one that the jar file is located ( cd path/to/folder)
+- Step 4: Execute the command: java -jar databaseProject-1.0-SNAPSHOT.jar
+
 ## Set up your Database
 #### Step #1: Name your Database 
 #### Step #2: Create table
