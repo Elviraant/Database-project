@@ -5,11 +5,10 @@
 ### The executable jar is located in [target folder](https://github.com/Elviraant/Database-project/tree/master/target)
 
 ## Execute the program
-
-### Step 1: Download or clone the repository
-### Step 2: Open the command line
-### Step 3: Change the directory to the one that the jar file is located ( cd path/to/folder)
-### Step 4: Execute the command: java -jar databaseProject-1.0-SNAPSHOT.jar
+#### Step 1: Download or clone the repository
+#### Step 2: Open the command line
+#### Step 3: Change the directory to the one that the jar file is located ( cd path/to/folder)
+#### Step 4: Execute the command: java -jar databaseProject-1.0-SNAPSHOT.jar
 
 ## Set up your Database
 #### Step #1: Name your Database 
